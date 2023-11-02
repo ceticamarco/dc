@@ -52,20 +52,12 @@ Some of the supported features are:
 And much more. You can find the complete manual [here](https://github.com/ice-bit/dc/blob/master/man.md).
 
 ## Installation
-`dc` is written in Rust. You can compile it by issuing the following command:
+`dc` is written in C++20 without using any additional dependency. In order to build it, issue the following commands: 
 ```sh
-$> cargo build --verbose --release
+$> make clean all
 ```
 
-You will find the output binary at:
-```sh
-$> target/release/dc
-```
-
-To run unit tests, instead, type:
-```sh
-$> cargo test --all
-```
+A new binary called `dc` will be created in your local folder.
 
 ## Usage
 dc can be used in three different ways:
