@@ -13,12 +13,11 @@ options(see below).
 
 `dc` can be invoked with the following command line options:
 ```
-Usage of dc:
-  -e string
-    	Evaluate an expression
-  -f string
-    	Evaluate a file containing expressions
-  -v	Show version information
+RPN desktop calculator with macro support. Usage: 
+-e, --expression <EXPRESSION> | Evaluate an expression
+-f, --file <FILE>             | Evaluate a file
+-h, --help                    | Show this helper
+-V, --version                 | Show version
 ```
 
 

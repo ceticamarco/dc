@@ -12,12 +12,11 @@ dc − RPN desktop calculator with macro support
 
 # SYNOPSIS
 ```
-Usage of dc:
-  -e string
-    	Evaluate an expression
-  -f string
-    	Evaluate a file
-  -v	Show version information
+RPN desktop calculator with macro support. Usage: 
+-e, --expression <EXPRESSION> | Evaluate an expression
+-f, --file <FILE>             | Evaluate a file
+-h, --help                    | Show this helper
+-V, --version                 | Show version
 ```
 
 # DESCRIPTION
