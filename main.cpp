@@ -68,6 +68,7 @@ int main(int argc, char **argv) {
         // Handle errors
         if(err != std::nullopt) {
             std::cerr << err.value() << std::endl;
+            return 1;
         }
 
         return 0;

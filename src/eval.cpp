@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "eval.h"
 #include "math.h"
 #include "stack.h"
@@ -13,217 +15,165 @@ std::optional<std::string> Evaluate::eval() {
 		// 		NUMERICAL OPERATIONS
 		//
         if(val == "+") {
-            IOperation *math = new Math(OPType::ADD);
+            auto math = std::make_unique<Math>(OPType::ADD);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-            
-            delete math;
         } else if(val == "-") {
-            IOperation *math = new Math(OPType::SUB);
+            auto math = std::make_unique<Math>(OPType::SUB);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-            
-            delete math;
         } else if(val == "*") {
-            IOperation *math = new Math(OPType::MUL);
+            auto math = std::make_unique<Math>(OPType::MUL);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-            
-            delete math;
         } else if(val =="/") {
-            IOperation *math = new Math(OPType::DIV);
+            auto math = std::make_unique<Math>(OPType::DIV);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "%") {
-            IOperation *math = new Math(OPType::MOD);
+            auto math = std::make_unique<Math>(OPType::MOD);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "~") {
-            IOperation *math = new Math(OPType::DIV_MOD);
+            auto math = std::make_unique<Math>(OPType::DIV_MOD);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "|") {
-            IOperation *math = new Math(OPType::MOD_EXP);
+            auto math = std::make_unique<Math>(OPType::MOD_EXP);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "^") {
-            IOperation *math = new Math(OPType::EXP);
+            auto math = std::make_unique<Math>(OPType::EXP);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "v") {
-            IOperation *math = new Math(OPType::SQRT);
+            auto math = std::make_unique<Math>(OPType::SQRT);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "sin") {
-            IOperation *math = new Math(OPType::SIN);
+            auto math = std::make_unique<Math>(OPType::SIN);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "cos") {
-            IOperation *math = new Math(OPType::COS);
+            auto math = std::make_unique<Math>(OPType::COS);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "tan") {
-            IOperation *math = new Math(OPType::TAN);
+            auto math = std::make_unique<Math>(OPType::TAN);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "!") {
-            IOperation *math = new Math(OPType::FACT);
+            auto math = std::make_unique<Math>(OPType::FACT);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "pi") {
-            IOperation *math = new Math(OPType::PI);
+            auto math = std::make_unique<Math>(OPType::PI);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         } else if(val == "e") {
-            IOperation *math = new Math(OPType::E);
+            auto math = std::make_unique<Math>(OPType::E);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete math;
         }
         //
         // 		STACK OPERATIONS
         //
         else if(val == "p") { // PRINT TOP ELEMENT OF STACK
-            IOperation *stack = new Stack(OPType::PCG);
+            auto stack = std::make_unique<Stack>(OPType::PCG);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "P") { // PRINT TOP ELEMENT WITHOUT NEWLINE
-            IOperation *stack = new Stack(OPType::P);
+            auto stack = std::make_unique<Stack>(OPType::P);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "c") { // CLEAR THE STACK
-            IOperation *stack = new Stack(OPType::CLR);
+            auto stack = std::make_unique<Stack>(OPType::CLR);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "R") { // POP HEAD OF THE STACK WITHOUT PRINTING IT
-            IOperation *stack = new Stack(OPType::PH);
+            auto stack = std::make_unique<Stack>(OPType::PH);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "r") { // SWAP ORDER OF THE TWO TOP ELEMENTS
-            IOperation *stack = new Stack(OPType::SO);
+            auto stack = std::make_unique<Stack>(OPType::SO);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "d") { // DUPLICATE THE HEAD OF THE STACK
-            IOperation *stack = new Stack(OPType::DP);
+            auto stack = std::make_unique<Stack>(OPType::DP);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "f") { // PRINT THE WHOLE STACK
-            IOperation *stack = new Stack(OPType::PS);
+            auto stack = std::make_unique<Stack>(OPType::PS);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "Z") { // COMPUTE HEAD SIZE(NUM. OF CHARS/DIGITS)
-            IOperation *stack = new Stack(OPType::CH);
+            auto stack = std::make_unique<Stack>(OPType::CH);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "z") { // COMPUTE STACK SIZE
-            IOperation *stack = new Stack(OPType::CS);
+            auto stack = std::make_unique<Stack>(OPType::CS);
             err = stack->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete stack;
         } else if(val == "x") { // EXECUTE MACRO
-            IOperation *macro = new Macro(OPType::EX, this->regs);
+            auto macro = std::make_unique<Macro>(OPType::EX, this->regs);
             err = macro->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-            
-            delete macro;
         } else if(val == "?") { // READ LINE FROM STDIN
-            IOperation *macro = new Macro(OPType::RI, this->regs);
+            auto macro = std::make_unique<Macro>(OPType::RI, this->regs);
             err = macro->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-
-            delete macro;
         } else if(val == "q") { // QUIT GRACEFULLY
             std::exit(0);
         } else {
@@ -328,53 +278,41 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string val) {
 	// execute register's content as a macro
     std::optional<std::string> err = std::nullopt;
     if(operation == ">") {
-        IOperation *macro = new Macro(OPType::CMP, Operator::GT, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GT, dc_register, this->regs);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
-
-        delete macro;
     } else if(operation == "<") {
-        IOperation *macro = new Macro(OPType::CMP, Operator::LT, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LT, dc_register, this->regs);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
-
-        delete macro;
     } else if(operation == "=") {
-        IOperation *macro = new Macro(OPType::CMP, Operator::EQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::EQ, dc_register, this->regs);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
-
-        delete macro;
     } else if(operation == ">=") {
-        IOperation *macro = new Macro(OPType::CMP, Operator::GEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GEQ, dc_register, this->regs);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
-
-        delete macro;
     } else if(operation == "<=") {
-        IOperation *macro = new Macro(OPType::CMP, Operator::LEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LEQ, dc_register, this->regs);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
-
-        delete macro;
     } else if(operation == "!=") {
-        IOperation *macro = new Macro(OPType::CMP, Operator::NEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::NEQ, dc_register, this->regs);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
-
-        delete macro;
     }
 
     return err;

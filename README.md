@@ -58,6 +58,11 @@ $> make clean all
 
 A new binary called `dc` will be created in your local folder.
 
+To generate a man page from the `man.md` document, use the following command(note: needs pandoc):
+```sh
+$> pandoc man.md -s -t man  > dc.1
+```
+
 ## Usage
 dc can be used in three different ways:
 1. From the interactive REPL(run it without any argument);  

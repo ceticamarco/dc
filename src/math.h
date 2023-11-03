@@ -23,6 +23,7 @@ private:
     std::optional<std::string> fn_fact(stack_t &stack);
     std::optional<std::string> fn_pi(stack_t &stack);
     std::optional<std::string> fn_e(stack_t &stack);
+    static std::string trim_zeros(double number);
 
     OPType op_type;
 };

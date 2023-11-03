@@ -50,7 +50,7 @@ std::optional<std::string> Math::fn_add(stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(std::to_string(lhs + rhs));
+        stack.push_back(trim_zeros(lhs + rhs));
     } else {
         return "'+' requires numeric values";
     }
@@ -80,7 +80,7 @@ std::optional<std::string> Math::fn_sub(stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(std::to_string(-(lhs - rhs)));
+        stack.push_back(trim_zeros(-(lhs - rhs)));
     } else {
         return "'-' requires numeric values";
     }
@@ -110,7 +110,7 @@ std::optional<std::string> Math::fn_mul(stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(std::to_string(lhs * rhs));
+        stack.push_back(trim_zeros(lhs * rhs));
     } else {
         return "'*' requires numeric values";
     }
@@ -145,7 +145,7 @@ std::optional<std::string> Math::fn_div(stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(std::to_string(dividend / divisor));
+        stack.push_back(trim_zeros(dividend / divisor));
     } else {
         return "'/' requires numeric values";
     }
@@ -180,7 +180,7 @@ std::optional<std::string> Math::fn_mod(stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(std::to_string((int)lhs % (int)rhs));
+        stack.push_back(trim_zeros((int)lhs % (int)rhs));
     } else {
         return "'%' requires numeric values";
     }
@@ -214,8 +214,8 @@ std::optional<std::string> Math::fn_div_mod(stack_t &stack) {
             auto quotient = std::trunc(dividend / divisor);
             auto remainder = ((int)dividend % (int)divisor);
 
-            stack.push_back(std::to_string(quotient));
-            stack.push_back(std::to_string(remainder));
+            stack.push_back(trim_zeros(quotient));
+            stack.push_back(trim_zeros(remainder));
         }
 
     } else {
@@ -270,7 +270,7 @@ std::optional<std::string> Math::fn_mod_exp(stack_t &stack) {
             c = (c * base) % modulus;
         }
         
-        stack.push_back(std::to_string(c));
+        stack.push_back(trim_zeros(c));
     } else {
         return "'|' requires numeric values";
     }
@@ -300,7 +300,7 @@ std::optional<std::string> Math::fn_exp(stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(std::to_string(pow(base, exp)));
+        stack.push_back(trim_zeros(pow(base, exp)));
     } else {
         return "'^' requires numeric values";
     }
@@ -329,7 +329,7 @@ std::optional<std::string> Math::fn_sqrt(stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(std::to_string(sqrt(x)));
+        stack.push_back(trim_zeros(sqrt(x)));
     } else {
         return "'v' requires numeric values";
     }
@@ -354,7 +354,7 @@ std::optional<std::string> Math::fn_sin(stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(std::to_string(sin(x)));
+        stack.push_back(trim_zeros(sin(x)));
     } else {
         return "'sin' requires numeric values";
     }
@@ -379,7 +379,7 @@ std::optional<std::string> Math::fn_cos(stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(std::to_string(cos(x)));
+        stack.push_back(trim_zeros(cos(x)));
     } else {
         return "'cos' requires numeric values";
     }
@@ -404,7 +404,7 @@ std::optional<std::string> Math::fn_tan(stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(std::to_string(tan(x)));
+        stack.push_back(trim_zeros(tan(x)));
     } else {
         return "'tan' requires numeric values";
     }
@@ -438,7 +438,7 @@ std::optional<std::string> Math::fn_fact(stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(std::to_string(factorial));
+        stack.push_back(trim_zeros(factorial));
     } else {
         return "'!' requires numeric values";
     }
@@ -447,13 +447,22 @@ std::optional<std::string> Math::fn_fact(stack_t &stack) {
 }
 
 std::optional<std::string> Math::fn_pi(stack_t &stack) {
-    stack.push_back(std::to_string(std::numbers::pi));
+    stack.push_back(trim_zeros(std::numbers::pi));
 
     return std::nullopt;
 }
 
 std::optional<std::string> Math::fn_e(stack_t &stack) {
-    stack.push_back(std::to_string(std::numbers::e));
+    stack.push_back(trim_zeros(std::numbers::e));
 
     return std::nullopt;
+}
+
+std::string Math::trim_zeros(double number) {
+    std::string s = std::to_string(number);
+
+    s.erase(s.find_last_not_of('0') + 1, std::string::npos);
+    s.erase(s.find_last_not_of('.') + 1, std::string::npos);
+
+    return s;
 }
