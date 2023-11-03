@@ -28,7 +28,6 @@ Some of the supported features are:
 - Basic arithmetical operations(`+`, `-`, `*`, `/`, `^`, `%`);  
 - Scientific notation support(`5e3` -> `5000`);  
 - Trigonometrical functions(`sin`, `cos`, `tan`);  
-- Base conversion(printBin `pb`, printOctal `po`, printHex `px`);  
 - Factorial and constants(`!`, `pi`, `e`);  
 - Stack operations:
     - Print top element(`p`, `P`);  
@@ -60,7 +59,7 @@ A new binary called `dc` will be created in your local folder.
 
 To generate a man page from the `man.md` document, use the following command(note: needs pandoc):
 ```sh
-$> pandoc man.md -s -t man  > dc.1
+$> pandoc man.md -s -t man > dc.1
 ```
 
 ## Usage

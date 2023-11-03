@@ -8,10 +8,10 @@ enum class Operator {
 
 class Macro : public IOperation {
 public:
-    Macro(OPType op_type, Operator op, char dc_register, std::unordered_map<char, Register> &regs)
-        : op_type(op_type), op(op), dc_register(dc_register), regs(regs) {}
-    Macro(OPType op_type, std::unordered_map<char, Register> &regs)
-        : op_type(op_type), regs(regs) {}
+    Macro(const OPType op_type, const Operator op, const char dc_register, std::unordered_map<char, Register> &regs)
+        : op_type(std::move(op_type)), op(std::move(op)), dc_register(std::move(dc_register)), regs(regs) {}
+    Macro(const OPType op_type, std::unordered_map<char, Register> &regs)
+        : op_type(std::move(op_type)), regs(regs) {}
     std::optional<std::string> exec(stack_t &stack) override;
     static std::vector<std::string> split(std::string str);
 

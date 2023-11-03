@@ -4,7 +4,7 @@
 
 class Stack : public IOperation {
 public:
-    Stack(OPType op_type) : op_type(op_type) {}
+    Stack(const OPType op_type) : op_type(std::move(op_type)) {}
     std::optional<std::string> exec(stack_t &stack) override;
 
 private:

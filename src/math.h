@@ -4,7 +4,7 @@
 
 class Math : public IOperation {
 public:
-    Math(OPType op_type) : op_type(op_type) {}
+    Math(const OPType op_type) : op_type(std::move(op_type)) {}
     std::optional<std::string> exec(stack_t &stack) override;
 
 private:
