@@ -20,10 +20,6 @@ RPN desktop calculator with macro support. Usage:
 -V, --version                 | Show version
 ```
 
-
-![](.screen.png)
-
-
 Some of the supported features are:
 - Basic arithmetical operations(`+`, `-`, `*`, `/`, `^`, `%`);  
 - Scientific notation support(`5e3` -> `5000`);  
