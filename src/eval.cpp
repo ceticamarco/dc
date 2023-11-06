@@ -6,6 +6,16 @@
 #include "macro.h"
 #include "is_num.h"
 
+#define MACRO_COND(VAL) ((VAL.length() == 1 && VAL == "["))
+#define MACRO_CMD_COND(VAL) ((val.length() == 2 || val.length() == 3) && \
+              (val.at(0) == '>' || val.at(0) == '<' || \
+               val.at(0) == '=' || val.at(0) == '!'))
+#define REGISTER_COND(VAL) ((val.length() == 2) && \
+              (val.at(0) == 's' || val.at(0) == 'S' || \
+               val.at(0) == 'l' || val.at(0) == 'L'))
+#define ARRAY_COND(VAL) ((val.length() == 2) && \
+        (val.at(0) == ':' || val.at(0) == ';'))
+
 std::optional<std::string> Evaluate::eval() {
     for(size_t idx = 0; idx < this->expr.size(); idx++) {
         auto val = this->expr.at(idx);
@@ -190,17 +200,13 @@ std::optional<std::string> Evaluate::eval() {
 std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx, std::vector<std::string> &expr) {
     std::optional<std::string> err = std::nullopt;
 
-    if(val.length() == 1 && val == "[") {
+    if(MACRO_COND(val)) {
         err = parse_macro(idx, expr);
-    } else if((val.length() == 2 || val.length() == 3) &&
-              (val.at(0) == '>' || val.at(0) == '<' || 
-               val.at(0) == '=' || val.at(0) == '!')) {
+    } else if(MACRO_CMD_COND(val)) {
         err = parse_macro_command(val);
-    } else if((val.length() == 2) &&
-              (val.at(0) == 's' || val.at(0) == 'S' ||
-               val.at(0) == 'l' || val.at(0) == 'L')) {
+    } else if(REGISTER_COND(val)) {
         err = parse_register_command(val);
-    } else if((val.length() == 2) && (val.at(0) == ':' || val.at(0) == ';')) {
+    } else if(ARRAY_COND(val)) {
         err = parse_array_command(val);
     } else if(is_num<double>(val)) {
         this->stack.push_back(val);

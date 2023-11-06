@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: November 02, 2023
+date: November 06, 2023
 ---
 
 
@@ -49,26 +49,49 @@ without opening the REPL by using the `-e` flag.
 # ARCHITECTURE
 As an advanced scientific calculator, **dc** has a complex architecture defined by the following two data structures:
 
-1. The main stack;  
-2. The register.
+1. The main stack
+2. The register ADT
 
-The _register_ can also be extended as follows:
+Which can be graphically represented as follows:
+```
++------------------+         +----+----+----+-----
+|    MAIN STACK    +-------->|    |    |    |    ... STACK
++------------------+         +----+----+----+-----
+|   REGISTER ADT   |
++---------------+--+
+                |                                +----+----+----+-----
+                |               HASH MAP         |    |    |    |    ...  STACK
+                |            +-------+---+------>+----+----+----+-----
+                |            | REG A |   |
+                +----------->+-------+---+------>+----+----+----+-----
+                             |           |       |    |    |    |    ...  ARRAY
+                             |           |       +----+----+----+-----
+                             |           |         0    1    2    3
+                             |    ....   |
+                             |           |
+                             |           |
+                             |           |       +----+----+----+-----
+                             |           |       |    |    |    |    ...  STACK
+                             +-------+---+------>+----+----+----+-----
+                             | REG G |   |
+                             +-------+---+------>+----+----+----+-----
+                                                 |    |    |    |    ...  ARRAY
+                                                 +----+----+----+-----
+                                                   0    1    2    3
+```
 
-1. The register stack;  
-2. The register array.
 
-The _main stack_ is the primary form of memory of this program. Every time you enter a number or execute a command, you are operating
+The _main stack_ is the primary form of memory available in this program. Every time you enter a number or execute a command, you are operating
 within the main stack. The _main stack_ is virtually infinite and grows as much as needed; the _main stack_ is **public**, i.e. it is
 shared between any **dc** command.
 
 The **register** is an hash map-like abstract data type that allows users to operate on an _isolated_ environment formed by a _stack_
 and an _array_. Each instance of the register is an ordered pair `(key, value)` where the _key_ is a character representing the name of the 
 register and the _value_ is a **private** instance of a stack and a **private** instance of an array. **dc** commands - exception made for registers, macro and array commands -
-cannot operate directly on the auxiliary stack or on the auxiliary array. In order to use a value stored on an auxiliary stack, you need to pop it
+cannot operate directly on the auxiliary stacks or on the auxiliary arrays. In order to use a value stored on an auxiliary stack, you need to pop it
 and push it onto the main stack(see the register section).
 
-Both the _main stack_ and the _auxiliary stack_ implement the same abstract data type, therefore any kind of data type supported by the main stack, 
-as well as any other property or feature supported by the main stack is also supported by the register's stack.
+Both the _main stack_ and the _auxiliary stack_ implement the same abstract data type, therefore any kind of data type supported by the main stack - as well as any other property or feature supported by the main stack - is also supported by the register's stack.
 
 _Arrays_ are dynamic, homogeneous and private abstract data type associated with a register.
 The underlying data type of a dc array is a hashmap where the index is represented by
