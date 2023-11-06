@@ -1,5 +1,6 @@
 TARGET = dc
-CC = g++
+CC = clang++
+#CC = g++
 CXXFLAGS = -Wall -Wextra -Werror -pedantic-errors -fstack-protector-strong \
 	-D_FORTIFY_SOURCE=2 -Wformat-security -fsanitize=address -fsanitize=undefined \
 	-fstack-clash-protection -Wundef -Wshadow -Wpointer-arith \
