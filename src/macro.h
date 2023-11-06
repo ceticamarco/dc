@@ -8,17 +8,17 @@ enum class Operator {
 
 class Macro : public IOperation {
 public:
-    Macro(const OPType op_type, const Operator op, const char dc_register, std::unordered_map<char, Register> &regs)
-        : op_type(std::move(op_type)), op(std::move(op)), dc_register(std::move(dc_register)), regs(regs) {}
-    Macro(const OPType op_type, std::unordered_map<char, Register> &regs)
-        : op_type(std::move(op_type)), regs(regs) {}
-    std::optional<std::string> exec(stack_t &stack) override;
+    Macro(const OPType op_t, const Operator o, const char dc_r, std::unordered_map<char, Register> &r)
+        : op_type(std::move(op_t)), op(std::move(o)), dc_register(std::move(dc_r)), regs(r) {}
+    Macro(const OPType op_t, std::unordered_map<char, Register> &r)
+        : op_type(std::move(op_t)), regs(r) {}
+    std::optional<std::string> exec(dc_stack_t &stack) override;
     static std::vector<std::string> split(std::string str);
 
 private:
-    std::optional<std::string> fn_execute(stack_t &stack);
-    std::optional<std::string> fn_evaluate_macro(stack_t &stack);
-    std::optional<std::string> fn_read_input(stack_t &stack);
+    std::optional<std::string> fn_execute(dc_stack_t &stack);
+    std::optional<std::string> fn_evaluate_macro(dc_stack_t &stack);
+    std::optional<std::string> fn_read_input(dc_stack_t &stack);
 
     OPType op_type;
     Operator op;

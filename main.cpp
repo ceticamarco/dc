@@ -9,7 +9,7 @@
 #include "src/eval.h"
 #include "src/macro.h" // for split static method
 
-#define DC_VERSION "1.0.0"
+#define DC_VERSION "1.0.1"
 
 void helper() {
     std::cout << "RPN desktop calculator with macro support. Usage: \n"
@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     std::string stdin_expression = "";
     bool execute_expression = false;
     bool execute_file = false;
-    stack_t stack;
+    dc_stack_t stack;
     std::unordered_map<char, Register> regs;
     struct option long_opts[] = {
         {"expression", required_argument, nullptr, 'e'},

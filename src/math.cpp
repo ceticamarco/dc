@@ -1,9 +1,10 @@
 #include <cmath>
+#include <numbers>
 
 #include "math.h"
 #include "is_num.h"
 
-std::optional<std::string> Math::exec(stack_t &stack) {
+std::optional<std::string> Math::exec(dc_stack_t &stack) {
     std::optional<std::string> err = std::nullopt;
 
     switch(this->op_type) {
@@ -28,7 +29,7 @@ std::optional<std::string> Math::exec(stack_t &stack) {
     return err;
 }
 
-std::optional<std::string> Math::fn_add(stack_t &stack) {
+std::optional<std::string> Math::fn_add(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'+' requires two operands";
@@ -58,7 +59,7 @@ std::optional<std::string> Math::fn_add(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sub(stack_t &stack) {
+std::optional<std::string> Math::fn_sub(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'-' requires two operands";
@@ -88,7 +89,7 @@ std::optional<std::string> Math::fn_sub(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mul(stack_t &stack) {
+std::optional<std::string> Math::fn_mul(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'*' requires two operands";
@@ -118,7 +119,7 @@ std::optional<std::string> Math::fn_mul(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div(stack_t &stack) {
+std::optional<std::string> Math::fn_div(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'/' requires two operands";
@@ -140,7 +141,7 @@ std::optional<std::string> Math::fn_div(stack_t &stack) {
         stack.pop_back();
 
         // Check whether divisor is equal to zero
-        if(divisor == (double)0) {
+        if(divisor == 0.0) {
             return "Cannot divide by zero";
         }
 
@@ -153,7 +154,7 @@ std::optional<std::string> Math::fn_div(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod(stack_t &stack) {
+std::optional<std::string> Math::fn_mod(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'%' requires two operands";
@@ -175,7 +176,7 @@ std::optional<std::string> Math::fn_mod(stack_t &stack) {
         stack.pop_back();
 
         // Check whether divisor is equal to zero
-        if(rhs == (double)0) {
+        if(rhs == 0.0) {
             return "Cannot divide by zero";
         }
 
@@ -188,7 +189,7 @@ std::optional<std::string> Math::fn_mod(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div_mod(stack_t &stack) {
+std::optional<std::string> Math::fn_div_mod(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'~' requires two operands";
@@ -210,7 +211,7 @@ std::optional<std::string> Math::fn_div_mod(stack_t &stack) {
         stack.pop_back();
 
         // Check if divisor is not equal to zero
-        if(divisor != (double)0) {
+        if(divisor != 0.0) {
             auto quotient = std::trunc(dividend / divisor);
             auto remainder = ((int)dividend % (int)divisor);
 
@@ -225,7 +226,7 @@ std::optional<std::string> Math::fn_div_mod(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod_exp(stack_t &stack) {
+std::optional<std::string> Math::fn_mod_exp(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 3) {
         return "'|' requires three operands";
@@ -278,7 +279,7 @@ std::optional<std::string> Math::fn_mod_exp(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_exp(stack_t &stack) {
+std::optional<std::string> Math::fn_exp(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'^' requires two operands";
@@ -308,7 +309,7 @@ std::optional<std::string> Math::fn_exp(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sqrt(stack_t &stack) {
+std::optional<std::string> Math::fn_sqrt(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'v' requires one operand";
@@ -321,15 +322,15 @@ std::optional<std::string> Math::fn_sqrt(stack_t &stack) {
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto x = std::stod(stack.back());
+        auto val = std::stod(stack.back());
         stack.pop_back();
 
-        if(x <= (double)0) {
+        if(val <= 0.0) {
             return "'v' domain error";
         }
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(sqrt(x)));
+        stack.push_back(trim_zeros(sqrt(val)));
     } else {
         return "'v' requires numeric values";
     }
@@ -337,7 +338,7 @@ std::optional<std::string> Math::fn_sqrt(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sin(stack_t &stack) {
+std::optional<std::string> Math::fn_sin(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'sin' requires one operand";
@@ -350,11 +351,11 @@ std::optional<std::string> Math::fn_sin(stack_t &stack) {
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto x = std::stod(stack.back());
+        auto val = std::stod(stack.back());
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(sin(x)));
+        stack.push_back(trim_zeros(sin(val)));
     } else {
         return "'sin' requires numeric values";
     }
@@ -362,7 +363,7 @@ std::optional<std::string> Math::fn_sin(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_cos(stack_t &stack) {
+std::optional<std::string> Math::fn_cos(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'cos' requires one operand";
@@ -375,11 +376,11 @@ std::optional<std::string> Math::fn_cos(stack_t &stack) {
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto x = std::stod(stack.back());
+        auto val = std::stod(stack.back());
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(cos(x)));
+        stack.push_back(trim_zeros(cos(val)));
     } else {
         return "'cos' requires numeric values";
     }
@@ -387,7 +388,7 @@ std::optional<std::string> Math::fn_cos(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_tan(stack_t &stack) {
+std::optional<std::string> Math::fn_tan(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'tan' requires one operand";
@@ -400,11 +401,11 @@ std::optional<std::string> Math::fn_tan(stack_t &stack) {
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto x = std::stod(stack.back());
+        auto val = std::stod(stack.back());
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(tan(x)));
+        stack.push_back(trim_zeros(tan(val)));
     } else {
         return "'tan' requires numeric values";
     }
@@ -412,7 +413,7 @@ std::optional<std::string> Math::fn_tan(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_fact(stack_t &stack) {
+std::optional<std::string> Math::fn_fact(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'!' requires one operand";
@@ -426,14 +427,14 @@ std::optional<std::string> Math::fn_fact(stack_t &stack) {
     // Check whether the entry is a number
     if(is_x_num) {
         unsigned long factorial = 1;
-        auto x = std::stod(stack.back());
+        auto val = std::stod(stack.back());
         stack.pop_back();
 
-        if(x == (double)0) {
+        if(val == 0.0) {
             factorial = 1;
         }
 
-        for(size_t i = 2; i <= (size_t)x; i++) {
+        for(size_t i = 2; i <= (size_t)val; i++) {
             factorial *= i;
         }
 
@@ -446,13 +447,13 @@ std::optional<std::string> Math::fn_fact(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_pi(stack_t &stack) {
+std::optional<std::string> Math::fn_pi(dc_stack_t &stack) {
     stack.push_back(trim_zeros(std::numbers::pi));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_e(stack_t &stack) {
+std::optional<std::string> Math::fn_e(dc_stack_t &stack) {
     stack.push_back(trim_zeros(std::numbers::e));
 
     return std::nullopt;

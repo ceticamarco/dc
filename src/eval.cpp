@@ -119,56 +119,56 @@ std::optional<std::string> Evaluate::eval() {
         // 		STACK OPERATIONS
         //
         else if(val == "p") { // PRINT TOP ELEMENT OF STACK
-            auto stack = std::make_unique<Stack>(OPType::PCG);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::PCG);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "P") { // PRINT TOP ELEMENT WITHOUT NEWLINE
-            auto stack = std::make_unique<Stack>(OPType::P);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::P);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "c") { // CLEAR THE STACK
-            auto stack = std::make_unique<Stack>(OPType::CLR);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::CLR);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "R") { // POP HEAD OF THE STACK WITHOUT PRINTING IT
-            auto stack = std::make_unique<Stack>(OPType::PH);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::PH);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "r") { // SWAP ORDER OF THE TWO TOP ELEMENTS
-            auto stack = std::make_unique<Stack>(OPType::SO);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::SO);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "d") { // DUPLICATE THE HEAD OF THE STACK
-            auto stack = std::make_unique<Stack>(OPType::DP);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::DP);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "f") { // PRINT THE WHOLE STACK
-            auto stack = std::make_unique<Stack>(OPType::PS);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::PS);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "Z") { // COMPUTE HEAD SIZE(NUM. OF CHARS/DIGITS)
-            auto stack = std::make_unique<Stack>(OPType::CH);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::CH);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "z") { // COMPUTE STACK SIZE
-            auto stack = std::make_unique<Stack>(OPType::CS);
-            err = stack->exec(this->stack);
+            auto op = std::make_unique<Stack>(OPType::CS);
+            err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
@@ -187,7 +187,7 @@ std::optional<std::string> Evaluate::eval() {
         } else if(val == "q") { // QUIT GRACEFULLY
             std::exit(0);
         } else {
-            err = handle_special(val, idx, expr);
+            err = handle_special(val, idx);
             if(err != std::nullopt) {
                 return err;
             }
@@ -197,11 +197,11 @@ std::optional<std::string> Evaluate::eval() {
     return std::nullopt;
 }
 
-std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx, std::vector<std::string> &expr) {
+std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx) {
     std::optional<std::string> err = std::nullopt;
 
     if(MACRO_COND(val)) {
-        err = parse_macro(idx, expr);
+        err = parse_macro(idx);
     } else if(MACRO_CMD_COND(val)) {
         err = parse_macro_command(val);
     } else if(REGISTER_COND(val)) {
@@ -217,7 +217,7 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
     return err;
 }
 
-std::optional<std::string> Evaluate::parse_macro(size_t &idx, std::vector<std::string> &expr) {
+std::optional<std::string> Evaluate::parse_macro(size_t &idx) {
     // A macro is any string surrounded by square brackets
     std::string dc_macro = "";
     bool closing_bracket = false;
@@ -226,9 +226,9 @@ std::optional<std::string> Evaluate::parse_macro(size_t &idx, std::vector<std::s
     idx++;
 
     // Parse the macro
-    while(idx < expr.size()) {
+    while(idx < this->expr.size()) {
         // Continue to parse until the clsoing square brackets
-        if(expr.at(idx) == "]") {
+        if(this->expr.at(idx) == "]") {
             closing_bracket = true;
             break;
         }
@@ -237,9 +237,9 @@ std::optional<std::string> Evaluate::parse_macro(size_t &idx, std::vector<std::s
         // If the macro is not empty, add some spacing
         // before the new token
         if(dc_macro.empty()) {
-            dc_macro += expr.at(idx);
+            dc_macro += this->expr.at(idx);
         } else {
-            dc_macro += ' ' + expr.at(idx);
+            dc_macro += ' ' + this->expr.at(idx);
         }
 
         // Go to the next token
@@ -435,7 +435,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
         // Extract two elements from the main stack
         auto idx_str = this->stack.back();
         this->stack.pop_back();
-        auto val = this->stack.back();
+        auto arr_val = this->stack.back();
         this->stack.pop_back();
 
         // Check whether the index is an integer
@@ -450,11 +450,11 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
         // If array does not exist, allocate a new array first
         auto it = this->regs.find(reg_name);
         if(it != this->regs.end()) { // Register exists
-            it->second.array.insert(std::pair<int, std::string>(idx, val));
+            it->second.array.insert(std::pair<int, std::string>(idx, arr_val));
         } else { // Register doesn't exist
             this->regs[reg_name] = Register{
                 std::vector<std::string>(),
-                std::unordered_map<int, std::string>{{idx, val}}
+                std::unordered_map<int, std::string>{{idx, arr_val}}
             };
         }
     } else {

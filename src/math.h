@@ -4,25 +4,25 @@
 
 class Math : public IOperation {
 public:
-    Math(const OPType op_type) : op_type(std::move(op_type)) {}
-    std::optional<std::string> exec(stack_t &stack) override;
+    Math(const OPType op_t) : op_type(std::move(op_t)) {}
+    std::optional<std::string> exec(dc_stack_t &stack) override;
 
 private:
-    std::optional<std::string> fn_add(stack_t &stack);
-    std::optional<std::string> fn_sub(stack_t &stack);
-    std::optional<std::string> fn_mul(stack_t &stack);
-    std::optional<std::string> fn_div(stack_t &stack);
-    std::optional<std::string> fn_mod(stack_t &stack);
-    std::optional<std::string> fn_div_mod(stack_t &stack);
-    std::optional<std::string> fn_mod_exp(stack_t &stack);
-    std::optional<std::string> fn_exp(stack_t &stack);
-    std::optional<std::string> fn_sqrt(stack_t &stack);
-    std::optional<std::string> fn_sin(stack_t &stack);
-    std::optional<std::string> fn_cos(stack_t &stack);
-    std::optional<std::string> fn_tan(stack_t &stack);
-    std::optional<std::string> fn_fact(stack_t &stack);
-    std::optional<std::string> fn_pi(stack_t &stack);
-    std::optional<std::string> fn_e(stack_t &stack);
+    std::optional<std::string> fn_add(dc_stack_t &stack);
+    std::optional<std::string> fn_sub(dc_stack_t &stack);
+    std::optional<std::string> fn_mul(dc_stack_t &stack);
+    std::optional<std::string> fn_div(dc_stack_t &stack);
+    std::optional<std::string> fn_mod(dc_stack_t &stack);
+    std::optional<std::string> fn_div_mod(dc_stack_t &stack);
+    std::optional<std::string> fn_mod_exp(dc_stack_t &stack);
+    std::optional<std::string> fn_exp(dc_stack_t &stack);
+    std::optional<std::string> fn_sqrt(dc_stack_t &stack);
+    std::optional<std::string> fn_sin(dc_stack_t &stack);
+    std::optional<std::string> fn_cos(dc_stack_t &stack);
+    std::optional<std::string> fn_tan(dc_stack_t &stack);
+    std::optional<std::string> fn_fact(dc_stack_t &stack);
+    std::optional<std::string> fn_pi(dc_stack_t &stack);
+    std::optional<std::string> fn_e(dc_stack_t &stack);
     static std::string trim_zeros(double number);
 
     OPType op_type;

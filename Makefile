@@ -2,7 +2,8 @@ TARGET = dc
 CC = g++
 CXXFLAGS = -Wall -Wextra -Werror -pedantic-errors -fstack-protector-strong \
 	-D_FORTIFY_SOURCE=2 -Wformat-security -fsanitize=address -fsanitize=undefined \
-	-fstack-clash-protection -std=c++20
+	-fstack-clash-protection -Wundef -Wshadow -Wpointer-arith \
+	-Wcast-align -Wwrite-strings -ftrapv -std=c++20 -O3
 
 all: $(TARGET)
 

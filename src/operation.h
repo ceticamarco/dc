@@ -5,7 +5,7 @@
 
 class IOperation {
 public:
-    virtual std::optional<std::string> exec(stack_t &stack) = 0;
+    virtual std::optional<std::string> exec(dc_stack_t &stack) = 0;
     virtual ~IOperation() = default;
 };
 

@@ -4,7 +4,7 @@
 #include "stack.h"
 #include "is_num.h"
 
-std::optional<std::string> Stack::exec(stack_t &stack) {
+std::optional<std::string> Stack::exec(dc_stack_t &stack) {
     std::optional<std::string> err = std::nullopt;
 
     switch(this->op_type) {
@@ -23,7 +23,7 @@ std::optional<std::string> Stack::exec(stack_t &stack) {
     return err;
 }
 
-std::optional<std::string> Stack::fn_print(stack_t &stack, bool new_line) {
+std::optional<std::string> Stack::fn_print(dc_stack_t &stack, bool new_line) {
     // Check if the stack is empty
     if(stack.empty()) {
         return "Cannot print empty stack";
@@ -38,7 +38,7 @@ std::optional<std::string> Stack::fn_print(stack_t &stack, bool new_line) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_pop_head(stack_t &stack) {
+std::optional<std::string> Stack::fn_pop_head(dc_stack_t &stack) {
     // Check if stack is empty
     if(stack.empty()) {
         return "'R' does not work on empty stack";
@@ -49,7 +49,7 @@ std::optional<std::string> Stack::fn_pop_head(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_swap_xy(stack_t &stack) {
+std::optional<std::string> Stack::fn_swap_xy(dc_stack_t &stack) {
     // Check if the stack has enough elements
     if(stack.size() < 2) {
         return "'r' requires two elements";
@@ -65,7 +65,7 @@ std::optional<std::string> Stack::fn_swap_xy(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_dup_head(stack_t &stack) {
+std::optional<std::string> Stack::fn_dup_head(dc_stack_t &stack) {
     // Check if the stack has enough elements
     if(stack.empty()) {
         return "'d' requires one element";
@@ -77,7 +77,7 @@ std::optional<std::string> Stack::fn_dup_head(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_print_stack(stack_t &stack) {
+std::optional<std::string> Stack::fn_print_stack(dc_stack_t &stack) {
     for(auto it = stack.rbegin(); it != stack.rend(); it++) {
         std::cout << *it << std::endl;
     }
@@ -85,7 +85,7 @@ std::optional<std::string> Stack::fn_print_stack(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_head_size(stack_t &stack) {
+std::optional<std::string> Stack::fn_head_size(dc_stack_t &stack) {
     // Check if the stack has enough elements
     if(stack.empty()) {
         return "'Z' does not work on empty stack";
@@ -116,7 +116,7 @@ std::optional<std::string> Stack::fn_head_size(stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_stack_size(stack_t &stack) {
+std::optional<std::string> Stack::fn_stack_size(dc_stack_t &stack) {
     stack.push_back(std::to_string(stack.size()));
 
     return std::nullopt;
