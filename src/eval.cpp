@@ -22,8 +22,8 @@ std::optional<std::string> Evaluate::eval() {
         std::optional<std::string> err = std::nullopt;
     
         //
-		// 		NUMERICAL OPERATIONS
-		//
+        // 		NUMERICAL OPERATIONS
+        //
         if(val == "+") {
             auto math = std::make_unique<Math>(OPType::ADD);
             err = math->exec(this->stack);
@@ -120,6 +120,24 @@ std::optional<std::string> Evaluate::eval() {
         //
         else if(val == "p") { // PRINT TOP ELEMENT OF STACK
             auto op = std::make_unique<Stack>(OPType::PCG);
+            err = op->exec(this->stack);
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "pb") { // PRINT TOP ELEMENT IN BASE 2
+            auto op = std::make_unique<Stack>(OPType::PBB);
+            err = op->exec(this->stack);
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "ph") { // PRINT TOP ELEMENT IN BASE 16
+            auto op = std::make_unique<Stack>(OPType::PBH);
+            err = op->exec(this->stack);
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "po") { // PRINT TOP ELEMENT IN BASE 8
+            auto op = std::make_unique<Stack>(OPType::PBO);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
@@ -264,8 +282,8 @@ std::optional<std::string> Evaluate::parse_macro(size_t &idx) {
 
 std::optional<std::string> Evaluate::parse_macro_command(std::string val) {
     // A macro command is a comparison symbol(>, <, =, >=, <=, !=)
-	// followed by a register name(e.g, >A)
-	// If command has length equal to three, then it's either '<=', '>=' or '!='
+    // followed by a register name(e.g, >A)
+    // If command has length equal to three, then it's either '<=', '>=' or '!='
 
     // Check if command is >=, <= or !=
     std::string operation = "";
@@ -279,9 +297,9 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string val) {
     }
 
     // Macro commands works as follow
-	// Pop two values off the stack and compares them assuming
-	// they are numbers. If top-of-stack is greater,
-	// execute register's content as a macro
+    // Pop two values off the stack and compares them assuming
+    // they are numbers. If top-of-stack is greater,
+    // execute register's content as a macro
     std::optional<std::string> err = std::nullopt;
     if(operation == ">") {
         auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GT, dc_register, this->regs);
@@ -326,8 +344,8 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string val) {
 
 std::optional<std::string> Evaluate::parse_register_command(std::string val) {
     // A register command has length equal to 2
-	// and starts either with 's', 'l'(i.e. "sX" or "lX")
-	// or with 'S' or 'L'(i.e., "SX", "LX")
+    // and starts either with 's', 'l'(i.e. "sX" or "lX")
+    // or with 'S' or 'L'(i.e., "SX", "LX")
     if(val.at(0) == 's') {
         // Check if main stack is empty
         if(this->stack.empty()) {
@@ -353,9 +371,9 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
          this->regs[reg_name].stack.push_back(head);
     } else if(val.at(0) == 'S') {
         // An uppercase 'S' pops the top of the main stack and
-		// pushes it onto the stack of selected register.
-		// The previous value of the register's stack becomes
-		// inaccessible(i.e. it follows LIFO policy).
+	// pushes it onto the stack of selected register.
+	// The previous value of the register's stack becomes
+	// inaccessible(i.e. it follows LIFO policy).
 
         // Check if main stack is empty
         if(this->stack.empty()) {
@@ -379,8 +397,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
         }
     } else if(val.at(0) == 'L') {
         // An uppercase 'L' pops the top of the register's stack
-		// abd pushes it onto the main stack. The previous register's stack
-		// value, if any, is accessible via the lowercase 'l' command
+	// abd pushes it onto the main stack. The previous register's stack
+	// value, if any, is accessible via the lowercase 'l' command
         auto reg_name = val.at(1);
 
         // Check if register exists
@@ -399,8 +417,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
         this->stack.push_back(value);
     } else {
         // Otherwise retrieve the register name and push its value
-		// to the stack without altering the register's stack.
-		// If the register is empty, push '0' to the stack
+	// to the stack without altering the register's stack.
+	// If the register is empty, push '0' to the stack
         auto reg_name = val.at(1);
 
         // If register does not exists or its stack is empty, push '0' onto the main stack
@@ -420,11 +438,11 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
 
 std::optional<std::string> Evaluate::parse_array_command(std::string val) {
     // An array command has length equal to 2, starts
-	// with either ':'(store) or ';'(read) and ends with
-	// the register name(i.e., ':X' or ';X')
+    // with either ':'(store) or ';'(read) and ends with
+    // the register name(i.e., ':X' or ';X')
     if(val.at(0) == ':') {
         // An ':' command pops two values from the main stack. The second-to-top
-		// element will be stored in the array indexed by the top-of-stack.
+	// element will be stored in the array indexed by the top-of-stack.
         auto reg_name = val.at(1);
 
         // Check if the main stack has enough elements
@@ -459,7 +477,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
         }
     } else {
         // An ';' command pops top-of-stack abd uses it as an index
-		// for the array. The selected value, if any, is pushed onto the stack
+	// for the array. The selected value, if any, is pushed onto the stack
         auto reg_name = val.at(1);
 
         // Check if the main stack is empty
@@ -489,7 +507,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
             return std::string("The array of register '") + reg_name + std::string("' is empty");
         }
 
-        // Otherwise, use the index to retrieve the array element 
+        // Otherwise, use the index to retrieve the array element
         // and to push it onto the main stack
         auto reg_it = regs.find(reg_name);
         auto arr_it = reg_it->second.array.find(idx);
@@ -497,7 +515,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
         if(arr_it != reg_it->second.array.end()) {
             this->stack.push_back(arr_it->second);
         } else {
-            return std::string("Cannot access ") + reg_name + 
+            return std::string("Cannot access ") + reg_name +
                    std::string("[") + std::to_string(idx) + std::string("]");
         }
     }

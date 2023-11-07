@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: November 06, 2023
+date: November 07, 2023
 ---
 
 
@@ -185,6 +185,20 @@ Pops one value, computes its `cos`, and pushes that.
 **tan**
 
 Pops one value, computes its `tan`, and pushes that.
+
+## Base Conversion
+
+**pb**
+
+Prints the value on the top of the stack in base 2, without altering the stack. A newline is printed after the value.
+
+**po**
+
+Prints the value on the top of the stack in base 8, without altering the stack. A newline is printed after the value.
+
+**ph**
+
+Prints the value on the top of the stack in base 16, without altering the stack. A newline is printed after the value.
 
 ## Stack Control
 

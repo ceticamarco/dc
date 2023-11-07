@@ -10,6 +10,9 @@ std::optional<std::string> Stack::exec(dc_stack_t &stack) {
     switch(this->op_type) {
         case OPType::PCG: err = fn_print(stack, true); break;
         case OPType::P: err = fn_print(stack, false); break;
+        case OPType::PBB: err = fn_print_base(stack, Base::BIN); break;
+        case OPType::PBH: err = fn_print_base(stack, Base::HEX); break;
+        case OPType::PBO: err = fn_print_base(stack, Base::OCT); break;
         case OPType::CLR: stack.clear(); break;
         case OPType::PH: fn_pop_head(stack); break;
         case OPType::SO: fn_swap_xy(stack); break;
@@ -33,6 +36,62 @@ std::optional<std::string> Stack::fn_print(dc_stack_t &stack, bool new_line) {
         std::cout << stack.back() << std::endl;
     } else {
         std::cout << stack.back();
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_print_base(dc_stack_t &stack, Base base) {
+    // Check if the stack is empty
+    if(stack.empty()) {
+        return "Cannot print empty stack";
+    }
+
+    // Check if top of the stack is a number
+    if(!is_num<int>(stack.back())) {
+        return "This operation requires integers values";
+    }
+
+    // Get top element of the stack
+    auto head = std::stol(stack.back());
+    switch(base) {
+        case Base::BIN: {
+            // Define a lambda function to convert dec to bin
+            auto to_bin = [](auto num) -> std::string {
+                if(num == 0) {
+                    return "0";
+                }
+
+                std::string res = "";
+                while(num > 0) {
+                    res = (std::to_string(num % 2) + res);
+                    num /= 2;
+                }
+
+                // Remove extra zeros
+                auto first_one = res.find('1');
+                if(first_one != std::string::npos) {
+                    res = res.substr(first_one);
+                }
+
+                return res;
+            };
+
+            // Print the number in base 2
+            std::cout << to_bin(head) << "b" << std::endl;
+            break;
+        }
+        case Base::HEX: {
+            // Print the number in base 16
+            std::cout << std::hex << std::uppercase << head << 'h'
+                      << std::dec << std::nouppercase << std::endl;
+            break;
+        }
+        case Base::OCT: {
+            // Print the number in base 8
+            std::cout << std::oct << head << 'o' << std::dec << std::endl;
+            break;
+        }
     }
 
     return std::nullopt;

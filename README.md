@@ -24,6 +24,7 @@ Some of the supported features are:
 - Basic arithmetical operations(`+`, `-`, `*`, `/`, `^`, `%`);  
 - Scientific notation support(`5e3` -> `5000`);  
 - Trigonometrical functions(`sin`, `cos`, `tan`);  
+- Base conversion(binary: `pb`, octal: `po`, hexadecimal: `px`);  
 - Factorial and constants(`!`, `pi`, `e`);  
 - Stack operations:
     - Print top element(`p`, `P`);  
