@@ -34,3 +34,6 @@ dc
 
 # Manual
 dc.1
+
+# CMake folders
+build

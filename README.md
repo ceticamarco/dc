@@ -47,12 +47,13 @@ Some of the supported features are:
 And much more. You can find the complete manual [here](https://github.com/ice-bit/dc/blob/master/man.md).
 
 ## Installation
-`dc` is written in C++20 without using any additional dependency. In order to build it, issue the following commands: 
+`dc` is written in C++20 without using any additional dependency. In order to build it, install a recent version of CMake and issue
+the following command:
 ```sh
-$> make clean all
+$> mkdir build && cd build
+$> cmake .. && make
 ```
-
-A new binary called `dc` will be created in your local folder.
+A new statically-compiled binary called `dc` will be created in your local folder.
 
 To generate a man page from the `man.md` document, use the following command(note: needs pandoc):
 ```sh
