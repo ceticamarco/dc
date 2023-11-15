@@ -190,6 +190,12 @@ std::optional<std::string> Evaluate::eval() {
             if(err != std::nullopt) {
                 return err;
             }
+        } else if(val == "k") { // SET PRECISION
+        } else if(val == "K") { // GET PRECISION
+        } else if(val == "o") { // SET OUTPUT BASE
+        } else if(val == "O") { // GET OUTPUT BASE
+        } else if(val == "i") { // SET INPUT BASE
+        } else if(val == "I") { // GET INPUT BASE
         } else if(val == "x") { // EXECUTE MACRO
             auto macro = std::make_unique<Macro>(OPType::EX, this->regs);
             err = macro->exec(this->stack);

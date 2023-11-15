@@ -180,3 +180,33 @@ std::optional<std::string> Stack::fn_stack_size(dc_stack_t &stack) {
 
     return std::nullopt;
 }
+
+std::optional<std::string> Stack::fn_set_precision(dc_stack_t &stack) {
+    (void)stack;
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_precision(dc_stack_t &stack) {
+    (void)stack;
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_set_oradix(dc_stack_t &stack) {
+    (void)stack;
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_oradix(dc_stack_t &stack) {
+    (void)stack;
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_set_iradix(dc_stack_t &stack) {
+    (void)stack;
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_iradix(dc_stack_t &stack) {
+    (void)stack;
+    return std::nullopt;
+}
