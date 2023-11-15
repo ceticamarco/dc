@@ -4,7 +4,7 @@
 
 class Math : public IOperation {
 public:
-    Math(const OPType op_t) : op_type(std::move(op_t)) {}
+    Math(const OPType op_t, const unsigned int p) : op_type(std::move(op_t)), precision(std::move(p)) {}
     std::optional<std::string> exec(dc_stack_t &stack) override;
 
 private:
@@ -23,7 +23,8 @@ private:
     std::optional<std::string> fn_fact(dc_stack_t &stack);
     std::optional<std::string> fn_pi(dc_stack_t &stack);
     std::optional<std::string> fn_e(dc_stack_t &stack);
-    static std::string trim_zeros(double number);
+    static std::string trim_digits(double number, unsigned int precision);
 
     OPType op_type;
+    unsigned int precision;
 };

@@ -25,91 +25,91 @@ std::optional<std::string> Evaluate::eval() {
         // 		NUMERICAL OPERATIONS
         //
         if(val == "+") {
-            auto math = std::make_unique<Math>(OPType::ADD);
+            auto math = std::make_unique<Math>(OPType::ADD, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "-") {
-            auto math = std::make_unique<Math>(OPType::SUB);
+            auto math = std::make_unique<Math>(OPType::SUB, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "*") {
-            auto math = std::make_unique<Math>(OPType::MUL);
+            auto math = std::make_unique<Math>(OPType::MUL, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val =="/") {
-            auto math = std::make_unique<Math>(OPType::DIV);
+            auto math = std::make_unique<Math>(OPType::DIV, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "%") {
-            auto math = std::make_unique<Math>(OPType::MOD);
+            auto math = std::make_unique<Math>(OPType::MOD, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "~") {
-            auto math = std::make_unique<Math>(OPType::DIV_MOD);
+            auto math = std::make_unique<Math>(OPType::DIV_MOD, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "|") {
-            auto math = std::make_unique<Math>(OPType::MOD_EXP);
+            auto math = std::make_unique<Math>(OPType::MOD_EXP, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "^") {
-            auto math = std::make_unique<Math>(OPType::EXP);
+            auto math = std::make_unique<Math>(OPType::EXP, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "v") {
-            auto math = std::make_unique<Math>(OPType::SQRT);
+            auto math = std::make_unique<Math>(OPType::SQRT, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "sin") {
-            auto math = std::make_unique<Math>(OPType::SIN);
+            auto math = std::make_unique<Math>(OPType::SIN, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "cos") {
-            auto math = std::make_unique<Math>(OPType::COS);
+            auto math = std::make_unique<Math>(OPType::COS, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "tan") {
-            auto math = std::make_unique<Math>(OPType::TAN);
+            auto math = std::make_unique<Math>(OPType::TAN, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "!") {
-            auto math = std::make_unique<Math>(OPType::FACT);
+            auto math = std::make_unique<Math>(OPType::FACT, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "pi") {
-            auto math = std::make_unique<Math>(OPType::PI);
+            auto math = std::make_unique<Math>(OPType::PI, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "e") {
-            auto math = std::make_unique<Math>(OPType::E);
+            auto math = std::make_unique<Math>(OPType::E, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;

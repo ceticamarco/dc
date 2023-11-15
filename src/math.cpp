@@ -1,5 +1,6 @@
 #include <cmath>
 #include <numbers>
+#include <iomanip>
 
 #include "math.h"
 #include "is_num.h"
@@ -51,7 +52,7 @@ std::optional<std::string> Math::fn_add(dc_stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(lhs + rhs));
+        stack.push_back(trim_digits((lhs + rhs), this->precision));
     } else {
         return "'+' requires numeric values";
     }
@@ -81,7 +82,7 @@ std::optional<std::string> Math::fn_sub(dc_stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(-(lhs - rhs)));
+        stack.push_back(trim_digits(-(lhs - rhs), this->precision));
     } else {
         return "'-' requires numeric values";
     }
@@ -111,7 +112,7 @@ std::optional<std::string> Math::fn_mul(dc_stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(lhs * rhs));
+        stack.push_back(trim_digits((lhs * rhs), this->precision));
     } else {
         return "'*' requires numeric values";
     }
@@ -146,7 +147,7 @@ std::optional<std::string> Math::fn_div(dc_stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(dividend / divisor));
+        stack.push_back(trim_digits((dividend / divisor), this->precision));
     } else {
         return "'/' requires numeric values";
     }
@@ -181,7 +182,7 @@ std::optional<std::string> Math::fn_mod(dc_stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(trim_zeros((int)lhs % (int)rhs));
+        stack.push_back(trim_digits(((int)lhs % (int)rhs), this->precision));
     } else {
         return "'%' requires numeric values";
     }
@@ -215,8 +216,8 @@ std::optional<std::string> Math::fn_div_mod(dc_stack_t &stack) {
             auto quotient = std::trunc(dividend / divisor);
             auto remainder = ((int)dividend % (int)divisor);
 
-            stack.push_back(trim_zeros(quotient));
-            stack.push_back(trim_zeros(remainder));
+            stack.push_back(trim_digits(quotient, this->precision));
+            stack.push_back(trim_digits(remainder, this->precision));
         }
 
     } else {
@@ -271,7 +272,7 @@ std::optional<std::string> Math::fn_mod_exp(dc_stack_t &stack) {
             c = (c * base) % modulus;
         }
         
-        stack.push_back(trim_zeros(c));
+        stack.push_back(trim_digits(c, this->precision));
     } else {
         return "'|' requires numeric values";
     }
@@ -301,7 +302,7 @@ std::optional<std::string> Math::fn_exp(dc_stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(pow(base, exp)));
+        stack.push_back(trim_digits(pow(base, exp), this->precision));
     } else {
         return "'^' requires numeric values";
     }
@@ -330,7 +331,7 @@ std::optional<std::string> Math::fn_sqrt(dc_stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(sqrt(val)));
+        stack.push_back(trim_digits(sqrt(val), this->precision));
     } else {
         return "'v' requires numeric values";
     }
@@ -355,7 +356,7 @@ std::optional<std::string> Math::fn_sin(dc_stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(sin(val)));
+        stack.push_back(trim_digits(sin(val), this->precision));
     } else {
         return "'sin' requires numeric values";
     }
@@ -380,7 +381,7 @@ std::optional<std::string> Math::fn_cos(dc_stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(cos(val)));
+        stack.push_back(trim_digits(cos(val), this->precision));
     } else {
         return "'cos' requires numeric values";
     }
@@ -405,7 +406,7 @@ std::optional<std::string> Math::fn_tan(dc_stack_t &stack) {
         stack.pop_back();
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(tan(val)));
+        stack.push_back(trim_digits(tan(val), this->precision));
     } else {
         return "'tan' requires numeric values";
     }
@@ -439,7 +440,7 @@ std::optional<std::string> Math::fn_fact(dc_stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(trim_zeros(factorial));
+        stack.push_back(trim_digits(factorial, this->precision));
     } else {
         return "'!' requires numeric values";
     }
@@ -448,22 +449,27 @@ std::optional<std::string> Math::fn_fact(dc_stack_t &stack) {
 }
 
 std::optional<std::string> Math::fn_pi(dc_stack_t &stack) {
-    stack.push_back(trim_zeros(std::numbers::pi));
+    stack.push_back(trim_digits(std::numbers::pi, this->precision));
 
     return std::nullopt;
 }
 
 std::optional<std::string> Math::fn_e(dc_stack_t &stack) {
-    stack.push_back(trim_zeros(std::numbers::e));
+    stack.push_back(trim_digits(std::numbers::e, this->precision));
 
     return std::nullopt;
 }
 
-std::string Math::trim_zeros(double number) {
-    std::string s = std::to_string(number);
+std::string Math::trim_digits(double number, unsigned int precision) {
+    std::ostringstream oss;
 
-    s.erase(s.find_last_not_of('0') + 1, std::string::npos);
-    s.erase(s.find_last_not_of('.') + 1, std::string::npos);
+    // Preserve non-zero decimal numbers even when precision is zero
+    if(precision == 0 && std::fmod(number, 1.0) != 0.0) {
+        precision = 2;
+    }
+
+    oss << std::fixed << std::setprecision(precision) << number;
+    std::string s = oss.str();
 
     return s;
 }
