@@ -16,6 +16,9 @@
 #define ARRAY_COND(VAL) ((val.length() == 2) && \
         (val.at(0) == ':' || val.at(0) == ';'))
 
+#define NUM_COND(VAL) ((is_num<double>(val) || \
+            val.find_first_of("ABCDEF") != std::string::npos))
+
 std::optional<std::string> Evaluate::eval() {
     for(size_t idx = 0; idx < this->expr.size(); idx++) {
         auto val = this->expr.at(idx);
@@ -248,7 +251,7 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
         err = parse_register_command(val);
     } else if(ARRAY_COND(val)) {
         err = parse_array_command(val);
-    } else if(is_num<double>(val)) {
+    } else if(NUM_COND(val)) {
         err = parse_number(val);
     } else {
         return "Unrecognized option";
@@ -262,8 +265,8 @@ std::optional<std::string> Evaluate::parse_number(std::string val) {
     if(this->parameters.iradix == 10) {
         this->stack.push_back(val);
     } else {
-        // Otherwise process it if and only if the number is an integer
-        if(!is_num<long>(val)) {
+        // Discard values that are neither integers and neither in the string 'ABCDEF'
+        if(!is_num<long>(val) && val.find_first_of("ABCDEF") == std::string::npos) {
             return "This input base supports integers only";
         }
 
