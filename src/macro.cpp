@@ -32,7 +32,7 @@ std::optional<std::string> Macro::fn_execute(dc_stack_t &stack) {
     if(!is_num<double>(head)) {
         stack.pop_back();
         std::vector<std::string> tokens = split(head);
-        Evaluate evaluator(tokens, this->regs, stack);
+        Evaluate evaluator(tokens, this->regs, stack, this->parameters);
         
         auto err = evaluator.eval();
         if(err != std::nullopt) {
@@ -70,7 +70,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::GT: {
                 if(head > second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack);
+                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -82,7 +82,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::LT: {
                 if(head < second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack);
+                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -94,7 +94,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::EQ: {
                 if(head == second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack);
+                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -106,7 +106,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::GEQ: {
                 if(head >= second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack);
+                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -118,7 +118,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::LEQ: {
                 if(head <= second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack);
+                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -130,7 +130,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::NEQ: {
                 if(head != second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack);
+                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -156,7 +156,7 @@ std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack) {
 
     // Push the input onto the main stack and execute it as a macro
     stack.push_back(user_input);
-    Evaluate evaluator(this->regs, stack);
+    Evaluate evaluator(this->regs, stack, this->parameters);
         
     auto err = evaluator.eval();
     if(err != std::nullopt) {

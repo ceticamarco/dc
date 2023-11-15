@@ -191,19 +191,27 @@ std::optional<std::string> Evaluate::eval() {
                 return err;
             }
         } else if(val == "k") { // SET PRECISION
+            err = fn_set_precision();
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "K") { // GET PRECISION
+            err = fn_get_precision();
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "o") { // SET OUTPUT BASE
         } else if(val == "O") { // GET OUTPUT BASE
         } else if(val == "i") { // SET INPUT BASE
         } else if(val == "I") { // GET INPUT BASE
         } else if(val == "x") { // EXECUTE MACRO
-            auto macro = std::make_unique<Macro>(OPType::EX, this->regs);
+            auto macro = std::make_unique<Macro>(OPType::EX, this->regs, this->parameters);
             err = macro->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "?") { // READ LINE FROM STDIN
-            auto macro = std::make_unique<Macro>(OPType::RI, this->regs);
+            auto macro = std::make_unique<Macro>(OPType::RI, this->regs, this->parameters);
             err = macro->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
@@ -308,37 +316,37 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string val) {
     // execute register's content as a macro
     std::optional<std::string> err = std::nullopt;
     if(operation == ">") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GT, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GT, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "<") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LT, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LT, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::EQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::EQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == ">=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GEQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "<=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LEQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "!=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::NEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::NEQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
@@ -526,5 +534,48 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
         }
     }
 
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_set_precision() {
+    // Check if stack has enough elements
+    if(this->stack.empty()) {
+        return "'k' requires one operand";
+    }
+
+    // Pop the head of the stack
+    auto head = std::stol(this->stack.back());
+    this->stack.pop_back();
+
+    // Check if precision is non-negative
+    if(head < 0) {
+        return "Precision must be >=0";
+    }
+
+    // Set precision parameter
+    this->parameters.precision = head;
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_get_precision() {
+    this->stack.push_back(std::to_string(this->parameters.precision));
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_set_oradix() {
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_get_oradix() {
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_set_iradix() {
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_get_iradix() {
     return std::nullopt;
 }
