@@ -371,9 +371,9 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
          this->regs[reg_name].stack.push_back(head);
     } else if(val.at(0) == 'S') {
         // An uppercase 'S' pops the top of the main stack and
-	// pushes it onto the stack of selected register.
-	// The previous value of the register's stack becomes
-	// inaccessible(i.e. it follows LIFO policy).
+        // pushes it onto the stack of selected register.
+        // The previous value of the register's stack becomes
+        // inaccessible(i.e. it follows LIFO policy).
 
         // Check if main stack is empty
         if(this->stack.empty()) {
@@ -397,8 +397,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
         }
     } else if(val.at(0) == 'L') {
         // An uppercase 'L' pops the top of the register's stack
-	// abd pushes it onto the main stack. The previous register's stack
-	// value, if any, is accessible via the lowercase 'l' command
+	    // abd pushes it onto the main stack. The previous register's stack
+    	// value, if any, is accessible via the lowercase 'l' command
         auto reg_name = val.at(1);
 
         // Check if register exists
@@ -417,8 +417,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
         this->stack.push_back(value);
     } else {
         // Otherwise retrieve the register name and push its value
-	// to the stack without altering the register's stack.
-	// If the register is empty, push '0' to the stack
+    	// to the stack without altering the register's stack.
+	    // If the register is empty, push '0' to the stack
         auto reg_name = val.at(1);
 
         // If register does not exists or its stack is empty, push '0' onto the main stack
@@ -442,7 +442,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
     // the register name(i.e., ':X' or ';X')
     if(val.at(0) == ':') {
         // An ':' command pops two values from the main stack. The second-to-top
-	// element will be stored in the array indexed by the top-of-stack.
+	    // element will be stored in the array indexed by the top-of-stack.
         auto reg_name = val.at(1);
 
         // Check if the main stack has enough elements
@@ -477,7 +477,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
         }
     } else {
         // An ';' command pops top-of-stack abd uses it as an index
-	// for the array. The selected value, if any, is pushed onto the stack
+    	// for the array. The selected value, if any, is pushed onto the stack
         auto reg_name = val.at(1);
 
         // Check if the main stack is empty
