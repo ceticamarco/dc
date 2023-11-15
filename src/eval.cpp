@@ -203,7 +203,15 @@ std::optional<std::string> Evaluate::eval() {
         } else if(val == "o") { // SET OUTPUT BASE
         } else if(val == "O") { // GET OUTPUT BASE
         } else if(val == "i") { // SET INPUT BASE
+            err = fn_set_iradix();
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "I") { // GET INPUT BASE
+            err = fn_get_iradix();
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "x") { // EXECUTE MACRO
             auto macro = std::make_unique<Macro>(OPType::EX, this->regs, this->parameters);
             err = macro->exec(this->stack);
@@ -241,12 +249,29 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
     } else if(ARRAY_COND(val)) {
         err = parse_array_command(val);
     } else if(is_num<double>(val)) {
-        this->stack.push_back(val);
+        err = parse_number(val);
     } else {
         return "Unrecognized option";
     }
 
     return err;
+}
+
+std::optional<std::string> Evaluate::parse_number(std::string val) {
+    // If input base is 10, do not pre-process the number
+    if(this->parameters.iradix == 10) {
+        this->stack.push_back(val);
+    } else {
+        // Otherwise process it if and only if the number is an integer
+        if(!is_num<long>(val)) {
+            return "This input base supports integers only";
+        }
+
+        long number = std::stol(val, nullptr, this->parameters.iradix);
+        this->stack.push_back(std::to_string(number));
+    }
+
+    return std::nullopt;
 }
 
 std::optional<std::string> Evaluate::parse_macro(size_t &idx) {
@@ -543,17 +568,16 @@ std::optional<std::string> Evaluate::fn_set_precision() {
         return "'k' requires one operand";
     }
 
-    // Pop the head of the stack
-    auto head = std::stol(this->stack.back());
-    this->stack.pop_back();
-
-    // Check if precision is non-negative
-    if(head < 0) {
-        return "Precision must be >=0";
+    // Check whether head is a non negative number
+    auto head = this->stack.back();
+    if(!is_num<int>(head) || std::stoi(head) < 0) {
+        return "Precision must be a non-negative number";
     }
 
-    // Set precision parameter
-    this->parameters.precision = head;
+    // Otherwise extract head of the stack and use it
+    // to set precision parameter
+    this->stack.pop_back();
+    this->parameters.precision = std::stoi(head);
 
     return std::nullopt;
 }
@@ -573,9 +597,27 @@ std::optional<std::string> Evaluate::fn_get_oradix() {
 }
 
 std::optional<std::string> Evaluate::fn_set_iradix() {
+    // Check if stack has enough elements
+    if(this->stack.empty()) {
+        return "'i' requires one operand";
+    }
+
+    // Check whether head is a number within the range 2-16
+    auto head = this->stack.back();
+    if(!is_num<double>(head) || std::stoi(head) < 2 || std::stoi(head) > 16) {
+        return "Input base must be a number within the range 2-16(inclusive)";
+    }
+
+    // Otherwise extract head of the stack and use it
+    // to set input base
+    this->stack.pop_back();
+    this->parameters.iradix = std::stoi(head);
+
     return std::nullopt;
 }
 
 std::optional<std::string> Evaluate::fn_get_iradix() {
+    this->stack.push_back(std::to_string(this->parameters.iradix));
+
     return std::nullopt;
 }
