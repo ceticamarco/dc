@@ -26,5 +26,5 @@ private:
     Operator op;
     char dc_register;
     std::unordered_map<char, Register> &regs;
-    Parameters parameters;
+    Parameters &parameters;
 };

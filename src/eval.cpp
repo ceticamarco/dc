@@ -44,7 +44,7 @@ std::optional<std::string> Evaluate::eval() {
             if(err != std::nullopt) {
                 return err;
             }
-        } else if(val =="/") {
+        } else if(val == "/") {
             auto math = std::make_unique<Math>(OPType::DIV, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
@@ -121,31 +121,31 @@ std::optional<std::string> Evaluate::eval() {
         // 		STACK OPERATIONS
         //
         else if(val == "p") { // PRINT TOP ELEMENT OF STACK
-            auto op = std::make_unique<Stack>(OPType::PCG);
+            auto op = std::make_unique<Stack>(OPType::PCG, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "pb") { // PRINT TOP ELEMENT IN BASE 2
-            auto op = std::make_unique<Stack>(OPType::PBB);
+            auto op = std::make_unique<Stack>(OPType::PBB, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "ph") { // PRINT TOP ELEMENT IN BASE 16
-            auto op = std::make_unique<Stack>(OPType::PBH);
+            auto op = std::make_unique<Stack>(OPType::PBH, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "po") { // PRINT TOP ELEMENT IN BASE 8
-            auto op = std::make_unique<Stack>(OPType::PBO);
+            auto op = std::make_unique<Stack>(OPType::PBO, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "P") { // PRINT TOP ELEMENT WITHOUT NEWLINE
-            auto op = std::make_unique<Stack>(OPType::P);
+            auto op = std::make_unique<Stack>(OPType::P, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
@@ -203,7 +203,15 @@ std::optional<std::string> Evaluate::eval() {
                 return err;
             }
         } else if(val == "o") { // SET OUTPUT BASE
+            err = fn_set_oradix();
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "O") { // GET OUTPUT BASE
+            err = fn_get_oradix();
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "i") { // SET INPUT BASE
             err = fn_set_iradix();
             if(err != std::nullopt) {
@@ -594,10 +602,33 @@ std::optional<std::string> Evaluate::fn_get_precision() {
 }
 
 std::optional<std::string> Evaluate::fn_set_oradix() {
+    // Check if stack has enough elements
+    if(this->stack.empty()) {
+        return "'o' requires one operand";
+    }
+
+    // Check whether the head is a number
+    auto head = this->stack.back();
+    if(!is_num<int>(head)) {
+        return "'o' requires numeric values only";
+    }
+
+    // Otherwise convert it to int
+    auto oradix = std::stoi(head);
+    switch(oradix) {
+        case 2: this->parameters.oradix = radix_base::BIN; break;
+        case 8: this->parameters.oradix = radix_base::OCT; break;
+        case 10: this->parameters.oradix = radix_base::DEC; break;
+        case 16: this->parameters.oradix = radix_base::HEX; break;
+        default: return "'o' accepts either BIN, OCT, DEC or HEX bases";
+    }
+
     return std::nullopt;
 }
 
 std::optional<std::string> Evaluate::fn_get_oradix() {
+    this->stack.push_back(std::to_string(static_cast<int>(this->parameters.oradix)));
+
     return std::nullopt;
 }
 

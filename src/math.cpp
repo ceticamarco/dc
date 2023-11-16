@@ -81,8 +81,18 @@ std::optional<std::string> Math::fn_sub(dc_stack_t &stack) {
         auto rhs = std::stod(stack.back());
         stack.pop_back();
 
+        // Subtract the two operands
+        auto result = (-(lhs - rhs));
+
+        // Compare the result with an epsilon value
+        // to prevent -0/+0 results
+        auto epsilon = 1e-10;
+        if(std::abs(result) < epsilon) {
+            result = 0.0;
+        }
+
         // Push back the result as a string
-        stack.push_back(trim_digits(-(lhs - rhs), this->precision));
+        stack.push_back(trim_digits(result, this->precision));
     } else {
         return "'-' requires numeric values";
     }
@@ -182,7 +192,7 @@ std::optional<std::string> Math::fn_mod(dc_stack_t &stack) {
         }
 
         // Push back the result as a string
-        stack.push_back(trim_digits(((int)lhs % (int)rhs), this->precision));
+        stack.push_back(trim_digits((static_cast<int>(lhs) % static_cast<int>(rhs)), this->precision));
     } else {
         return "'%' requires numeric values";
     }
