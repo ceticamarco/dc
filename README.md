@@ -1,7 +1,7 @@
 # dc ![](https://github.com/ice-bit/dc/actions/workflows/dc.yml/badge.svg)
 
 **dc** is an advanced, scientific and programmable RPN desktop calculator with macro support (re)written in C++. 
-By default, dc supports a wide range of arithmetical, trigonometrical and numerical functions. 
+By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions. 
 Its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
 
 **dc** reads from the standard input, but it can also work with text files using the `-f` flag. Futhermore, you can decide to evaluate an expression
@@ -33,6 +33,9 @@ Some of the supported features are:
     - Swap order of top two elements(`r`);  
     - Duplicate top element(`d`);  
     - Dump the whole stack(`f`);  
+- Parameters:
+    - Set precision(`k`);  
+    - Set input and output radix(`i` and `o`);  
 - Registers:
     - Store top element of the stack on register `X`(`sX` or `SX`);  
     - Load content of register `X` on top of the stack(`lX` or `LX`);  
@@ -135,14 +138,14 @@ $$\sum_{i=1}^{37} i = 666$$
 $> dc -e "36 [ d 1 - d 1 <F + ] d sF x p"
 ```
 
-5. Prints the first 20 values of `n!`:
+5. Print the first 20 values of `n!`:
 ```
 [ la 1 + d sa * p la 20 >y ] sy
 0 sa 1
 ly x
 ```
 
-9. Computes the factorial of a given number:
+9. Compute the factorial of a given number:
 ```
 [ ln 1 - sn ln la * sa ln 1 !=f ] sf
 [ Enter value: ] P ? sn
@@ -151,7 +154,15 @@ lf x
 la p
 ```
 
-10. Computes the Greatest Common Divisor(GCD) between two user-defined numbers `A` and `B`:
+10. Compute the sum $8AB6F + B783E$ in base 16. Print the result in base 10 and in base 2:
+```
+16 i
+8AB6F B783E +
+[ Result in base 10: ] P R p
+[ Result in base 2: ] P R pb
+```
+
+11. Compute the Greatest Common Divisor(GCD) between two user-defined numbers `A` and `B`:
 ```
 [ Enter A: ] P R ?
 [ Enter B: ] P R ?
@@ -159,7 +170,7 @@ la p
 [ GCD(A,B)= ] P R p
 ```
 
-11. Computes the Least Common Multiple(LCM) between two user-defined numbers `A` and `B`:
+12. Compute the Least Common Multiple(LCM) between two user-defined numbers `A` and `B`:
 ```
 [ Enter A: ] P R ? d sA
 [ Enter B: ] P R ? d SA
@@ -168,7 +179,7 @@ LA lA * r /
 [ LCM(A,B)= ] P R p
 ```
 
-12. Find the roots of a quadratic equation of the form:
+13. Find the roots of a quadratic equation of the form:
 $$ax^2 + bx + c = 0$$
 
 with $$a,b,c \in \mathbb{R}, a \neq 0$$
@@ -184,6 +195,7 @@ $$x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
 # THIS PROGRAM DOES NOT WORK WITH CMPLX NUMBERS
 # DEVELOPED BY MARCO CETICA 2023
 #
+3 k
 [ Enter A: ] P ? sA
 [ Enter B: ] P ? sB
 [ Enter C: ] P ? sC
@@ -192,8 +204,8 @@ lB -1 * lD - lA # NEGATIVE DELTA
 2 * / sS # FIRST SOLUTION
 lB -1 * lD + lA # POSITIVE DELTA
 2 * / SS # SECOND SOLUTION
-[ X: ] P R lS p
-[ Y: ] P R LS lS p
+[ X1: ] P R lS p
+[ X2: ] P R LS lS p
 ```
 
 ## License

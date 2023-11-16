@@ -9,7 +9,7 @@
 #include "src/eval.h"
 #include "src/macro.h" // for split static method
 
-#define DC_VERSION "1.0.1"
+#define DC_VERSION "1.0.2"
 
 void helper() {
     std::cout << "RPN desktop calculator with macro support. Usage: \n"

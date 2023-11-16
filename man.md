@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: November 07, 2023
+date: November 16, 2023
 ---
 
 
@@ -21,7 +21,7 @@ RPN desktop calculator with macro support. Usage:
 
 # DESCRIPTION
 **dc** is an advanced, scientific and programmable RPN desktop calculator with macro support (re)written in C++.
-By default, dc supports a wide range of arithmetical, trigonometrical and numerical functions. 
+By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions. 
 Its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
 
 **dc** uses the reverse polish notation(**RPN**) to parse mathematical expressions. Unlike the infix notation, where operators
@@ -99,7 +99,7 @@ the map's `key` and the associated value is represented by the map's `value`.
 
 # TYPE SYSTEM
 By default each value of any kind of stack is represented by a string. Each operation is in charge to type convert the value before and after
-their invocation. The user can store both numerical and alphanumerical values on the stack. The latter using the _macro_ syntax(see below).
+their invocation. The user can store both numeric and alphanumeric values on the stack. The latter using the _macro_ syntax(see below).
 
 Arrays are homogeneous, thus the only supported data type is the `string`(the internal string type and not the **dc** one).
 
@@ -218,6 +218,48 @@ Reverses the order of the top two values of the stack. This can also be accompli
 
 Pops the top-of-stack without printing it
 
+## Parameters
+**dc** has three parameters that control its operation: the *precision*, the *input radix* and the *output radix*.
+The precision specifies the number of fraction digits to keep in the result of most arithmetical operations. The
+input radix controls the interpretation of numbers typed in(i.e., the input base). The output radix specifies the numeric
+base used to print numbers.
+
+The input and the output radixes are separate parameters which are, by default, equal to 10(i.e., the decimal numeral system); you
+can make them unequal using the `i` and `o` options(see below). The input radix must be within the range 2-16. The ouput radix, instead, 
+can either be equal to 2, 8, 10 or 16. The precision parameter must be zero or greater and cannot be a float value.
+
+The input base affect the behaviour of the whole program, even the parameters commands. For example, the sequence `8 i` will change
+the input base to the octal numeric system and thus every new numeric input after this step will be evaluated in base 8(and not in base 10).
+Therefore, to reset the input base from the octal system to the decimal system, you will need to issue the following sequence: `12 i`.
+
+Non-decimal radixes enable a special set of characters(`ABCDEF`) that allows the user to insert into the stack non-decimal numbers.
+For example, the sequence `16 i F p` will print the number `15` since it represent the number `0xF` in base 10. Do note that these
+characters are case-sensitive(thus `F =/= f`) and cannot be used in the default input base system(thus `10 i F` will yield an error).
+
+**i**
+
+Pops the value off the top of the stack and uses it to set the input radix
+
+**o**
+
+Pops the value off the top of the stack and uses it to set the output radix
+
+**k**
+
+Pops the value off the top of the stack and uses it to set the precision
+
+**I**
+
+Pushes the current input radix on the stack
+
+**O**
+
+Pushes the curent output radix on the stack
+
+**K**
+
+Pushes the current precision on the stack
+
 ## Register(Stack)
 As mentioned before, **dc** supports an hashmap ADT called **register** represented by an ordered pair `(key, value)`. 
 A register maps the `key`(represented by a single character) with a `value`(represented by an auxiliary stack and a private array).
@@ -317,6 +359,7 @@ Exit with return code `0`.
 Reads a line from the terminal and executes it. This command allows a macro to request input from the user.
 
 # EXAMPLES
+# EXAMPLES
 Below, there are some practical problems solved using **dc**.
 
 1. Evaluate `(-5 + sqrt(25 - 16)) / 2`:
@@ -379,6 +422,7 @@ LA lA * r /
 
 9. Find the roots of a quadratic equation
 ```
+3 k
 [ Enter A: ] P ? sA
 [ Enter B: ] P ? sB
 [ Enter C: ] P ? sC
@@ -387,8 +431,16 @@ lB -1 * lD - lA # NEGATIVE DELTA
 2 * / sS # FIRST SOLUTION
 lB -1 * lD + lA # POSITIVE DELTA
 2 * / SS # SECOND SOLUTION
-[ X: ] P R lS p
-[ Y: ] P R LS lS p
+[ X1: ] P R lS p
+[ X2: ] P R LS lS p
+```
+
+10. Compute the sum `8AB6F + B783E` in base 16. Print the result in base 10 and in base 2:
+```
+16 i
+8AB6F B783E +
+[ Result in base 10: ] P R p
+[ Result in base 2: ] P R pb
 ```
 
 # AUTHORS
