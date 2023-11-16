@@ -16,8 +16,7 @@
 #define ARRAY_COND(VAL) ((val.length() == 2) && \
         (val.at(0) == ':' || val.at(0) == ';'))
 
-#define NUM_COND(VAL) ((is_num<double>(val) || \
-            val.find_first_of("ABCDEF") != std::string::npos))
+#define X_CONTAINS_Y(X, Y) ((Y.find_first_of(X) != std::string::npos))
 
 std::optional<std::string> Evaluate::eval() {
     for(size_t idx = 0; idx < this->expr.size(); idx++) {
@@ -251,8 +250,10 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
         err = parse_register_command(val);
     } else if(ARRAY_COND(val)) {
         err = parse_array_command(val);
-    } else if(NUM_COND(val)) {
-        err = parse_number(val);
+    } else if(this->parameters.iradix != 10) {
+        err = parse_base_n(val);
+    } else if(is_num<double>(val)) {
+        this->stack.push_back(val);
     } else {
         return "Unrecognized option";
     }
@@ -260,18 +261,19 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
     return err;
 }
 
-std::optional<std::string> Evaluate::parse_number(std::string val) {
-    // If input base is 10, do not pre-process the number
-    if(this->parameters.iradix == 10) {
-        this->stack.push_back(val);
-    } else {
-        // Discard values that are neither integers and neither in the string 'ABCDEF'
-        if(!is_num<long>(val) && val.find_first_of("ABCDEF") == std::string::npos) {
-            return "This input base supports integers only";
-        }
+std::optional<std::string> Evaluate::parse_base_n(std::string val) {
+    // Discard values that are neither integers neither within "ABCDEF"
+    if(!is_num<long>(val) && !X_CONTAINS_Y("ABCDEF", val)) {
+        return "This input base supports integers only";
+    }
 
+    // Try to convert the number to the selected numeric base
+    try {
         long number = std::stol(val, nullptr, this->parameters.iradix);
         this->stack.push_back(std::to_string(number));
+    } catch(...) {
+        return "Invalid number for input base '" 
+            + std::to_string(this->parameters.iradix) + "'"; 
     }
 
     return std::nullopt;

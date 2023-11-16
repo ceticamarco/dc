@@ -21,7 +21,7 @@ private:
     std::optional<std::string> parse_macro_command(std::string val);
     std::optional<std::string> parse_register_command(std::string val);
     std::optional<std::string> parse_array_command(std::string val);
-    std::optional<std::string> parse_number(std::string val);
+    std::optional<std::string> parse_base_n(std::string val);
     std::optional<std::string> fn_set_precision();
     std::optional<std::string> fn_get_precision();
     std::optional<std::string> fn_set_oradix();
