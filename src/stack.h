@@ -9,6 +9,7 @@ enum class Base {
 class Stack : public IOperation {
 public:
     Stack(const OPType op_t) : op_type(std::move(op_t)) {}
+    Stack(const OPType op_t, const radix_base base) : op_type(std::move(op_t)), oradix(base) {}
     std::optional<std::string> exec(dc_stack_t &stack) override;
 
 private:
@@ -22,4 +23,5 @@ private:
     std::optional<std::string> fn_stack_size(dc_stack_t &stack);
 
     OPType op_type;
+    radix_base oradix;
 };

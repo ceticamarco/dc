@@ -32,10 +32,19 @@ std::optional<std::string> Stack::fn_print(dc_stack_t &stack, bool new_line) {
         return "Cannot print empty stack";
     }
 
-    if(new_line) {
-        std::cout << stack.back() << std::endl;
-    } else {
-        std::cout << stack.back();
+    switch(this->oradix) {
+        case radix_base::DEC: {
+            if(new_line) {
+                std::cout << stack.back() << std::endl;
+            } else {
+                std::cout << stack.back();
+            }
+            break;
+        }
+        case radix_base::BIN: fn_print_base(stack, Base::BIN); break;
+        case radix_base::OCT: fn_print_base(stack, Base::OCT); break;
+        case radix_base::HEX: fn_print_base(stack, Base::HEX); break;
+        default: return "Unsupported output base";
     }
 
     return std::nullopt;

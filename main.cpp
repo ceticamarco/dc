@@ -29,6 +29,11 @@ int main(int argc, char **argv) {
     bool execute_file = false;
     dc_stack_t stack;
     std::unordered_map<char, Register> regs;
+    Parameters parameters = {
+        .precision = 0,
+        .iradix = 10,
+        .oradix = radix_base::DEC
+    };
     struct option long_opts[] = {
         {"expression", required_argument, nullptr, 'e'},
         {"file", required_argument, nullptr, 'f'},
@@ -63,7 +68,7 @@ int main(int argc, char **argv) {
         // Split string expression into a vector
         std::vector<std::string> tokens = Macro::split(cli_expression);
         // Evaluate expression
-        Evaluate evaluator(tokens, regs, stack);
+        Evaluate evaluator(tokens, regs, stack, parameters);
         auto err = evaluator.eval();
         // Handle errors
         if(err != std::nullopt) {
@@ -105,7 +110,7 @@ int main(int argc, char **argv) {
             }
 
             // Evaluate expression
-            Evaluate evaluator(tokens, regs, stack);
+            Evaluate evaluator(tokens, regs, stack, parameters);
             auto err = evaluator.eval();
             // Handle errors
             if(err != std::nullopt) {
@@ -122,7 +127,7 @@ int main(int argc, char **argv) {
         // Split string expression into a vector
         std::vector<std::string> tokens = Macro::split(stdin_expression);
         // Evaluate expression
-        Evaluate evaluator(tokens, regs, stack);
+        Evaluate evaluator(tokens, regs, stack, parameters);
         auto err = evaluator.eval();
         // Handle errors
         if(err != std::nullopt) {

@@ -7,14 +7,16 @@
 #include "is_num.h"
 
 #define MACRO_COND(VAL) ((VAL.length() == 1 && VAL == "["))
-#define MACRO_CMD_COND(VAL) ((val.length() == 2 || val.length() == 3) && \
-              (val.at(0) == '>' || val.at(0) == '<' || \
-               val.at(0) == '=' || val.at(0) == '!'))
-#define REGISTER_COND(VAL) ((val.length() == 2) && \
-              (val.at(0) == 's' || val.at(0) == 'S' || \
-               val.at(0) == 'l' || val.at(0) == 'L'))
-#define ARRAY_COND(VAL) ((val.length() == 2) && \
-        (val.at(0) == ':' || val.at(0) == ';'))
+#define MACRO_CMD_COND(VAL) ((VAL.length() == 2 || VAL.length() == 3) && \
+              (VAL.at(0) == '>' || VAL.at(0) == '<' || \
+               VAL.at(0) == '=' || VAL.at(0) == '!'))
+#define REGISTER_COND(VAL) ((VAL.length() == 2) && \
+              (VAL.at(0) == 's' || VAL.at(0) == 'S' || \
+               VAL.at(0) == 'l' || VAL.at(0) == 'L'))
+#define ARRAY_COND(VAL) ((VAL.length() == 2) && \
+        (VAL.at(0) == ':' || VAL.at(0) == ';'))
+
+#define X_CONTAINS_Y(X, Y) ((Y.find_first_of(X) != std::string::npos))
 
 std::optional<std::string> Evaluate::eval() {
     for(size_t idx = 0; idx < this->expr.size(); idx++) {
@@ -25,91 +27,91 @@ std::optional<std::string> Evaluate::eval() {
         // 		NUMERICAL OPERATIONS
         //
         if(val == "+") {
-            auto math = std::make_unique<Math>(OPType::ADD);
+            auto math = std::make_unique<Math>(OPType::ADD, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "-") {
-            auto math = std::make_unique<Math>(OPType::SUB);
+            auto math = std::make_unique<Math>(OPType::SUB, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "*") {
-            auto math = std::make_unique<Math>(OPType::MUL);
+            auto math = std::make_unique<Math>(OPType::MUL, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
-        } else if(val =="/") {
-            auto math = std::make_unique<Math>(OPType::DIV);
+        } else if(val == "/") {
+            auto math = std::make_unique<Math>(OPType::DIV, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "%") {
-            auto math = std::make_unique<Math>(OPType::MOD);
+            auto math = std::make_unique<Math>(OPType::MOD, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "~") {
-            auto math = std::make_unique<Math>(OPType::DIV_MOD);
+            auto math = std::make_unique<Math>(OPType::DIV_MOD, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "|") {
-            auto math = std::make_unique<Math>(OPType::MOD_EXP);
+            auto math = std::make_unique<Math>(OPType::MOD_EXP, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "^") {
-            auto math = std::make_unique<Math>(OPType::EXP);
+            auto math = std::make_unique<Math>(OPType::EXP, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "v") {
-            auto math = std::make_unique<Math>(OPType::SQRT);
+            auto math = std::make_unique<Math>(OPType::SQRT, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "sin") {
-            auto math = std::make_unique<Math>(OPType::SIN);
+            auto math = std::make_unique<Math>(OPType::SIN, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "cos") {
-            auto math = std::make_unique<Math>(OPType::COS);
+            auto math = std::make_unique<Math>(OPType::COS, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "tan") {
-            auto math = std::make_unique<Math>(OPType::TAN);
+            auto math = std::make_unique<Math>(OPType::TAN, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "!") {
-            auto math = std::make_unique<Math>(OPType::FACT);
+            auto math = std::make_unique<Math>(OPType::FACT, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "pi") {
-            auto math = std::make_unique<Math>(OPType::PI);
+            auto math = std::make_unique<Math>(OPType::PI, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "e") {
-            auto math = std::make_unique<Math>(OPType::E);
+            auto math = std::make_unique<Math>(OPType::E, this->parameters.precision);
             err = math->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
@@ -119,31 +121,31 @@ std::optional<std::string> Evaluate::eval() {
         // 		STACK OPERATIONS
         //
         else if(val == "p") { // PRINT TOP ELEMENT OF STACK
-            auto op = std::make_unique<Stack>(OPType::PCG);
+            auto op = std::make_unique<Stack>(OPType::PCG, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "pb") { // PRINT TOP ELEMENT IN BASE 2
-            auto op = std::make_unique<Stack>(OPType::PBB);
+            auto op = std::make_unique<Stack>(OPType::PBB, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "ph") { // PRINT TOP ELEMENT IN BASE 16
-            auto op = std::make_unique<Stack>(OPType::PBH);
+            auto op = std::make_unique<Stack>(OPType::PBH, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "po") { // PRINT TOP ELEMENT IN BASE 8
-            auto op = std::make_unique<Stack>(OPType::PBO);
+            auto op = std::make_unique<Stack>(OPType::PBO, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "P") { // PRINT TOP ELEMENT WITHOUT NEWLINE
-            auto op = std::make_unique<Stack>(OPType::P);
+            auto op = std::make_unique<Stack>(OPType::P, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
@@ -190,14 +192,44 @@ std::optional<std::string> Evaluate::eval() {
             if(err != std::nullopt) {
                 return err;
             }
+        } else if(val == "k") { // SET PRECISION
+            err = fn_set_precision();
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "K") { // GET PRECISION
+            err = fn_get_precision();
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "o") { // SET OUTPUT BASE
+            err = fn_set_oradix();
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "O") { // GET OUTPUT BASE
+            err = fn_get_oradix();
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "i") { // SET INPUT BASE
+            err = fn_set_iradix();
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "I") { // GET INPUT BASE
+            err = fn_get_iradix();
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "x") { // EXECUTE MACRO
-            auto macro = std::make_unique<Macro>(OPType::EX, this->regs);
+            auto macro = std::make_unique<Macro>(OPType::EX, this->regs, this->parameters);
             err = macro->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
             }
         } else if(val == "?") { // READ LINE FROM STDIN
-            auto macro = std::make_unique<Macro>(OPType::RI, this->regs);
+            auto macro = std::make_unique<Macro>(OPType::RI, this->regs, this->parameters);
             err = macro->exec(this->stack);
             if(err != std::nullopt) {
                 return err;
@@ -226,6 +258,8 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
         err = parse_register_command(val);
     } else if(ARRAY_COND(val)) {
         err = parse_array_command(val);
+    } else if(this->parameters.iradix != 10) {
+        err = parse_base_n(val);
     } else if(is_num<double>(val)) {
         this->stack.push_back(val);
     } else {
@@ -233,6 +267,24 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
     }
 
     return err;
+}
+
+std::optional<std::string> Evaluate::parse_base_n(std::string val) {
+    // Discard values that are neither integers neither within "ABCDEF"
+    if(!is_num<long>(val) && !X_CONTAINS_Y("ABCDEF", val)) {
+        return "This input base supports integers only";
+    }
+
+    // Try to convert the number to the selected numeric base
+    try {
+        long number = std::stol(val, nullptr, this->parameters.iradix);
+        this->stack.push_back(std::to_string(number));
+    } catch(...) {
+        return "Invalid number for input base '" 
+            + std::to_string(this->parameters.iradix) + "'"; 
+    }
+
+    return std::nullopt;
 }
 
 std::optional<std::string> Evaluate::parse_macro(size_t &idx) {
@@ -302,37 +354,37 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string val) {
     // execute register's content as a macro
     std::optional<std::string> err = std::nullopt;
     if(operation == ">") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GT, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GT, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "<") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LT, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LT, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::EQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::EQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == ">=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GEQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "<=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LEQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "!=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::NEQ, dc_register, this->regs);
+        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::NEQ, dc_register, this->regs, this->parameters);
         err = macro->exec(this->stack);
         if(err != std::nullopt) {
             return err;
@@ -519,6 +571,89 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
                    std::string("[") + std::to_string(idx) + std::string("]");
         }
     }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_set_precision() {
+    // Check if stack has enough elements
+    if(this->stack.empty()) {
+        return "'k' requires one operand";
+    }
+
+    // Check whether head is a non negative number
+    auto head = this->stack.back();
+    if(!is_num<int>(head) || std::stoi(head) < 0) {
+        return "Precision must be a non-negative number";
+    }
+
+    // Otherwise extract head of the stack and use it
+    // to set precision parameter
+    this->stack.pop_back();
+    this->parameters.precision = std::stoi(head);
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_get_precision() {
+    this->stack.push_back(std::to_string(this->parameters.precision));
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_set_oradix() {
+    // Check if stack has enough elements
+    if(this->stack.empty()) {
+        return "'o' requires one operand";
+    }
+
+    // Check whether the head is a number
+    auto head = this->stack.back();
+    if(!is_num<int>(head)) {
+        return "'o' requires numeric values only";
+    }
+
+    // Otherwise convert it to int
+    auto oradix = std::stoi(head);
+    switch(oradix) {
+        case 2: this->parameters.oradix = radix_base::BIN; break;
+        case 8: this->parameters.oradix = radix_base::OCT; break;
+        case 10: this->parameters.oradix = radix_base::DEC; break;
+        case 16: this->parameters.oradix = radix_base::HEX; break;
+        default: return "'o' accepts either BIN, OCT, DEC or HEX bases";
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_get_oradix() {
+    this->stack.push_back(std::to_string(static_cast<int>(this->parameters.oradix)));
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_set_iradix() {
+    // Check if stack has enough elements
+    if(this->stack.empty()) {
+        return "'i' requires one operand";
+    }
+
+    // Check whether head is a number within the range 2-16
+    auto head = this->stack.back();
+    if(!is_num<double>(head) || std::stoi(head) < 2 || std::stoi(head) > 16) {
+        return "Input base must be a number within the range 2-16(inclusive)";
+    }
+
+    // Otherwise extract head of the stack and use it
+    // to set input base
+    this->stack.pop_back();
+    this->parameters.iradix = std::stoi(head);
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Evaluate::fn_get_iradix() {
+    this->stack.push_back(std::to_string(this->parameters.iradix));
 
     return std::nullopt;
 }
