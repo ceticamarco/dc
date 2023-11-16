@@ -7,14 +7,14 @@
 #include "is_num.h"
 
 #define MACRO_COND(VAL) ((VAL.length() == 1 && VAL == "["))
-#define MACRO_CMD_COND(VAL) ((val.length() == 2 || val.length() == 3) && \
-              (val.at(0) == '>' || val.at(0) == '<' || \
-               val.at(0) == '=' || val.at(0) == '!'))
-#define REGISTER_COND(VAL) ((val.length() == 2) && \
-              (val.at(0) == 's' || val.at(0) == 'S' || \
-               val.at(0) == 'l' || val.at(0) == 'L'))
-#define ARRAY_COND(VAL) ((val.length() == 2) && \
-        (val.at(0) == ':' || val.at(0) == ';'))
+#define MACRO_CMD_COND(VAL) ((VAL.length() == 2 || VAL.length() == 3) && \
+              (VAL.at(0) == '>' || VAL.at(0) == '<' || \
+               VAL.at(0) == '=' || VAL.at(0) == '!'))
+#define REGISTER_COND(VAL) ((VAL.length() == 2) && \
+              (VAL.at(0) == 's' || VAL.at(0) == 'S' || \
+               VAL.at(0) == 'l' || VAL.at(0) == 'L'))
+#define ARRAY_COND(VAL) ((VAL.length() == 2) && \
+        (VAL.at(0) == ':' || VAL.at(0) == ';'))
 
 #define X_CONTAINS_Y(X, Y) ((Y.find_first_of(X) != std::string::npos))
 
