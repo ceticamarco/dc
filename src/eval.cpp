@@ -175,7 +175,7 @@ std::optional<std::string> Evaluate::eval() {
                 return err;
             }
         } else if(val == "f") { // PRINT THE WHOLE STACK
-            auto op = std::make_unique<Stack>(OPType::PS);
+            auto op = std::make_unique<Stack>(OPType::PS, this->parameters.oradix);
             err = op->exec(this->stack);
             if(err != std::nullopt) {
                 return err;

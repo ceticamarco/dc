@@ -10,9 +10,27 @@ std::optional<std::string> Stack::exec(dc_stack_t &stack) {
     switch(this->op_type) {
         case OPType::PCG: err = fn_print(stack, true); break;
         case OPType::P: err = fn_print(stack, false); break;
-        case OPType::PBB: err = fn_print_base(stack, Base::BIN); break;
-        case OPType::PBH: err = fn_print_base(stack, Base::HEX); break;
-        case OPType::PBO: err = fn_print_base(stack, Base::OCT); break;
+        case OPType::PBB: {
+            auto old_rdx = this->oradix;
+            this->oradix = radix_base::BIN;
+            err = fn_print(stack, false);
+            this->oradix = old_rdx;
+            break;
+        }
+        case OPType::PBO: {
+            auto old_rdx = this->oradix;
+            this->oradix = radix_base::OCT;
+            err = fn_print(stack, false);
+            this->oradix = old_rdx;
+            break;
+        }
+        case OPType::PBH: {
+            auto old_rdx = this->oradix;
+            this->oradix = radix_base::HEX;
+            err = fn_print(stack, false);
+            this->oradix = old_rdx;
+            break;
+        }
         case OPType::CLR: stack.clear(); break;
         case OPType::PH: fn_pop_head(stack); break;
         case OPType::SO: fn_swap_xy(stack); break;
@@ -32,6 +50,11 @@ std::optional<std::string> Stack::fn_print(dc_stack_t &stack, bool new_line) {
         return "Cannot print empty stack";
     }
 
+    // If the output radix is non-decimal, check if top of the stack is an integer
+    if(static_cast<int>(this->oradix) != 10 && !is_num<int>(stack.back())) {
+        return "This output radix requires integer values";
+    }
+
     switch(this->oradix) {
         case radix_base::DEC: {
             if(new_line) {
@@ -41,66 +64,23 @@ std::optional<std::string> Stack::fn_print(dc_stack_t &stack, bool new_line) {
             }
             break;
         }
-        case radix_base::BIN: fn_print_base(stack, Base::BIN); break;
-        case radix_base::OCT: fn_print_base(stack, Base::OCT); break;
-        case radix_base::HEX: fn_print_base(stack, Base::HEX); break;
-        default: return "Unsupported output base";
-    }
-
-    return std::nullopt;
-}
-
-std::optional<std::string> Stack::fn_print_base(dc_stack_t &stack, Base base) {
-    // Check if the stack is empty
-    if(stack.empty()) {
-        return "Cannot print empty stack";
-    }
-
-    // Check if top of the stack is a number
-    if(!is_num<int>(stack.back())) {
-        return "This operation requires integers values";
-    }
-
-    // Get top element of the stack
-    auto head = std::stol(stack.back());
-    switch(base) {
-        case Base::BIN: {
-            // Define a lambda function to convert dec to bin
-            auto to_bin = [](auto num) -> std::string {
-                if(num == 0) {
-                    return "0";
-                }
-
-                std::string res = "";
-                while(num > 0) {
-                    res = (std::to_string(num % 2) + res);
-                    num /= 2;
-                }
-
-                // Remove extra zeros
-                auto first_one = res.find('1');
-                if(first_one != std::string::npos) {
-                    res = res.substr(first_one);
-                }
-
-                return res;
-            };
-
-            // Print the number in base 2
-            std::cout << to_bin(head) << "b" << std::endl;
+        case radix_base::BIN: {
+            auto head = std::stol(stack.back());
+            std::cout << to_bin(head) << 'b' << std::endl;
             break;
         }
-        case Base::HEX: {
-            // Print the number in base 16
+        case radix_base::OCT: {
+            auto head = std::stol(stack.back());
+            std::cout << std::oct << head << 'o' << std::dec << std::endl;
+            break;
+        }
+        case radix_base::HEX: {
+            auto head = std::stol(stack.back());
             std::cout << std::hex << std::uppercase << head << 'h'
                       << std::dec << std::nouppercase << std::endl;
             break;
         }
-        case Base::OCT: {
-            // Print the number in base 8
-            std::cout << std::oct << head << 'o' << std::dec << std::endl;
-            break;
-        }
+        default: return "Unsupported output base";
     }
 
     return std::nullopt;
@@ -146,8 +126,32 @@ std::optional<std::string> Stack::fn_dup_head(dc_stack_t &stack) {
 }
 
 std::optional<std::string> Stack::fn_print_stack(dc_stack_t &stack) {
-    for(auto it = stack.rbegin(); it != stack.rend(); it++) {
-        std::cout << *it << std::endl;
+    switch(this->oradix) {
+        case radix_base::DEC: {
+            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
+                std::cout << *it << std::endl;
+            }
+            break;
+        }
+        case radix_base::BIN: {
+            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
+                std::cout << to_bin(std::stol(*it)) << 'b' << std::endl;
+            }
+            break;
+        }
+        case radix_base::OCT: {
+            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
+                std::cout << std::oct << std::stol(*it) << 'o' << std::dec << std::endl;
+            }
+            break;
+        }
+        case radix_base::HEX: {
+            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
+            std::cout << std::hex << std::uppercase << std::stol(*it) << 'h'
+                      << std::dec << std::nouppercase << std::endl;
+            }
+            break;
+        }
     }
 
     return std::nullopt;
@@ -188,4 +192,24 @@ std::optional<std::string> Stack::fn_stack_size(dc_stack_t &stack) {
     stack.push_back(std::to_string(stack.size()));
 
     return std::nullopt;
+}
+
+constexpr auto Stack::to_bin(auto num) -> std::string {
+    if(num == 0) {
+        return "0";
+    }
+
+    std::string res = "";
+    while(num > 0) {
+        res = (std::to_string(num % 2) + res);
+        num /= 2;
+    }
+
+    // Remove extra zeros
+    auto first_one = res.find('1');
+    if(first_one != std::string::npos) {
+        res = res.substr(first_one);
+    }
+
+    return res;
 }

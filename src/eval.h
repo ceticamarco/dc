@@ -8,8 +8,8 @@
 
 class Evaluate {
 public:
-    Evaluate(const std::vector<std::string> e, std::unordered_map<char, 
-             Register> &r, dc_stack_t &s, Parameters &p)
+    Evaluate(const std::vector<std::string> e, std::unordered_map<char, Register> &r, 
+            dc_stack_t &s, Parameters &p)
         : expr(std::move(e)), regs(r), stack(s), parameters(p) {}
     Evaluate(std::unordered_map<char, Register> &r, dc_stack_t &s, Parameters &p)
         : regs(r), stack(s), parameters(p) {}
