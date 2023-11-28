@@ -23,7 +23,7 @@ RPN desktop calculator with macro support. Usage:
 Some of the supported features are:
 - Basic arithmetical operations(`+`, `-`, `*`, `/`, `^`, `%`);  
 - Scientific notation support(`5e3` -> `5000`);  
-- Trigonometrical functions(`sin`, `cos`, `tan`);  
+- Trigonometrical functions(`sin`, `cos`, `tan`, `asin`, `acos`, `atan`);  
 - Base conversion(binary: `pb`, octal: `po`, hexadecimal: `px`);  
 - Factorial and constants(`!`, `pi`, `e`);  
 - Stack operations:

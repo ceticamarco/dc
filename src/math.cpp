@@ -21,6 +21,9 @@ std::optional<std::string> Math::exec(dc_stack_t &stack) {
         case OPType::SIN: err = fn_sin(stack); break;
         case OPType::COS: err = fn_cos(stack); break;
         case OPType::TAN: err = fn_tan(stack); break;
+        case OPType::ASIN: err = fn_asin(stack); break;
+        case OPType::ACOS: err = fn_acos(stack); break;
+        case OPType::ATAN: err = fn_atan(stack); break;
         case OPType::FACT: err = fn_fact(stack); break;
         case OPType::PI: err = fn_pi(stack); break;
         case OPType::E: err = fn_e(stack); break;
@@ -326,7 +329,7 @@ std::optional<std::string> Math::fn_sqrt(dc_stack_t &stack) {
         return "'v' requires one operand";
     }
 
-    // Extract two entries from the stack
+    // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack.at(len);
     auto is_x_num = is_num<double>(x);
@@ -355,7 +358,7 @@ std::optional<std::string> Math::fn_sin(dc_stack_t &stack) {
         return "'sin' requires one operand";
     }
 
-    // Extract two entries from the stack
+    // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack.at(len);
     auto is_x_num = is_num<double>(x);
@@ -380,7 +383,7 @@ std::optional<std::string> Math::fn_cos(dc_stack_t &stack) {
         return "'cos' requires one operand";
     }
 
-    // Extract two entries from the stack
+    // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack.at(len);
     auto is_x_num = is_num<double>(x);
@@ -405,7 +408,7 @@ std::optional<std::string> Math::fn_tan(dc_stack_t &stack) {
         return "'tan' requires one operand";
     }
 
-    // Extract two entries from the stack
+    // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack.at(len);
     auto is_x_num = is_num<double>(x);
@@ -424,13 +427,88 @@ std::optional<std::string> Math::fn_tan(dc_stack_t &stack) {
     return std::nullopt;
 }
 
+std::optional<std::string> Math::fn_asin(dc_stack_t &stack) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'asin' requires one operand";
+    }
+
+    // Extract one entry from the stack
+    auto len = stack.size()-1;
+    auto x = stack.at(len);
+    auto is_x_num = is_num<double>(x);
+
+    // Check whether the entry is a number
+    if(is_x_num) {
+        auto val = std::stod(stack.back());
+        stack.pop_back();
+
+        // Push back the result as a string
+        stack.push_back(trim_digits(asin(val), this->precision));
+    } else {
+        return "'asin' requires numeric values";
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Math::fn_acos(dc_stack_t &stack) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'acos' requires one operand";
+    }
+
+    // Extract one entry from the stack
+    auto len = stack.size()-1;
+    auto x = stack.at(len);
+    auto is_x_num = is_num<double>(x);
+
+    // Check whether the entry is a number
+    if(is_x_num) {
+        auto val = std::stod(stack.back());
+        stack.pop_back();
+
+        // Push back the result as a string
+        stack.push_back(trim_digits(acos(val), this->precision));
+    } else {
+        return "'acos' requires numeric values";
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Math::fn_atan(dc_stack_t &stack) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'atan' requires one operand";
+    }
+
+    // Extract one entry from the stack
+    auto len = stack.size()-1;
+    auto x = stack.at(len);
+    auto is_x_num = is_num<double>(x);
+
+    // Check whether the entry is a number
+    if(is_x_num) {
+        auto val = std::stod(stack.back());
+        stack.pop_back();
+
+        // Push back the result as a string
+        stack.push_back(trim_digits(atan(val), this->precision));
+    } else {
+        return "'atan' requires numeric values";
+    }
+
+    return std::nullopt;
+}
+
 std::optional<std::string> Math::fn_fact(dc_stack_t &stack) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'!' requires one operand";
     }
 
-    // Extract two entries from the stack
+    // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack.at(len);
     auto is_x_num = is_num<double>(x);

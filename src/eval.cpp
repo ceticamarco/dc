@@ -98,6 +98,24 @@ std::optional<std::string> Evaluate::eval() {
             if(err != std::nullopt) {
                 return err;
             }
+        } else if(val == "asin") {
+            auto math = std::make_unique<Math>(OPType::ASIN, this->parameters.precision);
+            err = math->exec(this->stack);
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "acos") {
+            auto math = std::make_unique<Math>(OPType::ACOS, this->parameters.precision);
+            err = math->exec(this->stack);
+            if(err != std::nullopt) {
+                return err;
+            }
+        } else if(val == "atan") {
+            auto math = std::make_unique<Math>(OPType::ATAN, this->parameters.precision);
+            err = math->exec(this->stack);
+            if(err != std::nullopt) {
+                return err;
+            }
         } else if(val == "!") {
             auto math = std::make_unique<Math>(OPType::FACT, this->parameters.precision);
             err = math->exec(this->stack);

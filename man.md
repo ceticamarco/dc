@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: November 16, 2023
+date: November 28, 2023
 ---
 
 
@@ -186,6 +186,18 @@ Pops one value, computes its `cos`, and pushes that.
 
 Pops one value, computes its `tan`, and pushes that.
 
+**asin**
+
+Pops one value, computes its `asin`, and pushes that.
+
+**acos**
+
+Pops one value, computes its `acos`, and pushes that.
+
+**atan**
+
+Pops one value, computes its `atan`, and pushes that.
+
 ## Base Conversion
 
 **pb**
@@ -358,7 +370,6 @@ Exit with return code `0`.
 
 Reads a line from the terminal and executes it. This command allows a macro to request input from the user.
 
-# EXAMPLES
 # EXAMPLES
 Below, there are some practical problems solved using **dc**.
 

@@ -20,6 +20,9 @@ private:
     std::optional<std::string> fn_sin(dc_stack_t &stack);
     std::optional<std::string> fn_cos(dc_stack_t &stack);
     std::optional<std::string> fn_tan(dc_stack_t &stack);
+    std::optional<std::string> fn_asin(dc_stack_t &stack);
+    std::optional<std::string> fn_acos(dc_stack_t &stack);
+    std::optional<std::string> fn_atan(dc_stack_t &stack);
     std::optional<std::string> fn_fact(dc_stack_t &stack);
     std::optional<std::string> fn_pi(dc_stack_t &stack);
     std::optional<std::string> fn_e(dc_stack_t &stack);
