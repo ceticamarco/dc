@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <cstdint>
 #include <unordered_map>
 
 using dc_stack_t = std::vector<std::string>;
