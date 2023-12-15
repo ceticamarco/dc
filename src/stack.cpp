@@ -6,31 +6,22 @@
 
 std::optional<std::string> Stack::exec(dc_stack_t &stack) {
     std::optional<std::string> err = std::nullopt;
+    
+    auto print_oradix = [this, &stack](radix_base base) {
+        auto old_rdx = this->oradix;
+        this->oradix = base;
+        auto res = fn_print(stack, false);
+        this->oradix = old_rdx;
+
+        return res;
+    };
 
     switch(this->op_type) {
         case OPType::PCG: err = fn_print(stack, true); break;
         case OPType::P: err = fn_print(stack, false); break;
-        case OPType::PBB: {
-            auto old_rdx = this->oradix;
-            this->oradix = radix_base::BIN;
-            err = fn_print(stack, false);
-            this->oradix = old_rdx;
-            break;
-        }
-        case OPType::PBO: {
-            auto old_rdx = this->oradix;
-            this->oradix = radix_base::OCT;
-            err = fn_print(stack, false);
-            this->oradix = old_rdx;
-            break;
-        }
-        case OPType::PBH: {
-            auto old_rdx = this->oradix;
-            this->oradix = radix_base::HEX;
-            err = fn_print(stack, false);
-            this->oradix = old_rdx;
-            break;
-        }
+        case OPType::PBB: err = print_oradix(radix_base::BIN); break;
+        case OPType::PBO: err = print_oradix(radix_base::OCT); break;
+        case OPType::PBH: err = print_oradix(radix_base::HEX); break;
         case OPType::CLR: stack.clear(); break;
         case OPType::PH: fn_pop_head(stack); break;
         case OPType::SO: fn_swap_xy(stack); break;
@@ -194,7 +185,7 @@ std::optional<std::string> Stack::fn_stack_size(dc_stack_t &stack) {
     return std::nullopt;
 }
 
-constexpr auto Stack::to_bin(auto num) -> std::string {
+constexpr std::string Stack::to_bin(auto num) {
     if(num == 0) {
         return "0";
     }

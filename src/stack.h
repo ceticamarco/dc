@@ -16,7 +16,7 @@ private:
     std::optional<std::string> fn_print_stack(dc_stack_t &stack);
     std::optional<std::string> fn_head_size(dc_stack_t &stack);
     std::optional<std::string> fn_stack_size(dc_stack_t &stack);
-    constexpr auto to_bin(auto num) -> std::string;
+    constexpr std::string to_bin(auto num);
 
     OPType op_type;
     radix_base oradix;
