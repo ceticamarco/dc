@@ -1,4 +1,4 @@
-# dc ![](https://github.com/ice-bit/dc/actions/workflows/dc.yml/badge.svg)
+# dc ![](https://github.com/ceticamarco/dc/actions/workflows/dc.yml/badge.svg)
 
 **dc** is an advanced, scientific and programmable RPN desktop calculator with macro support (re)written in C++. 
 By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions. 
