@@ -56,12 +56,33 @@ the following command:
 $> mkdir build && cd build
 $> cmake .. && make
 ```
-A new statically-compiled binary called `dc` will be created in your local folder.
-
-To generate a man page from the `man.md` document, use the following command(note: needs pandoc):
+A new statically-compiled binary called `dc` will be created in your local folder. To generate a man page from the `man.md` document, 
+use the following command(note: needs pandoc):
 ```sh
 $> pandoc man.md -s -t man > dc.1
 ```
+
+Otherwise, if you are running a Linux-based distribution, issue
+one of the following commands:
+
+### Debian/Ubuntu:
+```sh
+$> sudo apt install ./dc-<VERSION>.x86_64.deb
+```
+
+### RHEL/Centos/Fedora
+```sh
+$> sudo dnf install ./dc-<VERSION>.x86_64.rpm
+```
+
+### Arch
+```sh
+$> sudo pacman -U dc-<VERSION>-1-x86_64.pkg.tar.zst
+```
+
+You can find the binaries on the release page or on the `bin` folder
+of this repository.
+
 
 ## Usage
 dc can be used in three different ways:
