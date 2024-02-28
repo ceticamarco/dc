@@ -1,0 +1,21 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED_X="1"
+    EXPECTED_Y="2"
+    read -r ACTUAL_X ACTUAL_Y <<< $(dc -e '15 7 ~ p R p' | tr '\n' ' ')
+    assert_eq "$EXPECTED_X" "$ACTUAL_X"
+    assert_eq "$EXPECTED_Y" "$ACTUAL_Y"
+
+    # Test empty stack
+    EXPECTED="'~' requires two operands"
+    ACTUAL="$(dc -e '~' 2>&1)" || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test non numerical values
+    EXPECTED="'~' requires numeric values"
+    ACTUAL=$("$PROGRAM" -e '[ foo ] 5 ~' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:
