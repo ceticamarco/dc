@@ -1,0 +1,21 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+
+    # Test default output base
+    EXPECTED="10"
+    ACTUAL=$("$PROGRAM" -e 'O p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test new, valid output base
+    EXPECTED="Fh"
+    ACTUAL=$("$PROGRAM" -e '16 o 15 p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test new, invalid output base
+    EXPECTED="'o' accepts either BIN, OCT, DEC or HEX bases"
+    ACTUAL=$("$PROGRAM" -e '9 o' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

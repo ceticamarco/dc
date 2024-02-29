@@ -1,0 +1,21 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+
+    # Test default input base
+    EXPECTED="10"
+    ACTUAL=$("$PROGRAM" -e 'I p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test new, valid input base
+    EXPECTED="10"
+    ACTUAL=$("$PROGRAM" -e '2 i 1010 p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test new, invalid input base
+    EXPECTED="Input base must be a number within the range 2-16(inclusive)"
+    ACTUAL=$("$PROGRAM" -e '1 i' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:
