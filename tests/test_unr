@@ -1,0 +1,8 @@
+#!/bin/sh
+
+utest() {
+    EXPECTED="Unrecognized option"
+    ACTUAL=$("$PROGRAM" -e '(' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:
