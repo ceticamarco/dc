@@ -15,3 +15,6 @@ jobs:
         mkdir build && cd build
         cmake ..
         make
+    - name: Run unit tests
+      run: |
+        ./utest.sh tests

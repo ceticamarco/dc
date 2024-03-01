@@ -1,0 +1,10 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="Cannot print empty stack"
+    ACTUAL=$("$PROGRAM" -e '5 4 c p' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

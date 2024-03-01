@@ -1,0 +1,14 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="6"
+    ACTUAL=$("$PROGRAM" -e '5 0 :A 6 0 :A 0 ;A p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="This operation requires two values"
+    ACTUAL=$("$PROGRAM" -e ':A' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:
