@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test_read() {
+test_load() {
     PROGRAM="$PWD/build/dc"
     EXPECTED="5"
     ACTUAL=$("$PROGRAM" -e '5 sA lA p')
@@ -12,7 +12,7 @@ test_read() {
     assert_eq "$EXPECTED" "$ACTUAL"
 }
 
-test_uppercase_read() {
+test_uppercase_load() {
     PROGRAM="$PWD/build/dc"
     EXPECTED="5"
     ACTUAL=$("$PROGRAM" -e '5 sA LA p')
@@ -25,7 +25,7 @@ test_uppercase_read() {
 }
 
 utest() {
-    test_read
-    test_uppercase_read
+    test_load
+    test_uppercase_load
 }
 # vim: ts=4 sw=4 softtabstop=4 expandtab:

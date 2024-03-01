@@ -430,6 +430,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
 
         // Always discard previous instance of the register
         // i.e., initialize a new instance of register 'reg_name'
+        this->regs.erase(reg_name);
         this->regs.insert(
                 std::make_pair(reg_name, Register{
                     std::vector<std::string>(),
@@ -478,7 +479,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
 
         // Check if register's stack is empty
         if(this->regs[reg_name].stack.empty()) {
-            return std::string("The stack of register '") + reg_name + std::string(" is empty");
+            return std::string("The stack of register '") + reg_name + std::string("' is empty");
         }
 
         // Otherwise, pop an element from the register's stack and push it onto the main stack
