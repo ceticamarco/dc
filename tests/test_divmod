@@ -4,7 +4,10 @@ utest() {
     PROGRAM="$PWD/build/dc"
     EXPECTED_X="1"
     EXPECTED_Y="2"
-    read -r ACTUAL_X ACTUAL_Y <<< $(dc -e '15 7 ~ p R p' | tr '\n' ' ')
+    read -r ACTUAL_X ACTUAL_Y <<EOF
+    $("$PROGRAM" -e '15 7 ~ p R p' | tr '\n' ' '  | sed 's/$/\n/g')
+EOF
+
     assert_eq "$EXPECTED_X" "$ACTUAL_X"
     assert_eq "$EXPECTED_Y" "$ACTUAL_Y"
 
