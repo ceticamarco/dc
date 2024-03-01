@@ -1,0 +1,36 @@
+#!/bin/sh
+
+test_store() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="5"
+    ACTUAL=$("$PROGRAM" -e '5 sA lA p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="This operation does not work on empty stack"
+    ACTUAL=$("$PROGRAM" -e 'sA' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test auxiliary stack policy
+    EXPECTED="The stack of register 'A' is empty"
+    ACTUAL=$("$PROGRAM" -e "5 sA 6 sA LA LA" 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+
+test_uppercase_store() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="6"
+    ACTUAL=$("$PROGRAM" -e '5 SA 6 SA lA p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="This operation does not work on empty stack"
+    ACTUAL=$("$PROGRAM" -e 'SA' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"   
+}
+
+utest() {
+    test_store
+    test_uppercase_store
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:
