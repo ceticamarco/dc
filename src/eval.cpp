@@ -430,6 +430,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
 
         // Always discard previous instance of the register
         // i.e., initialize a new instance of register 'reg_name'
+        this->regs.erase(reg_name);
         this->regs.insert(
                 std::make_pair(reg_name, Register{
                     std::vector<std::string>(),
