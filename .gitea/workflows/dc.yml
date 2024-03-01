@@ -1,7 +1,7 @@
 name: dc
 on:
   push:
-    branches: [master, unit_testing]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -16,3 +16,6 @@ jobs:
         mkdir build && cd build
         cmake ..
         make
+    - name: Run unit tests
+      run: |
+        ./utest.sh tests

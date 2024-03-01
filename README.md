@@ -83,6 +83,13 @@ $> sudo pacman -U dc-<VERSION>-1-x86_64.pkg.tar.zst
 You can find the binaries on the release page or on the `bin` folder
 of this repository.
 
+## Unit tests
+This repository as well as the CI pipeline provides unit tests for the
+program's features. To run them, issue the following command:
+
+```sh
+$> ./utest.sh tests
+```
 
 ## Usage
 dc can be used in three different ways:
