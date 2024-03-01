@@ -13,7 +13,7 @@ EOF
 
     # Test empty stack
     EXPECTED="'~' requires two operands"
-    ACTUAL="$(dc -e '~' 2>&1)" || true
+    ACTUAL="$("$PROGRAM" -e '~' 2>&1)" || true
     assert_eq "$EXPECTED" "$ACTUAL"
 
     # Test non numerical values
