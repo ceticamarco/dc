@@ -539,6 +539,8 @@ std::optional<std::string> Evaluate::parse_array_command(std::string val) {
         // If array does not exist, allocate a new array first
         auto it = this->regs.find(reg_name);
         if(it != this->regs.end()) { // Register exists
+            // Always discard previous values of array
+            it->second.array.erase(idx);
             it->second.array.insert(std::pair<int, std::string>(idx, arr_val));
         } else { // Register doesn't exist
             this->regs[reg_name] = Register{
