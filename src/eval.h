@@ -8,9 +8,9 @@
 
 class Evaluate {
 public:
-    Evaluate(const std::vector<std::string> e, std::unordered_map<char, Register> &r, 
+    Evaluate(const std::vector<std::string>& e, std::unordered_map<char, Register> &r,
             dc_stack_t &s, Parameters &p)
-        : expr(std::move(e)), regs(r), stack(s), parameters(p) {}
+        : expr(e), regs(r), stack(s), parameters(p) {}
     Evaluate(std::unordered_map<char, Register> &r, dc_stack_t &s, Parameters &p)
         : regs(r), stack(s), parameters(p) {}
     std::optional<std::string> eval();
@@ -21,7 +21,7 @@ private:
     std::optional<std::string> parse_macro_command(std::string val);
     std::optional<std::string> parse_register_command(std::string val);
     std::optional<std::string> parse_array_command(std::string val);
-    std::optional<std::string> parse_base_n(std::string val);
+    std::optional<std::string> parse_base_n(const std::string& val);
     std::optional<std::string> fn_set_precision();
     std::optional<std::string> fn_get_precision();
     std::optional<std::string> fn_set_oradix();

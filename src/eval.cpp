@@ -21,7 +21,7 @@
 std::optional<std::string> Evaluate::eval() {
     for(size_t idx = 0; idx < this->expr.size(); idx++) {
         auto val = this->expr.at(idx);
-        std::optional<std::string> err = std::nullopt;
+        std::optional<std::string> err;
     
         //
         // 		NUMERICAL OPERATIONS
@@ -287,7 +287,7 @@ std::optional<std::string> Evaluate::handle_special(std::string val, size_t &idx
     return err;
 }
 
-std::optional<std::string> Evaluate::parse_base_n(std::string val) {
+std::optional<std::string> Evaluate::parse_base_n(const std::string& val) {
     // Discard values that are neither integers neither within "ABCDEF"
     if(!is_num<long>(val) && !X_CONTAINS_Y("ABCDEF", val)) {
         return "This input base supports integers only";
@@ -307,7 +307,7 @@ std::optional<std::string> Evaluate::parse_base_n(std::string val) {
 
 std::optional<std::string> Evaluate::parse_macro(size_t &idx) {
     // A macro is any string surrounded by square brackets
-    std::string dc_macro = "";
+    std::string dc_macro;
     bool closing_bracket = false;
 
     // Scan next token
@@ -356,7 +356,7 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string val) {
     // If command has length equal to three, then it's either '<=', '>=' or '!='
 
     // Check if command is >=, <= or !=
-    std::string operation = "";
+    std::string operation;
     char dc_register = 0;
     if(val.length() == 3) {
         operation = val.substr(0, 2);
@@ -492,10 +492,10 @@ std::optional<std::string> Evaluate::parse_register_command(std::string val) {
 	    // If the register is empty, push '0' to the stack
         auto reg_name = val.at(1);
 
-        // If register does not exists or its stack is empty, push '0' onto the main stack
+        // If register does not exist or its stack is empty, push '0' onto the main stack
         auto it = this->regs.find(reg_name);
         if(it == this->regs.end() || it->second.stack.empty()) {
-            this->stack.push_back("0");
+            this->stack.emplace_back("0");
             return std::nullopt;
         }
 

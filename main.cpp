@@ -22,9 +22,9 @@ void helper() {
 int main(int argc, char **argv) {
     int opt;
     const char *short_opts = "e:f:hV";
-    std::string cli_expression = "";
-    std::string file_name = "";
-    std::string stdin_expression = "";
+    std::string cli_expression;
+    std::string file_name;
+    std::string stdin_expression;
     bool execute_expression = false;
     bool execute_file = false;
     dc_stack_t stack;

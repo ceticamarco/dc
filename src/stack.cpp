@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <ranges>
 
 #include "stack.h"
 #include "is_num.h"
@@ -119,28 +120,28 @@ std::optional<std::string> Stack::fn_dup_head(dc_stack_t &stack) {
 std::optional<std::string> Stack::fn_print_stack(dc_stack_t &stack) {
     switch(this->oradix) {
         case radix_base::DEC: {
-            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
-                std::cout << *it << std::endl;
+            for(auto & it : std::ranges::reverse_view(stack)) {
+                std::cout << it << std::endl;
             }
             break;
         }
         case radix_base::BIN: {
-            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
-                std::cout << to_bin(std::stol(*it)) << 'b' << std::endl;
+            for(auto & it : std::ranges::reverse_view(stack)) {
+                std::cout << to_bin(std::stol(it)) << 'b' << std::endl;
             }
             break;
         }
         case radix_base::OCT: {
-            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
-                std::cout << std::oct << std::stol(*it) << 'o' << std::dec << std::endl;
+            for(auto & it : std::ranges::reverse_view(stack)) {
+                std::cout << std::oct << std::stol(it) << 'o' << std::dec << std::endl;
             }
             break;
         }
         case radix_base::HEX: {
-            for(auto it = stack.rbegin(); it != stack.rend(); it++) {
-            std::cout << std::hex << std::uppercase << std::stol(*it) << 'h'
-                      << std::dec << std::nouppercase << std::endl;
-            }
+            for(auto & it : std::ranges::reverse_view(stack)) {
+                std::cout << std::hex << std::uppercase << std::stol(it) << 'h'
+                          << std::dec << std::nouppercase << std::endl;
+                }
             break;
         }
     }
@@ -190,7 +191,7 @@ constexpr std::string Stack::to_bin(auto num) {
         return "0";
     }
 
-    std::string res = "";
+    std::string res;
     while(num > 0) {
         res = (std::to_string(num % 2) + res);
         num /= 2;

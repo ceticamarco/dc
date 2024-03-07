@@ -147,7 +147,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
 
 std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack) {
     // Read user input from stdin
-    std::string user_input = "";
+    std::string user_input;
 
     std::cin >> user_input;
     if(std::cin.fail()) {
@@ -166,7 +166,7 @@ std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack) {
     return std::nullopt;
 }
 
-std::vector<std::string> Macro::split(std::string str) {
+std::vector<std::string> Macro::split(const std::string& str) {
     std::stringstream ss(str);
     std::istream_iterator<std::string> begin(ss);
     std::istream_iterator<std::string> end;
