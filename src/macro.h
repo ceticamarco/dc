@@ -8,7 +8,7 @@ enum class Operator {
 
 class Macro : public IOperation {
 public:
-    Macro(const OPType op_t, const Operator o, __attribute__((unused)) const char dc_r) : op_type(op_t), op(o) {}
+    Macro(const OPType op_t, const Operator o, const char dc_r) : op_type(op_t), op(o), dc_register(dc_r) {}
     explicit Macro(const OPType op_t) : op_type(op_t) {}
     std::optional<std::string> exec(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) override;
     static std::vector<std::string> split(const std::string& str);
