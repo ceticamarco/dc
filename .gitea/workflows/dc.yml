@@ -1,7 +1,7 @@
 name: dc
 on:
   push:
-    branches: [master, unit_testing]
+    branches: [master, factory_parsing]
   workflow_dispatch:
 
 jobs:

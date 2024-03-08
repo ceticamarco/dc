@@ -25,12 +25,7 @@ private:
     std::optional<std::string> parse_register_command(std::string val);
     std::optional<std::string> parse_array_command(std::string val);
     std::optional<std::string> parse_base_n(const std::string& val);
-    std::optional<std::string> fn_set_precision();
-    std::optional<std::string> fn_get_precision();
-    std::optional<std::string> fn_set_oradix();
-    std::optional<std::string> fn_get_oradix();
-    std::optional<std::string> fn_set_iradix();
-    std::optional<std::string> fn_get_iradix();
+
     void init_op_factory();
 
     using op_factory_t = std::function<std::unique_ptr<IOperation>()>;

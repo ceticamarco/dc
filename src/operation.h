@@ -14,7 +14,8 @@ enum class OPType {
     ADD, SUB, MUL, DIV, MOD, DIV_MOD, MOD_EXP, EXP,
     SQRT, SIN, COS, TAN, ASIN, ACOS, ATAN, FACT, PI, E,
     // Stack operations
-    PCG, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS,
+    PCG, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS, 
+    SP, GP, SOR, GOR, SIR, GIR,
     // Macro operations
     EX, CMP, RI
 };

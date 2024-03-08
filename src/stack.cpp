@@ -24,12 +24,18 @@ std::optional<std::string> Stack::exec(dc_stack_t &stack, Parameters &parameters
         case OPType::PBO: err = print_oradix(radix_base::OCT); break;
         case OPType::PBH: err = print_oradix(radix_base::HEX); break;
         case OPType::CLR: stack.clear(); break;
-        case OPType::PH: fn_pop_head(stack); break;
-        case OPType::SO: fn_swap_xy(stack); break;
-        case OPType::DP: fn_dup_head(stack); break;
-        case OPType::PS: fn_print_stack(stack, parameters); break;
-        case OPType::CH: fn_head_size(stack); break;
-        case OPType::CS: fn_stack_size(stack); break;
+        case OPType::PH: err = fn_pop_head(stack); break;
+        case OPType::SO: err = fn_swap_xy(stack); break;
+        case OPType::DP: err = fn_dup_head(stack); break;
+        case OPType::PS: err = fn_print_stack(stack, parameters); break;
+        case OPType::CH: err = fn_head_size(stack); break;
+        case OPType::CS: err = fn_stack_size(stack); break;
+        case OPType::SP: err = fn_set_precision(stack, parameters); break;
+        case OPType::GP: err = fn_get_precision(stack, parameters); break;
+        case OPType::SOR: err = fn_set_oradix(stack, parameters); break;
+        case OPType::GOR: err = fn_get_oradix(stack, parameters); break;
+        case OPType::SIR: err = fn_set_iradix(stack, parameters); break;
+        case OPType::GIR: err = fn_get_iradix(stack, parameters); break;
         default: break;
     }
 
@@ -182,6 +188,89 @@ std::optional<std::string> Stack::fn_head_size(dc_stack_t &stack) {
 
 std::optional<std::string> Stack::fn_stack_size(dc_stack_t &stack) {
     stack.push_back(std::to_string(stack.size()));
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_set_precision(dc_stack_t &stack, Parameters &parameters) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'k' requires one operand";
+    }
+
+    // Check whether head is a non-negative number
+    auto head = stack.back();
+    if(!is_num<int>(head) || std::stoi(head) < 0) {
+        return "Precision must be a non-negative number";
+    }
+
+    // Otherwise extract head of the stack and use it
+    // to set precision parameter
+    stack.pop_back();
+    parameters.precision = std::stoi(head);
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_precision(dc_stack_t &stack, Parameters &parameters) {
+    stack.push_back(std::to_string(parameters.precision));
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_set_oradix(dc_stack_t &stack, Parameters &parameters) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'o' requires one operand";
+    }
+
+    // Check whether the head is a number
+    auto head = stack.back();
+    if(!is_num<int>(head)) {
+        return "'o' requires numeric values only";
+    }
+
+    // Otherwise convert it to int
+    auto oradix = std::stoi(head);
+    switch(oradix) {
+        case 2: parameters.oradix = radix_base::BIN; break;
+        case 8: parameters.oradix = radix_base::OCT; break;
+        case 10: parameters.oradix = radix_base::DEC; break;
+        case 16: parameters.oradix = radix_base::HEX; break;
+        default: return "'o' accepts either BIN, OCT, DEC or HEX bases";
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_oradix(dc_stack_t &stack, Parameters &parameters) {
+    stack.push_back(std::to_string(static_cast<int>(parameters.oradix)));
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_set_iradix(dc_stack_t &stack, Parameters &parameters) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'i' requires one operand";
+    }
+
+    // Check whether head is a number within the range 2-16
+    auto head = stack.back();
+    if(!is_num<double>(head) || std::stoi(head) < 2 || std::stoi(head) > 16) {
+        return "Input base must be a number within the range 2-16(inclusive)";
+    }
+
+    // Otherwise extract head of the stack and use it
+    // to set input base
+    stack.pop_back();
+    parameters.iradix = std::stoi(head);
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_iradix(dc_stack_t &stack, Parameters &parameters) {
+    stack.push_back(std::to_string(parameters.iradix));
 
     return std::nullopt;
 }
