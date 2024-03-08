@@ -21,12 +21,11 @@ public:
 private:
     std::optional<std::string> handle_special(std::string val, size_t &idx);
     std::optional<std::string> parse_macro(size_t &idx);
-    std::optional<std::string> parse_macro_command(std::string val);
-    std::optional<std::string> parse_register_command(std::string val);
-    std::optional<std::string> parse_array_command(std::string val);
-    std::optional<std::string> parse_base_n(const std::string& val);
-
-    void init_op_factory();
+    std::optional<std::string> parse_macro_command(std::string token);
+    std::optional<std::string> parse_register_command(std::string token);
+    std::optional<std::string> parse_array_command(std::string token);
+    std::optional<std::string> parse_base_n(const std::string& token);
+    void init_environment();
 
     using op_factory_t = std::function<std::unique_ptr<IOperation>()>;
     std::vector<std::string> expr;
