@@ -5,21 +5,21 @@
 #include "stack.h"
 #include "is_num.h"
 
-std::optional<std::string> Stack::exec(dc_stack_t &stack) {
+std::optional<std::string> Stack::exec(dc_stack_t &stack, Parameters &parameters, __attribute__((unused)) std::unordered_map<char, Register> &regs) {
     std::optional<std::string> err = std::nullopt;
     
-    auto print_oradix = [this, &stack](radix_base base) {
-        auto old_rdx = this->oradix;
-        this->oradix = base;
-        auto res = fn_print(stack, false);
-        this->oradix = old_rdx;
+    auto print_oradix = [&stack, &parameters, this](radix_base base) {
+        auto old_rdx = parameters.oradix;
+        parameters.oradix = base;
+        auto res = fn_print(stack, parameters, false);
+        parameters.oradix = old_rdx;
 
         return res;
     };
 
     switch(this->op_type) {
-        case OPType::PCG: err = fn_print(stack, true); break;
-        case OPType::P: err = fn_print(stack, false); break;
+        case OPType::PCG: err = fn_print(stack, parameters, true); break;
+        case OPType::P: err = fn_print(stack, parameters, false); break;
         case OPType::PBB: err = print_oradix(radix_base::BIN); break;
         case OPType::PBO: err = print_oradix(radix_base::OCT); break;
         case OPType::PBH: err = print_oradix(radix_base::HEX); break;
@@ -27,7 +27,7 @@ std::optional<std::string> Stack::exec(dc_stack_t &stack) {
         case OPType::PH: fn_pop_head(stack); break;
         case OPType::SO: fn_swap_xy(stack); break;
         case OPType::DP: fn_dup_head(stack); break;
-        case OPType::PS: fn_print_stack(stack); break;
+        case OPType::PS: fn_print_stack(stack, parameters); break;
         case OPType::CH: fn_head_size(stack); break;
         case OPType::CS: fn_stack_size(stack); break;
         default: break;
@@ -36,18 +36,18 @@ std::optional<std::string> Stack::exec(dc_stack_t &stack) {
     return err;
 }
 
-std::optional<std::string> Stack::fn_print(dc_stack_t &stack, bool new_line) {
+std::optional<std::string> Stack::fn_print(dc_stack_t &stack, Parameters  &parameters, bool new_line) {
     // Check if the stack is empty
     if(stack.empty()) {
         return "Cannot print empty stack";
     }
 
     // If the output radix is non-decimal, check if top of the stack is an integer
-    if(static_cast<int>(this->oradix) != 10 && !is_num<int>(stack.back())) {
+    if(static_cast<int>(parameters.oradix) != 10 && !is_num<int>(stack.back())) {
         return "This output radix requires integer values";
     }
 
-    switch(this->oradix) {
+    switch(parameters.oradix) {
         case radix_base::DEC: {
             if(new_line) {
                 std::cout << stack.back() << std::endl;
@@ -117,8 +117,8 @@ std::optional<std::string> Stack::fn_dup_head(dc_stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_print_stack(dc_stack_t &stack) {
-    switch(this->oradix) {
+std::optional<std::string> Stack::fn_print_stack(dc_stack_t &stack, Parameters &parameters) {
+    switch(parameters.oradix) {
         case radix_base::DEC: {
             for(auto & it : std::ranges::reverse_view(stack)) {
                 std::cout << it << std::endl;

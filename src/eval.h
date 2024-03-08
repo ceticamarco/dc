@@ -3,7 +3,10 @@
 #include <vector>
 #include <unordered_map>
 #include <optional>
+#include <memory>
+#include <functional>
 
+#include "operation.h"
 #include "types.h"
 
 class Evaluate {
@@ -28,9 +31,12 @@ private:
     std::optional<std::string> fn_get_oradix();
     std::optional<std::string> fn_set_iradix();
     std::optional<std::string> fn_get_iradix();
+    void init_op_factory();
 
+    using op_factory_t = std::function<std::unique_ptr<IOperation>()>;
     std::vector<std::string> expr;
     std::unordered_map<char, Register> &regs;
+    std::unordered_map<std::string, op_factory_t> op_factory;
     dc_stack_t &stack;
     Parameters &parameters;
 };

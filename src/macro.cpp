@@ -7,20 +7,20 @@
 #include "macro.h"
 #include "is_num.h"
 
-std::optional<std::string> Macro::exec(dc_stack_t &stack) {
+std::optional<std::string> Macro::exec(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     std::optional<std::string> err = std::nullopt;
 
     switch(this->op_type) {
-        case OPType::EX: err = fn_execute(stack); break;
-        case OPType::CMP: err = fn_evaluate_macro(stack); break;
-        case OPType::RI: err = fn_read_input(stack); break;
+        case OPType::EX: err = fn_execute(stack, parameters, regs); break;
+        case OPType::CMP: err = fn_evaluate_macro(stack, parameters, regs); break;
+        case OPType::RI: err = fn_read_input(stack, parameters, regs); break;
         default: break;
     }
 
     return err;
 }
 
-std::optional<std::string> Macro::fn_execute(dc_stack_t &stack) {
+std::optional<std::string> Macro::fn_execute(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "This operation does not work on empty stack";
@@ -32,7 +32,7 @@ std::optional<std::string> Macro::fn_execute(dc_stack_t &stack) {
     if(!is_num<double>(head)) {
         stack.pop_back();
         std::vector<std::string> tokens = split(head);
-        Evaluate evaluator(tokens, this->regs, stack, this->parameters);
+        Evaluate evaluator(tokens, regs, stack, parameters);
         
         auto err = evaluator.eval();
         if(err != std::nullopt) {
@@ -43,14 +43,14 @@ std::optional<std::string> Macro::fn_execute(dc_stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
+std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     // Check whether the main stack has enough elements
     if(stack.size() < 2) {
         return "This operation requires two elements";
     }
 
     // Check whether the register's stack exists or not
-    if(this->regs.find(this->dc_register) == this->regs.end()) {
+    if(regs.find(this->dc_register) == regs.end()) {
         return "Null register";
     }
 
@@ -59,7 +59,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
     stack.pop_back();
     auto second_str = stack.back();
     stack.pop_back();
-    auto dc_macro = this->regs[this->dc_register].stack.back();
+    auto dc_macro = regs[this->dc_register].stack.back();
 
     // Check if macro exists and if top two elements of main stack are numbers
     if(!dc_macro.empty() && is_num<double>(head_str) && is_num<double>(second_str)) {
@@ -70,7 +70,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::GT: {
                 if(head > second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
+                    Evaluate evaluator(tokens, regs, stack, parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -82,7 +82,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::LT: {
                 if(head < second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
+                    Evaluate evaluator(tokens, regs, stack, parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -94,7 +94,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::EQ: {
                 if(head == second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
+                    Evaluate evaluator(tokens, regs, stack, parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -106,7 +106,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::GEQ: {
                 if(head >= second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
+                    Evaluate evaluator(tokens, regs, stack, parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -118,7 +118,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::LEQ: {
                 if(head <= second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
+                    Evaluate evaluator(tokens, regs, stack, parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -130,7 +130,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
             case Operator::NEQ: {
                 if(head != second) {
                     std::vector<std::string> tokens = split(dc_macro);
-                    Evaluate evaluator(tokens, this->regs, stack, this->parameters);
+                    Evaluate evaluator(tokens, regs, stack, parameters);
 
                     auto err = evaluator.eval();
                     if(err != std::nullopt) {
@@ -145,7 +145,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack) {
+std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     // Read user input from stdin
     std::string user_input;
 
@@ -156,7 +156,7 @@ std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack) {
 
     // Push the input onto the main stack and execute it as a macro
     stack.push_back(user_input);
-    Evaluate evaluator(this->regs, stack, this->parameters);
+    Evaluate evaluator(regs, stack, parameters);
         
     auto err = evaluator.eval();
     if(err != std::nullopt) {
