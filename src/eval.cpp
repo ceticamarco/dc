@@ -68,49 +68,37 @@ std::optional<std::string> Evaluate::eval() {
     init_environment();
 
     for(size_t idx = 0; idx < this->expr.size(); idx++) {
-        std::optional<std::string> err;
+        std::optional<std::string> err = std::nullopt;
         auto token = this->expr.at(idx);
 
         // If token exists in the environment, instantiate it through the factory
         if (this->op_factory.find(token) != this->op_factory.end()) {
             std::unique_ptr<IOperation> operation = this->op_factory[token]();
             err = operation->exec(this->stack, this->parameters, this->regs);
-            if(err != std::nullopt) {
-                return err;
-            }
+        } else if(MACRO_COND(token)) {
+            err = parse_macro(idx);
+        } else if(MACRO_CMD_COND(token)) {
+            err = parse_macro_command(token);
+        } else if(REGISTER_COND(token)) {
+            err = parse_register_command(token);
+        } else if(ARRAY_COND(token)) {
+            err = parse_array_command(token);
+        } else if(this->parameters.iradix != 10) {
+            err = parse_base_n(token);
+        } else if(is_num<double>(token)) {
+            this->stack.push_back(token);
+        } else if(token == "q") {
+            std::exit(0);
         } else {
-            err = handle_special(token, idx);
-            if(err != std::nullopt) {
-                return err;
-            }
+            return "Unrecognized option";
+        }
+
+        if(err != std::nullopt) {
+            return err;
         }
     }
 
     return std::nullopt;
-}
-
-std::optional<std::string> Evaluate::handle_special(std::string token, size_t &idx) {
-    std::optional<std::string> err = std::nullopt;
-
-    if(MACRO_COND(token)) {
-        err = parse_macro(idx);
-    } else if(MACRO_CMD_COND(token)) {
-        err = parse_macro_command(token);
-    } else if(REGISTER_COND(token)) {
-        err = parse_register_command(token);
-    } else if(ARRAY_COND(token)) {
-        err = parse_array_command(token);
-    } else if(this->parameters.iradix != 10) {
-        err = parse_base_n(token);
-    } else if(is_num<double>(token)) {
-        this->stack.push_back(token);
-    } else if(token == "q") {
-        std::exit(0);
-    } else {
-        return "Unrecognized option";
-    }
-
-    return err;
 }
 
 std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
@@ -309,9 +297,9 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         }
 
         // Otherwise, pop an element from the register's stack and push it onto the main stack
-        auto ue = this->regs[reg_name].stack.back();
+        auto value = this->regs[reg_name].stack.back();
         this->regs[reg_name].stack.pop_back();
-        this->stack.push_back(ue);
+        this->stack.push_back(value);
     } else {
         // Otherwise retrieve the register name and push its value
     	// to the stack without altering the register's stack.
@@ -326,8 +314,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         }
 
         // Otherwise, peek an element from the register's stack and push it onto the main stack
-        auto ue = this->regs[reg_name].stack.back();
-        this->stack.push_back(ue);
+        auto value = this->regs[reg_name].stack.back();
+        this->stack.push_back(value);
     }
 
     return std::nullopt;
@@ -338,7 +326,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
     // with either ':'(store) or ';'(read) and ends with
     // the register name(i.e., ':X' or ';X')
     if(token.at(0) == ':') {
-        // An ':' command pops two ues from the main stack. The second-to-top
+        // An ':' command pops two values from the main stack. The second-to-top
 	    // element will be stored in the array indexed by the top-of-stack.
         auto reg_name = token.at(1);
 
@@ -365,7 +353,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         // If array does not exist, allocate a new array first
         auto it = this->regs.find(reg_name);
         if(it != this->regs.end()) { // Register exists
-            // Always discard previous ues of array
+            // Always discard previous values of array
             it->second.array.erase(idx);
             it->second.array.insert(std::pair<int, std::string>(idx, arr_val));
         } else { // Register doesn't exist

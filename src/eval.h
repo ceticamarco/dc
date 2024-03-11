@@ -19,7 +19,6 @@ public:
     std::optional<std::string> eval();
 
 private:
-    std::optional<std::string> handle_special(std::string val, size_t &idx);
     std::optional<std::string> parse_macro(size_t &idx);
     std::optional<std::string> parse_macro_command(std::string token);
     std::optional<std::string> parse_register_command(std::string token);
