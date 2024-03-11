@@ -1,5 +1,6 @@
 #include <memory>
 
+#include "adt.cpp"
 #include "eval.h"
 #include "math.h"
 #include "stack.h"
@@ -86,7 +87,7 @@ std::optional<std::string> Evaluate::eval() {
         } else if(this->parameters.iradix != 10) {
             err = parse_base_n(token);
         } else if(is_num<double>(token)) {
-            this->stack.push_back(token);
+            this->stack.push(token);
         } else if(token == "q") {
             std::exit(0);
         } else {
@@ -110,7 +111,7 @@ std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
     // Try to convert the number to the selected numeric base
     try {
         long number = std::stol(token, nullptr, this->parameters.iradix);
-        this->stack.push_back(std::to_string(number));
+        this->stack.push(std::to_string(number));
     } catch(...) {
         return "Invalid number for input base '" 
             + std::to_string(this->parameters.iradix) + "'"; 
@@ -159,7 +160,7 @@ std::optional<std::string> Evaluate::parse_macro(size_t &idx) {
     }
 
     // Push the macro back onto the stack
-    this->stack.push_back(dc_macro);
+    this->stack.push(dc_macro);
 
     return std::nullopt;
 }
@@ -239,21 +240,20 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         // Otherwise pop an element from main stack and store it into
         // the register's top-of-the-stack. Any previous value gets overwritten
         auto reg_name = token.at(1);
-        auto head = this->stack.back();
-        this->stack.pop_back();
+        auto head = this->stack.pop(true);
 
         // Always discard previous instance of the register
         // i.e., initialize a new instance of register 'reg_name'
         this->regs.erase(reg_name);
         this->regs.insert(
                 std::make_pair(reg_name, Register{
-                    std::vector<std::string>(),
+                    DCStack<std::string>(),
                     std::unordered_map<int, std::string>()
                 })
         );
 
          // Populate register's 'reg_name' stack with top of main stack
-         this->regs[reg_name].stack.push_back(head);
+         this->regs[reg_name].stack.push(head);
     } else if(token.at(0) == 'S') {
         // An uppercase 'S' pops the top of the main stack and
         // pushes it onto the stack of selected register.
@@ -266,17 +266,16 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         }
 
         auto reg_name = token.at(1);
-        auto head = this->stack.back();
-        this->stack.pop_back();
+        auto head = this->stack.pop(true);
 
         // If register's stack exist, push an element onto its stack
         // otherwise allocate a new instance of the register
         auto it = this->regs.find(reg_name);
         if(it != this->regs.end()) { // Register exists
-            it->second.stack.push_back(head);
+            it->second.stack.push(head);
         } else { // Register doesn't exist
             this->regs[reg_name] = Register{
-                std::vector<std::string>{head},
+                DCStack<std::string>(),
                 std::unordered_map<int, std::string>()
             };
         }
@@ -297,9 +296,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         }
 
         // Otherwise, pop an element from the register's stack and push it onto the main stack
-        auto value = this->regs[reg_name].stack.back();
-        this->regs[reg_name].stack.pop_back();
-        this->stack.push_back(value);
+        auto value = this->regs[reg_name].stack.pop(true);
+        this->stack.push(value);
     } else {
         // Otherwise retrieve the register name and push its value
     	// to the stack without altering the register's stack.
@@ -309,13 +307,13 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         // If register does not exist or its stack is empty, push '0' onto the main stack
         auto it = this->regs.find(reg_name);
         if(it == this->regs.end() || it->second.stack.empty()) {
-            this->stack.emplace_back("0");
+            this->stack.push("0");
             return std::nullopt;
         }
 
         // Otherwise, peek an element from the register's stack and push it onto the main stack
-        auto value = this->regs[reg_name].stack.back();
-        this->stack.push_back(value);
+        auto value = this->regs[reg_name].stack.pop(false);
+        this->stack.push(value);
     }
 
     return std::nullopt;
@@ -336,10 +334,8 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         }
 
         // Extract two elements from the main stack
-        auto idx_str = this->stack.back();
-        this->stack.pop_back();
-        auto arr_val = this->stack.back();
-        this->stack.pop_back();
+        auto idx_str = this->stack.pop(true);
+        auto arr_val = this->stack.pop(true);
 
         // Check whether the index is an integer
         if(!is_num<int>(idx_str)) {
@@ -358,7 +354,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
             it->second.array.insert(std::pair<int, std::string>(idx, arr_val));
         } else { // Register doesn't exist
             this->regs[reg_name] = Register{
-                std::vector<std::string>(),
+                DCStack<std::string>(),
                 std::unordered_map<int, std::string>{{idx, arr_val}}
             };
         }
@@ -373,8 +369,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         }
 
         // Extract the index from the stack
-        auto idx_str = this->stack.back();
-        this->stack.pop_back();
+        auto idx_str = this->stack.pop(true);
 
         // Check if index is an integer
         if(!is_num<int>(idx_str)) {
@@ -400,7 +395,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         auto arr_it = reg_it->second.array.find(idx);
 
         if(arr_it != reg_it->second.array.end()) {
-            this->stack.push_back(arr_it->second);
+            this->stack.push(arr_it->second);
         } else {
             return std::string("Cannot access ") + reg_name +
                    std::string("[") + std::to_string(idx) + std::string("]");

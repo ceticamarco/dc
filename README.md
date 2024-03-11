@@ -54,7 +54,7 @@ And much more. You can find the complete manual [here](https://github.com/ice-bi
 the following command:
 ```sh
 $> mkdir build && cd build
-$> cmake .. && make
+$> cmake -DCMAKE_BUILD_TYPE=Release .. && make
 ```
 A new statically-compiled binary called `dc` will be created in your local folder. To generate a man page from the `man.md` document, 
 use the following command(note: needs pandoc):

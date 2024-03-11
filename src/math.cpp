@@ -2,10 +2,11 @@
 #include <numbers>
 #include <iomanip>
 
+#include "adt.cpp"
 #include "math.h"
 #include "is_num.h"
 
-std::optional<std::string> Math::exec(dc_stack_t &stack, Parameters &parameters, __attribute__((unused))  std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Math::exec(DCStack<std::string> &stack, Parameters &parameters, __attribute__((unused))  std::unordered_map<char, Register> &regs) {
     std::optional<std::string> err = std::nullopt;
 
     switch(this->op_type) {
@@ -33,7 +34,7 @@ std::optional<std::string> Math::exec(dc_stack_t &stack, Parameters &parameters,
     return err;
 }
 
-std::optional<std::string> Math::fn_add(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_add(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'+' requires two operands";
@@ -48,14 +49,11 @@ std::optional<std::string> Math::fn_add(dc_stack_t &stack, Parameters &parameter
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
-        auto lhs = std::stod(stack.back());
-        stack.pop_back();
-
-        auto rhs = std::stod(stack.back());
-        stack.pop_back();
+        auto lhs = std::stod(stack.pop(true));
+        auto rhs = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits((lhs + rhs), parameters.precision));
+        stack.push(trim_digits((lhs + rhs), parameters.precision));
     } else {
         return "'+' requires numeric values";
     }
@@ -63,7 +61,7 @@ std::optional<std::string> Math::fn_add(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sub(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_sub(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'-' requires two operands";
@@ -78,11 +76,8 @@ std::optional<std::string> Math::fn_sub(dc_stack_t &stack, Parameters &parameter
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
-        auto lhs = std::stod(stack.back());
-        stack.pop_back();
-
-        auto rhs = std::stod(stack.back());
-        stack.pop_back();
+        auto lhs = std::stod(stack.pop(true));
+        auto rhs = std::stod(stack.pop(true));
 
         // Subtract the two operands
         auto result = (-(lhs - rhs));
@@ -95,7 +90,7 @@ std::optional<std::string> Math::fn_sub(dc_stack_t &stack, Parameters &parameter
         }
 
         // Push back the result as a string
-        stack.push_back(trim_digits(result, parameters.precision));
+        stack.push(trim_digits(result, parameters.precision));
     } else {
         return "'-' requires numeric values";
     }
@@ -103,7 +98,7 @@ std::optional<std::string> Math::fn_sub(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mul(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_mul(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'*' requires two operands";
@@ -118,14 +113,11 @@ std::optional<std::string> Math::fn_mul(dc_stack_t &stack, Parameters &parameter
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
-        auto lhs = std::stod(stack.back());
-        stack.pop_back();
-
-        auto rhs = std::stod(stack.back());
-        stack.pop_back();
+        auto lhs = std::stod(stack.pop(true));
+        auto rhs = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits((lhs * rhs), parameters.precision));
+        stack.push(trim_digits((lhs * rhs), parameters.precision));
     } else {
         return "'*' requires numeric values";
     }
@@ -133,7 +125,7 @@ std::optional<std::string> Math::fn_mul(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_div(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'/' requires two operands";
@@ -148,11 +140,8 @@ std::optional<std::string> Math::fn_div(dc_stack_t &stack, Parameters &parameter
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
-        auto divisor = std::stod(stack.back());
-        stack.pop_back();
-
-        auto dividend = std::stod(stack.back());
-        stack.pop_back();
+        auto divisor = std::stod(stack.pop(true));
+        auto dividend = std::stod(stack.pop(true));
 
         // Check whether divisor is equal to zero
         if(divisor == 0.0) {
@@ -160,7 +149,7 @@ std::optional<std::string> Math::fn_div(dc_stack_t &stack, Parameters &parameter
         }
 
         // Push back the result as a string
-        stack.push_back(trim_digits((dividend / divisor), parameters.precision));
+        stack.push(trim_digits((dividend / divisor), parameters.precision));
     } else {
         return "'/' requires numeric values";
     }
@@ -168,7 +157,7 @@ std::optional<std::string> Math::fn_div(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_mod(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'%' requires two operands";
@@ -183,11 +172,8 @@ std::optional<std::string> Math::fn_mod(dc_stack_t &stack, Parameters &parameter
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
-        auto rhs = std::stod(stack.back());
-        stack.pop_back();
-
-        auto lhs = std::stod(stack.back());
-        stack.pop_back();
+        auto rhs = std::stod(stack.pop(true));
+        auto lhs = std::stod(stack.pop(true));
 
         // Check whether divisor is equal to zero
         if(rhs == 0.0) {
@@ -195,7 +181,7 @@ std::optional<std::string> Math::fn_mod(dc_stack_t &stack, Parameters &parameter
         }
 
         // Push back the result as a string
-        stack.push_back(trim_digits((static_cast<int>(lhs) % static_cast<int>(rhs)), parameters.precision));
+        stack.push(trim_digits((static_cast<int>(lhs) % static_cast<int>(rhs)), parameters.precision));
     } else {
         return "'%' requires numeric values";
     }
@@ -203,7 +189,7 @@ std::optional<std::string> Math::fn_mod(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div_mod(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_div_mod(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'~' requires two operands";
@@ -218,19 +204,16 @@ std::optional<std::string> Math::fn_div_mod(dc_stack_t &stack, Parameters &param
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
-        auto divisor = std::stod(stack.back());
-        stack.pop_back();
-
-        auto dividend = std::stod(stack.back());
-        stack.pop_back();
+        auto divisor = std::stod(stack.pop(true));
+        auto dividend = std::stod(stack.pop(true));
 
         // Check if divisor is not equal to zero
         if(divisor != 0.0) {
             auto quotient = std::trunc(dividend / divisor);
             auto remainder = ((int)dividend % (int)divisor);
 
-            stack.push_back(trim_digits(quotient, parameters.precision));
-            stack.push_back(trim_digits(remainder, parameters.precision));
+            stack.push(trim_digits(quotient, parameters.precision));
+            stack.push(trim_digits(remainder, parameters.precision));
         }
 
     } else {
@@ -240,7 +223,7 @@ std::optional<std::string> Math::fn_div_mod(dc_stack_t &stack, Parameters &param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod_exp(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_mod_exp(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 3) {
         return "'|' requires three operands";
@@ -260,17 +243,12 @@ std::optional<std::string> Math::fn_mod_exp(dc_stack_t &stack, Parameters &param
     // This functions computes
 	// 		c ≡ b^e (mod n)
     if(is_n_num && is_e_num && is_b_num) {
-        auto modulus = std::stoi(stack.back());
-        stack.pop_back();
-
-        auto exponent = std::stoi(stack.back());
-        stack.pop_back();
-
-        auto base = std::stoi(stack.back());
-        stack.pop_back();
+        auto modulus = std::stoi(stack.pop(true));
+        auto exponent = std::stoi(stack.pop(true));
+        auto base = std::stoi(stack.pop(true));
 
         if(modulus == 1) {
-            stack.emplace_back("0");
+            stack.push("0");
             return std::nullopt;
         } else if(modulus == 0) {
             return "Modulus cannot be zero";
@@ -285,7 +263,7 @@ std::optional<std::string> Math::fn_mod_exp(dc_stack_t &stack, Parameters &param
             c = (c * base) % modulus;
         }
         
-        stack.push_back(trim_digits(c, parameters.precision));
+        stack.push(trim_digits(c, parameters.precision));
     } else {
         return "'|' requires numeric values";
     }
@@ -293,7 +271,7 @@ std::optional<std::string> Math::fn_mod_exp(dc_stack_t &stack, Parameters &param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_exp(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_exp(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'^' requires two operands";
@@ -308,14 +286,11 @@ std::optional<std::string> Math::fn_exp(dc_stack_t &stack, Parameters &parameter
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
-        auto exp = std::stod(stack.back());
-        stack.pop_back();
-
-        auto base = std::stod(stack.back());
-        stack.pop_back();
+        auto exp = std::stod(stack.pop(true));
+        auto base = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits(pow(base, exp), parameters.precision));
+        stack.push(trim_digits(pow(base, exp), parameters.precision));
     } else {
         return "'^' requires numeric values";
     }
@@ -323,7 +298,7 @@ std::optional<std::string> Math::fn_exp(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sqrt(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_sqrt(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'v' requires one operand";
@@ -336,15 +311,14 @@ std::optional<std::string> Math::fn_sqrt(dc_stack_t &stack, Parameters &paramete
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         if(val <= 0.0) {
             return "'v' domain error";
         }
 
         // Push back the result as a string
-        stack.push_back(trim_digits(sqrt(val), parameters.precision));
+        stack.push(trim_digits(sqrt(val), parameters.precision));
     } else {
         return "'v' requires numeric values";
     }
@@ -352,7 +326,7 @@ std::optional<std::string> Math::fn_sqrt(dc_stack_t &stack, Parameters &paramete
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sin(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_sin(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'sin' requires one operand";
@@ -365,11 +339,10 @@ std::optional<std::string> Math::fn_sin(dc_stack_t &stack, Parameters &parameter
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits(sin(val), parameters.precision));
+        stack.push(trim_digits(sin(val), parameters.precision));
     } else {
         return "'sin' requires numeric values";
     }
@@ -377,7 +350,7 @@ std::optional<std::string> Math::fn_sin(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_cos(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_cos(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'cos' requires one operand";
@@ -390,11 +363,10 @@ std::optional<std::string> Math::fn_cos(dc_stack_t &stack, Parameters &parameter
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits(cos(val), parameters.precision));
+        stack.push(trim_digits(cos(val), parameters.precision));
     } else {
         return "'cos' requires numeric values";
     }
@@ -402,7 +374,7 @@ std::optional<std::string> Math::fn_cos(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_tan(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_tan(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'tan' requires one operand";
@@ -415,11 +387,10 @@ std::optional<std::string> Math::fn_tan(dc_stack_t &stack, Parameters &parameter
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits(tan(val), parameters.precision));
+        stack.push(trim_digits(tan(val), parameters.precision));
     } else {
         return "'tan' requires numeric values";
     }
@@ -427,7 +398,7 @@ std::optional<std::string> Math::fn_tan(dc_stack_t &stack, Parameters &parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_asin(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_asin(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'asin' requires one operand";
@@ -440,11 +411,10 @@ std::optional<std::string> Math::fn_asin(dc_stack_t &stack, Parameters &paramete
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits(asin(val), parameters.precision));
+        stack.push(trim_digits(asin(val), parameters.precision));
     } else {
         return "'asin' requires numeric values";
     }
@@ -452,7 +422,7 @@ std::optional<std::string> Math::fn_asin(dc_stack_t &stack, Parameters &paramete
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_acos(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_acos(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'acos' requires one operand";
@@ -465,11 +435,10 @@ std::optional<std::string> Math::fn_acos(dc_stack_t &stack, Parameters &paramete
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits(acos(val), parameters.precision));
+        stack.push(trim_digits(acos(val), parameters.precision));
     } else {
         return "'acos' requires numeric values";
     }
@@ -477,7 +446,7 @@ std::optional<std::string> Math::fn_acos(dc_stack_t &stack, Parameters &paramete
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_atan(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_atan(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'atan' requires one operand";
@@ -490,11 +459,10 @@ std::optional<std::string> Math::fn_atan(dc_stack_t &stack, Parameters &paramete
 
     // Check whether the entry is a number
     if(is_x_num) {
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push_back(trim_digits(atan(val), parameters.precision));
+        stack.push(trim_digits(atan(val), parameters.precision));
     } else {
         return "'atan' requires numeric values";
     }
@@ -502,7 +470,7 @@ std::optional<std::string> Math::fn_atan(dc_stack_t &stack, Parameters &paramete
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_fact(dc_stack_t &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_fact(DCStack<std::string> &stack, Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'!' requires one operand";
@@ -516,8 +484,7 @@ std::optional<std::string> Math::fn_fact(dc_stack_t &stack, Parameters &paramete
     // Check whether the entry is a number
     if(is_x_num) {
         unsigned long factorial = 1;
-        auto val = std::stod(stack.back());
-        stack.pop_back();
+        auto val = std::stod(stack.pop(true));
 
         if(val == 0.0) {
             factorial = 1;
@@ -528,7 +495,7 @@ std::optional<std::string> Math::fn_fact(dc_stack_t &stack, Parameters &paramete
         }
 
         // Push back the result as a string
-        stack.push_back(trim_digits(static_cast<double>(factorial), parameters.precision));
+        stack.push(trim_digits(static_cast<double>(factorial), parameters.precision));
     } else {
         return "'!' requires numeric values";
     }
@@ -536,14 +503,14 @@ std::optional<std::string> Math::fn_fact(dc_stack_t &stack, Parameters &paramete
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_pi(dc_stack_t &stack, Parameters &parameters) {
-    stack.push_back(trim_digits(std::numbers::pi, parameters.precision));
+std::optional<std::string> Math::fn_pi(DCStack<std::string> &stack, Parameters &parameters) {
+    stack.push(trim_digits(std::numbers::pi, parameters.precision));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_e(dc_stack_t &stack, Parameters &parameters) {
-    stack.push_back(trim_digits(std::numbers::e, parameters.precision));
+std::optional<std::string> Math::fn_e(DCStack<std::string> &stack, Parameters &parameters) {
+    stack.push(trim_digits(std::numbers::e, parameters.precision));
 
     return std::nullopt;
 }

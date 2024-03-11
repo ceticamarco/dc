@@ -5,7 +5,7 @@
 #include <iterator>
 #include <fstream>
 
-#include "src/types.h"
+#include "src//adt.h"
 #include "src/eval.h"
 #include "src/macro.h" // for split static method
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     std::string stdin_expression;
     bool execute_expression = false;
     bool execute_file = false;
-    dc_stack_t stack;
+    DCStack<std::string> stack;
     std::unordered_map<char, Register> regs;
     Parameters parameters = {
         .precision = 0,

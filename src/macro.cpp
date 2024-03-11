@@ -3,11 +3,12 @@
 #include <iterator>
 #include <limits>
 
+#include "adt.cpp"
 #include "eval.h"
 #include "macro.h"
 #include "is_num.h"
 
-std::optional<std::string> Macro::exec(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::exec(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     std::optional<std::string> err = std::nullopt;
 
     switch(this->op_type) {
@@ -20,7 +21,7 @@ std::optional<std::string> Macro::exec(dc_stack_t &stack, Parameters &parameters
     return err;
 }
 
-std::optional<std::string> Macro::fn_execute(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::fn_execute(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "This operation does not work on empty stack";
@@ -28,9 +29,9 @@ std::optional<std::string> Macro::fn_execute(dc_stack_t &stack, Parameters &para
 
     // If the head of the stack is a string
     // pop it and execute it as a macro
-    auto head = stack.back();
+    auto head = stack.pop(false);
     if(!is_num<double>(head)) {
-        stack.pop_back();
+        stack.pop(true);
         std::vector<std::string> tokens = split(head);
         Evaluate evaluator(tokens, regs, stack, parameters);
         
@@ -43,7 +44,7 @@ std::optional<std::string> Macro::fn_execute(dc_stack_t &stack, Parameters &para
     return std::nullopt;
 }
 
-std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::fn_evaluate_macro(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     // Check whether the main stack has enough elements
     if(stack.size() < 2) {
         return "This operation requires two elements";
@@ -55,11 +56,9 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack, Parameter
     }
 
     // Extract macro and top two values of the stack
-    auto head_str = stack.back();
-    stack.pop_back();
-    auto second_str = stack.back();
-    stack.pop_back();
-    auto dc_macro = regs[this->dc_register].stack.back();
+    auto head_str = stack.pop(true);
+    auto second_str = stack.pop(true);
+    auto dc_macro = regs[this->dc_register].stack.pop(false);
 
     // Check if macro exists and if top two elements of main stack are numbers
     if(!dc_macro.empty() && is_num<double>(head_str) && is_num<double>(second_str)) {
@@ -145,7 +144,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc_stack_t &stack, Parameter
     return std::nullopt;
 }
 
-std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::fn_read_input(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
     // Read user input from stdin
     std::string user_input;
 
@@ -155,7 +154,7 @@ std::optional<std::string> Macro::fn_read_input(dc_stack_t &stack, Parameters &p
     }
 
     // Push the input onto the main stack and execute it as a macro
-    stack.push_back(user_input);
+    stack.push(user_input);
     Evaluate evaluator(regs, stack, parameters);
         
     auto err = evaluator.eval();

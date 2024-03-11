@@ -6,15 +6,15 @@
 #include <memory>
 #include <functional>
 
+#include "adt.h"
 #include "operation.h"
-#include "types.h"
 
 class Evaluate {
 public:
     Evaluate(const std::vector<std::string>& e, std::unordered_map<char, Register> &r,
-            dc_stack_t &s, Parameters &p)
+             DCStack<std::string> &s, Parameters &p)
         : expr(e), regs(r), stack(s), parameters(p) {}
-    Evaluate(std::unordered_map<char, Register> &r, dc_stack_t &s, Parameters &p)
+    Evaluate(std::unordered_map<char, Register> &r, DCStack<std::string> &s, Parameters &p)
         : regs(r), stack(s), parameters(p) {}
     std::optional<std::string> eval();
 
@@ -30,6 +30,6 @@ private:
     std::vector<std::string> expr;
     std::unordered_map<char, Register> &regs;
     std::unordered_map<std::string, op_factory_t> op_factory;
-    dc_stack_t &stack;
+    DCStack<std::string> &stack;
     Parameters &parameters;
 };

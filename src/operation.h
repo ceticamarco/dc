@@ -1,11 +1,11 @@
 #pragma once
 #include <optional>
 
-#include "types.h"
+#include "adt.h"
 
 class IOperation {
 public:
-    virtual std::optional<std::string> exec(dc_stack_t &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) = 0;
+    virtual std::optional<std::string> exec(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) = 0;
     virtual ~IOperation() = default;
 };
 
