@@ -12,8 +12,8 @@ jobs:
       uses: actions/checkout@main
     - name: Build dc
       run: |
-        apt -y update && apt -y install cmake build-essential
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug .
+        apt -y update && apt -y install cmake ninja-build build-essential
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release .
         cmake --build build
     - name: Run unit tests
       run: |
