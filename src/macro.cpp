@@ -31,6 +31,7 @@ std::optional<std::string> Macro::fn_execute(DCStack<std::string> &stack, Parame
     // pop it and execute it as a macro
     auto head = stack.pop(false);
     if(!is_num<double>(head)) {
+        stack.copy_xyz();
         stack.pop(true);
         std::vector<std::string> tokens = split(head);
         Evaluate evaluator(tokens, regs, stack, parameters);
@@ -56,6 +57,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(DCStack<std::string> &stack,
     }
 
     // Extract macro and top two values of the stack
+    stack.copy_xyz();
     auto head_str = stack.pop(true);
     auto second_str = stack.pop(true);
     auto dc_macro = regs[this->dc_register].stack.pop(false);

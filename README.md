@@ -33,6 +33,7 @@ Some of the supported features are:
     - Swap order of top two elements(`r`);  
     - Duplicate top element(`d`);  
     - Dump the whole stack(`f`);  
+    - Last head, 2nd, 3rd element of the stack(`.x`, `.y`, `.z`);  
 - Parameters:
     - Set precision(`k`);  
     - Set input and output radix(`i` and `o`);  
@@ -151,7 +152,15 @@ lA lB # Push 'A' and 'B' content onto the stack
 p     # Print top element(output: 5)
 ```
 
-7. Print out numbers from 1 through user-defined upper bound:
+7. Recall last value of top three elements of the stack:  
+```sh
+10 1 / # <- Wrong operation: division instead of sum
+.y     # Call last value of y register
+.x     # Call last value of x register
++ p    # Sum and print head(output: 11)
+```
+
+8. Print out numbers from 1 through user-defined upper bound:
 ```sh
 [ p 1 + d lN >L ] sL # Print numbers from 1 through 'N'
 
@@ -160,20 +169,20 @@ p     # Print top element(output: 5)
 c 1 lL x # Clear the stack, add lower bound, load and execute macro
 ```
 
-8. Sum the first 36 natural numbers(😈), i.e.,
+9. Sum the first 36 natural numbers(😈), i.e.,
 $$\sum_{i=1}^{37} i = 666$$
 ```sh
 $> dc -e "36 [ d 1 - d 1 <F + ] d sF x p"
 ```
 
-5. Print the first 20 values of `n!`:
+10. Print the first 20 values of `n!`:
 ```
 [ la 1 + d sa * p la 20 >y ] sy
 0 sa 1
 ly x
 ```
 
-9. Compute the factorial of a given number:
+11. Compute the factorial of a given number:
 ```
 [ ln 1 - sn ln la * sa ln 1 !=f ] sf
 [ Enter value: ] P ? sn
@@ -182,7 +191,7 @@ lf x
 la p
 ```
 
-10. Compute the sum $8AB6F + B783E$ in base 16. Print the result in base 10 and in base 2:
+12. Compute the sum $8AB6F + B783E$ in base 16. Print the result in base 10 and in base 2:
 ```
 16 i
 8AB6F B783E +
@@ -190,7 +199,7 @@ la p
 [ Result in base 2: ] P R pb
 ```
 
-11. Compute the Greatest Common Divisor(GCD) between two user-defined numbers `A` and `B`:
+13. Compute the Greatest Common Divisor(GCD) between two user-defined numbers `A` and `B`:
 ```
 [ Enter A: ] P R ?
 [ Enter B: ] P R ?
@@ -198,7 +207,7 @@ la p
 [ GCD(A,B)= ] P R p
 ```
 
-12. Compute the Least Common Multiple(LCM) between two user-defined numbers `A` and `B`:
+14. Compute the Least Common Multiple(LCM) between two user-defined numbers `A` and `B`:
 ```
 [ Enter A: ] P R ? d sA
 [ Enter B: ] P R ? d SA
@@ -207,7 +216,7 @@ LA lA * r /
 [ LCM(A,B)= ] P R p
 ```
 
-13. Find the roots of a quadratic equation of the form:
+15. Find the roots of a quadratic equation of the form:
 $$ax^2 + bx + c = 0$$
 
 with $$a,b,c \in \mathbb{R}, a \neq 0$$

@@ -11,10 +11,13 @@ template<typename T>
 requires is_num_or_str<T>
 class DCStack {
 public:
-    DCStack() = default;
     void push(T value);
     void clear();
+    void copy_xyz();
     T pop(bool remove);
+    T get_last_x();
+    T get_last_y();
+    T get_last_z();
     T& at(size_t index);
     size_t size();
     bool empty();
@@ -22,9 +25,9 @@ public:
 
 private:
     std::vector<T> stack;
-    T last_x;
-    T last_y;
-    T last_z;
+    T last_x{};
+    T last_y{};
+    T last_z{};
 };
 
 typedef struct {

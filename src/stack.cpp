@@ -37,6 +37,9 @@ std::optional<std::string> Stack::exec(DCStack<std::string> &stack, Parameters &
         case OPType::GOR: err = fn_get_oradix(stack, parameters); break;
         case OPType::SIR: err = fn_set_iradix(stack, parameters); break;
         case OPType::GIR: err = fn_get_iradix(stack, parameters); break;
+        case OPType::LX: err = fn_get_lastx(stack); break;
+        case OPType::LY: err = fn_get_lasty(stack); break;
+        case OPType::LZ: err = fn_get_lastz(stack); break;
         default: break;
     }
 
@@ -91,6 +94,7 @@ std::optional<std::string> Stack::fn_pop_head(DCStack<std::string> &stack) {
         return "'R' does not work on empty stack";
     }
 
+    stack.copy_xyz();
     stack.pop(true);
 
     return std::nullopt;
@@ -106,6 +110,7 @@ std::optional<std::string> Stack::fn_swap_xy(DCStack<std::string> &stack) {
     auto len = stack.size()-1;
     auto x = stack.at(len);
     
+    stack.copy_xyz();
     stack.at(len) = stack.at(len-1);
     stack.at(len-1) = x;
 
@@ -170,6 +175,8 @@ std::optional<std::string> Stack::fn_head_size(DCStack<std::string> &stack) {
     // If it's an integer, count its digits
     if(is_num<int>(head)) {
         auto num = std::stoi(head);
+
+        stack.copy_xyz();
         stack.pop(true);
 
         size_t len = 0;
@@ -181,6 +188,7 @@ std::optional<std::string> Stack::fn_head_size(DCStack<std::string> &stack) {
         stack.push(std::to_string(len));
     } else {
         // Otherwise, treat the value as a string and count its length
+        stack.copy_xyz();
         stack.pop(true);
         head.erase(std::remove(head.begin(), head.end(), '.'), head.end());
         stack.push(std::to_string(head.length()));
@@ -209,6 +217,7 @@ std::optional<std::string> Stack::fn_set_precision(DCStack<std::string> &stack, 
 
     // Otherwise extract head of the stack and use it
     // to set precision parameter
+    stack.copy_xyz();
     stack.pop(true);
     parameters.precision = std::stoi(head);
 
@@ -228,7 +237,8 @@ std::optional<std::string> Stack::fn_set_oradix(DCStack<std::string> &stack, Par
     }
 
     // Check whether the head is a number
-    auto head = stack.pop(false);
+    stack.copy_xyz();
+    auto head = stack.pop(true);
     if(!is_num<int>(head)) {
         return "'o' requires numeric values only";
     }
@@ -266,6 +276,7 @@ std::optional<std::string> Stack::fn_set_iradix(DCStack<std::string> &stack, Par
 
     // Otherwise extract head of the stack and use it
     // to set input base
+    stack.copy_xyz();
     stack.pop(true);
     parameters.iradix = std::stoi(head);
 
@@ -274,6 +285,30 @@ std::optional<std::string> Stack::fn_set_iradix(DCStack<std::string> &stack, Par
 
 std::optional<std::string> Stack::fn_get_iradix(DCStack<std::string> &stack, Parameters &parameters) {
     stack.push(std::to_string(parameters.iradix));
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_lastx(DCStack<std::string> &stack) {
+    // Retrieve last x from the stack and push it back
+    auto last_x = stack.get_last_x();
+    last_x.empty() ? stack.push("0") : stack.push(last_x);
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_lasty(DCStack<std::string> &stack) {
+    // Retrieve last y from the stack and push it back
+    auto last_y = stack.get_last_y();
+    last_y.empty() ? stack.push("0") : stack.push(last_y);
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Stack::fn_get_lastz(DCStack<std::string> &stack) {
+    // Retrieve last y from the stack and push it back
+    auto last_z = stack.get_last_z();
+    last_z.empty() ? stack.push("0") : stack.push(last_z);
 
     return std::nullopt;
 }

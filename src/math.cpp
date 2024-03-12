@@ -49,6 +49,7 @@ std::optional<std::string> Math::fn_add(DCStack<std::string> &stack, Parameters 
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
+        stack.copy_xyz();
         auto lhs = std::stod(stack.pop(true));
         auto rhs = std::stod(stack.pop(true));
 
@@ -76,6 +77,7 @@ std::optional<std::string> Math::fn_sub(DCStack<std::string> &stack, Parameters 
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
+        stack.copy_xyz();
         auto lhs = std::stod(stack.pop(true));
         auto rhs = std::stod(stack.pop(true));
 
@@ -113,6 +115,7 @@ std::optional<std::string> Math::fn_mul(DCStack<std::string> &stack, Parameters 
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
+        stack.copy_xyz();
         auto lhs = std::stod(stack.pop(true));
         auto rhs = std::stod(stack.pop(true));
 
@@ -140,6 +143,7 @@ std::optional<std::string> Math::fn_div(DCStack<std::string> &stack, Parameters 
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
+        stack.copy_xyz();
         auto divisor = std::stod(stack.pop(true));
         auto dividend = std::stod(stack.pop(true));
 
@@ -172,6 +176,7 @@ std::optional<std::string> Math::fn_mod(DCStack<std::string> &stack, Parameters 
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
+        stack.copy_xyz();
         auto rhs = std::stod(stack.pop(true));
         auto lhs = std::stod(stack.pop(true));
 
@@ -204,6 +209,7 @@ std::optional<std::string> Math::fn_div_mod(DCStack<std::string> &stack, Paramet
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
+        stack.copy_xyz();
         auto divisor = std::stod(stack.pop(true));
         auto dividend = std::stod(stack.pop(true));
 
@@ -243,6 +249,7 @@ std::optional<std::string> Math::fn_mod_exp(DCStack<std::string> &stack, Paramet
     // This functions computes
 	// 		c ≡ b^e (mod n)
     if(is_n_num && is_e_num && is_b_num) {
+        stack.copy_xyz();
         auto modulus = std::stoi(stack.pop(true));
         auto exponent = std::stoi(stack.pop(true));
         auto base = std::stoi(stack.pop(true));
@@ -286,6 +293,7 @@ std::optional<std::string> Math::fn_exp(DCStack<std::string> &stack, Parameters 
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
+        stack.copy_xyz();
         auto exp = std::stod(stack.pop(true));
         auto base = std::stod(stack.pop(true));
 
@@ -311,6 +319,7 @@ std::optional<std::string> Math::fn_sqrt(DCStack<std::string> &stack, Parameters
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         auto val = std::stod(stack.pop(true));
 
         if(val <= 0.0) {
@@ -339,6 +348,7 @@ std::optional<std::string> Math::fn_sin(DCStack<std::string> &stack, Parameters 
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
@@ -363,6 +373,7 @@ std::optional<std::string> Math::fn_cos(DCStack<std::string> &stack, Parameters 
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
@@ -387,6 +398,7 @@ std::optional<std::string> Math::fn_tan(DCStack<std::string> &stack, Parameters 
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
@@ -411,6 +423,7 @@ std::optional<std::string> Math::fn_asin(DCStack<std::string> &stack, Parameters
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
@@ -435,6 +448,7 @@ std::optional<std::string> Math::fn_acos(DCStack<std::string> &stack, Parameters
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
@@ -459,6 +473,7 @@ std::optional<std::string> Math::fn_atan(DCStack<std::string> &stack, Parameters
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
@@ -483,6 +498,7 @@ std::optional<std::string> Math::fn_fact(DCStack<std::string> &stack, Parameters
 
     // Check whether the entry is a number
     if(is_x_num) {
+        stack.copy_xyz();
         unsigned long factorial = 1;
         auto val = std::stod(stack.pop(true));
 

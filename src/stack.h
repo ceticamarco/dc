@@ -21,6 +21,9 @@ private:
     static std::optional<std::string> fn_get_oradix(DCStack<std::string> &stack, Parameters &parameters);
     static std::optional<std::string> fn_set_iradix(DCStack<std::string> &stack, Parameters &parameters);
     static std::optional<std::string> fn_get_iradix(DCStack<std::string> &stack, Parameters &parameters);
+    std::optional<std::string> fn_get_lastx(DCStack<std::string> &stack);
+    std::optional<std::string> fn_get_lasty(DCStack<std::string> &stack);
+    std::optional<std::string> fn_get_lastz(DCStack<std::string> &stack);
     constexpr std::string to_bin(auto num);
 
     OPType op_type;

@@ -15,7 +15,7 @@ enum class OPType {
     SQRT, SIN, COS, TAN, ASIN, ACOS, ATAN, FACT, PI, E,
     // Stack operations
     PCG, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS, 
-    SP, GP, SOR, GOR, SIR, GIR,
+    SP, GP, SOR, GOR, SIR, GIR, LX, LY, LZ,
     // Macro operations
     EX, CMP, RI
 };

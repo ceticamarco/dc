@@ -59,6 +59,9 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("O", MAKE_UNIQUE_PTR(Stack, OPType::GOR));
     this->op_factory.emplace("i", MAKE_UNIQUE_PTR(Stack, OPType::SIR));
     this->op_factory.emplace("I", MAKE_UNIQUE_PTR(Stack, OPType::GIR));
+    this->op_factory.emplace(".x", MAKE_UNIQUE_PTR(Stack, OPType::LX));
+    this->op_factory.emplace(".y", MAKE_UNIQUE_PTR(Stack, OPType::LY));
+    this->op_factory.emplace(".z", MAKE_UNIQUE_PTR(Stack, OPType::LZ));
     // Macro operations
     this->op_factory.emplace("x", MAKE_UNIQUE_PTR(Macro, OPType::EX));
     this->op_factory.emplace("?", MAKE_UNIQUE_PTR(Macro, OPType::RI));
@@ -239,6 +242,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
 
         // Otherwise pop an element from main stack and store it into
         // the register's top-of-the-stack. Any previous value gets overwritten
+        this->stack.copy_xyz();
         auto reg_name = token.at(1);
         auto head = this->stack.pop(true);
 
@@ -265,6 +269,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
             return "This operation does not work on empty stack";
         }
 
+        this->stack.copy_xyz();
         auto reg_name = token.at(1);
         auto head = this->stack.pop(true);
 
@@ -334,6 +339,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         }
 
         // Extract two elements from the main stack
+        this->stack.copy_xyz();
         auto idx_str = this->stack.pop(true);
         auto arr_val = this->stack.pop(true);
 
@@ -369,6 +375,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         }
 
         // Extract the index from the stack
+        this->stack.copy_xyz();
         auto idx_str = this->stack.pop(true);
 
         // Check if index is an integer

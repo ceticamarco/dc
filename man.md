@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: November 28, 2023
+date: March 12, 2024
 ---
 
 
@@ -91,7 +91,8 @@ register and the _value_ is a **private** instance of a stack and a **private** 
 cannot operate directly on the auxiliary stacks or on the auxiliary arrays. In order to use a value stored on an auxiliary stack, you need to pop it
 and push it onto the main stack(see the register section).
 
-Both the _main stack_ and the _auxiliary stack_ implement the same abstract data type, therefore any kind of data type supported by the main stack - as well as any other property or feature supported by the main stack - is also supported by the register's stack.
+Both the _main stack_ and the _auxiliary stack_ implement the same abstract data type, therefore any kind of data type supported by the main
+stack - as well as any other property or feature supported by the main stack - is also supported by the register's stack.
 
 _Arrays_ are dynamic, homogeneous and private abstract data type associated with a register.
 The underlying data type of a dc array is a hashmap where the index is represented by
@@ -229,6 +230,20 @@ Reverses the order of the top two values of the stack. This can also be accompli
 **R**
 
 Pops the top-of-stack without printing it
+
+**.x**
+
+Retrieve the value that was last the top-of-stack *before execution of any operation*(stack, macro, arithmetical, etc.).
+This function can be used to quickly key back numbers when you are recovering from errors, such as typing in the wrong number
+or executing the wrong operation.
+
+**.y**
+
+Retrieve the value that was last the second-to-top of the stack *before execution of any operation*(stack, macro, arithmetical, etc.).
+
+**.z**
+
+Retrieve the value that was last the third-to-top of the stack *before execution of any operation*(stack, macro, arithmetical, etc.).
 
 ## Parameters
 **dc** has three parameters that control its operation: the *precision*, the *input radix* and the *output radix*.

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+
+    # Test with arithmetical operations
+    EXPECTED="1"
+    ACTUAL=$("$PROGRAM" -e '1 5 4 + + .z p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test with default value
+    EXPECTED="0"
+    ACTUAL=$("$PROGRAM" -e '.z p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test with macro opeartions
+    EXPECTED="5"
+    ACTUAL=$("$PROGRAM" -e '5 6 [ foo ] sx sy sz .z p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test with stack operations
+    EXPECTED="10"
+    ACTUAL=$("$PROGRAM" -e '10 1 2 R .z p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:
