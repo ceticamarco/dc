@@ -12,9 +12,9 @@ jobs:
       uses: actions/checkout@main
     - name: Build dc
       run: |
-        mkdir build && cd build
-        cmake ..
-        make
+        apt -y update && apt -y install cmake build-essential
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug .
+        cmake --build build
     - name: Run unit tests
       run: |
         ./utest.sh tests

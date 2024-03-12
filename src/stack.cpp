@@ -6,10 +6,10 @@
 #include "stack.h"
 #include "is_num.h"
 
-std::optional<std::string> Stack::exec(DCStack<std::string> &stack, Parameters &parameters, __attribute__((unused)) std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Stack::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, __attribute__((unused)) std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
     
-    auto print_oradix = [&stack, &parameters, this](radix_base base) {
+    auto print_oradix = [&stack, &parameters, this](dc::radix_base base) {
         auto old_rdx = parameters.oradix;
         parameters.oradix = base;
         auto res = fn_print(stack, parameters, false);
@@ -21,9 +21,9 @@ std::optional<std::string> Stack::exec(DCStack<std::string> &stack, Parameters &
     switch(this->op_type) {
         case OPType::PCG: err = fn_print(stack, parameters, true); break;
         case OPType::P: err = fn_print(stack, parameters, false); break;
-        case OPType::PBB: err = print_oradix(radix_base::BIN); break;
-        case OPType::PBO: err = print_oradix(radix_base::OCT); break;
-        case OPType::PBH: err = print_oradix(radix_base::HEX); break;
+        case OPType::PBB: err = print_oradix(dc::radix_base::BIN); break;
+        case OPType::PBO: err = print_oradix(dc::radix_base::OCT); break;
+        case OPType::PBH: err = print_oradix(dc::radix_base::HEX); break;
         case OPType::CLR: stack.clear(); break;
         case OPType::PH: err = fn_pop_head(stack); break;
         case OPType::SO: err = fn_swap_xy(stack); break;
@@ -46,7 +46,7 @@ std::optional<std::string> Stack::exec(DCStack<std::string> &stack, Parameters &
     return err;
 }
 
-std::optional<std::string> Stack::fn_print(DCStack<std::string> &stack, Parameters  &parameters, bool new_line) {
+std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Parameters  &parameters, bool new_line) {
     // Check if the stack is empty
     if(stack.empty()) {
         return "Cannot print empty stack";
@@ -58,7 +58,7 @@ std::optional<std::string> Stack::fn_print(DCStack<std::string> &stack, Paramete
     }
 
     switch(parameters.oradix) {
-        case radix_base::DEC: {
+        case dc::radix_base::DEC: {
             if(new_line) {
                 std::cout << stack.pop(false) << std::endl;
             } else {
@@ -66,17 +66,17 @@ std::optional<std::string> Stack::fn_print(DCStack<std::string> &stack, Paramete
             }
             break;
         }
-        case radix_base::BIN: {
+        case dc::radix_base::BIN: {
             auto head = std::stol(stack.pop(false));
             std::cout << to_bin(head) << 'b' << std::endl;
             break;
         }
-        case radix_base::OCT: {
+        case dc::radix_base::OCT: {
             auto head = std::stol(stack.pop(false));
             std::cout << std::oct << head << 'o' << std::dec << std::endl;
             break;
         }
-        case radix_base::HEX: {
+        case dc::radix_base::HEX: {
             auto head = std::stol(stack.pop(false));
             std::cout << std::hex << std::uppercase << head << 'h'
                       << std::dec << std::nouppercase << std::endl;
@@ -88,7 +88,7 @@ std::optional<std::string> Stack::fn_print(DCStack<std::string> &stack, Paramete
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_pop_head(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_pop_head(dc::Stack<std::string> &stack) {
     // Check if stack is empty
     if(stack.empty()) {
         return "'R' does not work on empty stack";
@@ -100,7 +100,7 @@ std::optional<std::string> Stack::fn_pop_head(DCStack<std::string> &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_swap_xy(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_swap_xy(dc::Stack<std::string> &stack) {
     // Check if the stack has enough elements
     if(stack.size() < 2) {
         return "'r' requires two elements";
@@ -108,16 +108,16 @@ std::optional<std::string> Stack::fn_swap_xy(DCStack<std::string> &stack) {
 
     // Swap top two elements
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     
     stack.copy_xyz();
-    stack.at(len) = stack.at(len-1);
-    stack.at(len-1) = x;
+    stack[len] = stack[len-1];
+    stack[len-1] = x;
 
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_dup_head(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_dup_head(dc::Stack<std::string> &stack) {
     // Check if the stack has enough elements
     if(stack.empty()) {
         return "'d' requires one element";
@@ -129,29 +129,29 @@ std::optional<std::string> Stack::fn_dup_head(DCStack<std::string> &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_print_stack(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Stack::fn_print_stack(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     const auto& const_ref = stack.get_ref();
 
     switch(parameters.oradix) {
-        case radix_base::DEC: {
+        case dc::radix_base::DEC: {
             for(auto & it : std::ranges::reverse_view(const_ref)) {
                 std::cout << it << std::endl;
             }
             break;
         }
-        case radix_base::BIN: {
+        case dc::radix_base::BIN: {
             for(auto & it : std::ranges::reverse_view(const_ref)) {
                 std::cout << to_bin(std::stol(it)) << 'b' << std::endl;
             }
             break;
         }
-        case radix_base::OCT: {
+        case dc::radix_base::OCT: {
             for(auto & it : std::ranges::reverse_view(const_ref)) {
                 std::cout << std::oct << std::stol(it) << 'o' << std::dec << std::endl;
             }
             break;
         }
-        case radix_base::HEX: {
+        case dc::radix_base::HEX: {
             for(auto & it : std::ranges::reverse_view(const_ref)) {
                 std::cout << std::hex << std::uppercase << std::stol(it) << 'h'
                           << std::dec << std::nouppercase << std::endl;
@@ -163,7 +163,7 @@ std::optional<std::string> Stack::fn_print_stack(DCStack<std::string> &stack, Pa
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_head_size(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_head_size(dc::Stack<std::string> &stack) {
     // Check if the stack has enough elements
     if(stack.empty()) {
         return "'Z' does not work on empty stack";
@@ -179,7 +179,7 @@ std::optional<std::string> Stack::fn_head_size(DCStack<std::string> &stack) {
         stack.copy_xyz();
         stack.pop(true);
 
-        size_t len = 0;
+        std::size_t len = 0;
         while(num > 0) {
             num /= 10;
             len++;
@@ -197,13 +197,13 @@ std::optional<std::string> Stack::fn_head_size(DCStack<std::string> &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_stack_size(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_stack_size(dc::Stack<std::string> &stack) {
     stack.push(std::to_string(stack.size()));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_set_precision(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Stack::fn_set_precision(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'k' requires one operand";
@@ -224,13 +224,13 @@ std::optional<std::string> Stack::fn_set_precision(DCStack<std::string> &stack, 
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_precision(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Stack::fn_get_precision(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     stack.push(std::to_string(parameters.precision));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_set_oradix(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Stack::fn_set_oradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'o' requires one operand";
@@ -246,23 +246,23 @@ std::optional<std::string> Stack::fn_set_oradix(DCStack<std::string> &stack, Par
     // Otherwise convert it to int
     auto oradix = std::stoi(head);
     switch(oradix) {
-        case 2: parameters.oradix = radix_base::BIN; break;
-        case 8: parameters.oradix = radix_base::OCT; break;
-        case 10: parameters.oradix = radix_base::DEC; break;
-        case 16: parameters.oradix = radix_base::HEX; break;
+        case 2: parameters.oradix = dc::radix_base::BIN; break;
+        case 8: parameters.oradix = dc::radix_base::OCT; break;
+        case 10: parameters.oradix = dc::radix_base::DEC; break;
+        case 16: parameters.oradix = dc::radix_base::HEX; break;
         default: return "'o' accepts either BIN, OCT, DEC or HEX bases";
     }
 
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_oradix(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Stack::fn_get_oradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     stack.push(std::to_string(static_cast<int>(parameters.oradix)));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_set_iradix(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Stack::fn_set_iradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'i' requires one operand";
@@ -283,13 +283,13 @@ std::optional<std::string> Stack::fn_set_iradix(DCStack<std::string> &stack, Par
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_iradix(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Stack::fn_get_iradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     stack.push(std::to_string(parameters.iradix));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_lastx(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_get_lastx(dc::Stack<std::string> &stack) {
     // Retrieve last x from the stack and push it back
     auto last_x = stack.get_last_x();
     last_x.empty() ? stack.push("0") : stack.push(last_x);
@@ -297,7 +297,7 @@ std::optional<std::string> Stack::fn_get_lastx(DCStack<std::string> &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_lasty(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_get_lasty(dc::Stack<std::string> &stack) {
     // Retrieve last y from the stack and push it back
     auto last_y = stack.get_last_y();
     last_y.empty() ? stack.push("0") : stack.push(last_y);
@@ -305,7 +305,7 @@ std::optional<std::string> Stack::fn_get_lasty(DCStack<std::string> &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_lastz(DCStack<std::string> &stack) {
+std::optional<std::string> Stack::fn_get_lastz(dc::Stack<std::string> &stack) {
     // Retrieve last y from the stack and push it back
     auto last_z = stack.get_last_z();
     last_z.empty() ? stack.push("0") : stack.push(last_z);

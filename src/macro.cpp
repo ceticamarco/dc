@@ -8,7 +8,7 @@
 #include "macro.h"
 #include "is_num.h"
 
-std::optional<std::string> Macro::exec(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
 
     switch(this->op_type) {
@@ -21,7 +21,7 @@ std::optional<std::string> Macro::exec(DCStack<std::string> &stack, Parameters &
     return err;
 }
 
-std::optional<std::string> Macro::fn_execute(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::fn_execute(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "This operation does not work on empty stack";
@@ -45,7 +45,7 @@ std::optional<std::string> Macro::fn_execute(DCStack<std::string> &stack, Parame
     return std::nullopt;
 }
 
-std::optional<std::string> Macro::fn_evaluate_macro(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check whether the main stack has enough elements
     if(stack.size() < 2) {
         return "This operation requires two elements";
@@ -146,7 +146,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(DCStack<std::string> &stack,
     return std::nullopt;
 }
 
-std::optional<std::string> Macro::fn_read_input(DCStack<std::string> &stack, Parameters &parameters, std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Macro::fn_read_input(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Read user input from stdin
     std::string user_input;
 

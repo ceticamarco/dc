@@ -13,9 +13,8 @@ jobs:
     - name: Build dc
       run: |
         apt -y update && apt -y install cmake build-essential
-        mkdir build && cd build
-        cmake ..
-        make
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug .
+        cmake --build build
     - name: Run unit tests
       run: |
         ./utest.sh tests

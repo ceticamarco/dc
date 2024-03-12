@@ -9,6 +9,8 @@
 #include "src/eval.h"
 #include "src/macro.h" // for split static method
 
+using namespace dc;
+
 #define DC_VERSION "1.0.3"
 
 void helper() {
@@ -27,7 +29,7 @@ int main(int argc, char **argv) {
     std::string stdin_expression;
     bool execute_expression = false;
     bool execute_file = false;
-    DCStack<std::string> stack;
+    Stack<std::string> stack;
     std::unordered_map<char, Register> regs;
     Parameters parameters = {
         .precision = 0,

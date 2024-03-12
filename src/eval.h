@@ -11,15 +11,15 @@
 
 class Evaluate {
 public:
-    Evaluate(const std::vector<std::string>& e, std::unordered_map<char, Register> &r,
-             DCStack<std::string> &s, Parameters &p)
+    Evaluate(const std::vector<std::string>& e, std::unordered_map<char, dc::Register> &r,
+             dc::Stack<std::string> &s, dc::Parameters &p)
         : expr(e), regs(r), stack(s), parameters(p) {}
-    Evaluate(std::unordered_map<char, Register> &r, DCStack<std::string> &s, Parameters &p)
+    Evaluate(std::unordered_map<char, dc::Register> &r, dc::Stack<std::string> &s, dc::Parameters &p)
         : regs(r), stack(s), parameters(p) {}
     std::optional<std::string> eval();
 
 private:
-    std::optional<std::string> parse_macro(size_t &idx);
+    std::optional<std::string> parse_macro(std::size_t &idx);
     std::optional<std::string> parse_macro_command(std::string token);
     std::optional<std::string> parse_register_command(std::string token);
     std::optional<std::string> parse_array_command(std::string token);
@@ -28,8 +28,8 @@ private:
 
     using op_factory_t = std::function<std::unique_ptr<IOperation>()>;
     std::vector<std::string> expr;
-    std::unordered_map<char, Register> &regs;
+    std::unordered_map<char, dc::Register> &regs;
     std::unordered_map<std::string, op_factory_t> op_factory;
-    DCStack<std::string> &stack;
-    Parameters &parameters;
+    dc::Stack<std::string> &stack;
+    dc::Parameters &parameters;
 };

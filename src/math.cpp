@@ -6,7 +6,7 @@
 #include "math.h"
 #include "is_num.h"
 
-std::optional<std::string> Math::exec(DCStack<std::string> &stack, Parameters &parameters, __attribute__((unused))  std::unordered_map<char, Register> &regs) {
+std::optional<std::string> Math::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, __attribute__((unused))  std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
 
     switch(this->op_type) {
@@ -34,7 +34,7 @@ std::optional<std::string> Math::exec(DCStack<std::string> &stack, Parameters &p
     return err;
 }
 
-std::optional<std::string> Math::fn_add(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_add(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'+' requires two operands";
@@ -42,8 +42,8 @@ std::optional<std::string> Math::fn_add(DCStack<std::string> &stack, Parameters 
 
     // Extract two entries from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
-    auto y = stack.at(len-1);
+    auto x = stack[len];
+    auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
 
@@ -62,7 +62,7 @@ std::optional<std::string> Math::fn_add(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sub(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_sub(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'-' requires two operands";
@@ -70,8 +70,8 @@ std::optional<std::string> Math::fn_sub(DCStack<std::string> &stack, Parameters 
 
     // Extract two entries from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
-    auto y = stack.at(len-1);
+    auto x = stack[len];
+    auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
 
@@ -100,7 +100,7 @@ std::optional<std::string> Math::fn_sub(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mul(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_mul(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'*' requires two operands";
@@ -108,8 +108,8 @@ std::optional<std::string> Math::fn_mul(DCStack<std::string> &stack, Parameters 
 
     // Extract two entries from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
-    auto y = stack.at(len-1);
+    auto x = stack[len];
+    auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
 
@@ -128,7 +128,7 @@ std::optional<std::string> Math::fn_mul(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_div(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'/' requires two operands";
@@ -136,8 +136,8 @@ std::optional<std::string> Math::fn_div(DCStack<std::string> &stack, Parameters 
 
     // Extract two entries from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
-    auto y = stack.at(len-1);
+    auto x = stack[len];
+    auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
 
@@ -161,7 +161,7 @@ std::optional<std::string> Math::fn_div(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_mod(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'%' requires two operands";
@@ -169,8 +169,8 @@ std::optional<std::string> Math::fn_mod(DCStack<std::string> &stack, Parameters 
 
     // Extract two entries from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
-    auto y = stack.at(len-1);
+    auto x = stack[len];
+    auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
 
@@ -194,7 +194,7 @@ std::optional<std::string> Math::fn_mod(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div_mod(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_div_mod(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'~' requires two operands";
@@ -202,8 +202,8 @@ std::optional<std::string> Math::fn_div_mod(DCStack<std::string> &stack, Paramet
 
     // Extract two entries from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
-    auto y = stack.at(len-1);
+    auto x = stack[len];
+    auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
 
@@ -229,7 +229,7 @@ std::optional<std::string> Math::fn_div_mod(DCStack<std::string> &stack, Paramet
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod_exp(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_mod_exp(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 3) {
         return "'|' requires three operands";
@@ -239,9 +239,9 @@ std::optional<std::string> Math::fn_mod_exp(DCStack<std::string> &stack, Paramet
 	// The first one is the modulus(n), the second one
 	// is the exponent(e) and the third one is the base(b)
     auto len = stack.size()-1;
-    auto n = stack.at(len);
-    auto e = stack.at(len-1);
-    auto b = stack.at(len-2);
+    auto n = stack[len];
+    auto e = stack[len-1];
+    auto b = stack[len-2];
     auto is_n_num = is_num<double>(n);
     auto is_e_num = is_num<double>(e);
     auto is_b_num = is_num<double>(b);
@@ -278,7 +278,7 @@ std::optional<std::string> Math::fn_mod_exp(DCStack<std::string> &stack, Paramet
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_exp(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_exp(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'^' requires two operands";
@@ -286,8 +286,8 @@ std::optional<std::string> Math::fn_exp(DCStack<std::string> &stack, Parameters 
 
     // Extract two entries from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
-    auto y = stack.at(len-1);
+    auto x = stack[len];
+    auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
 
@@ -306,7 +306,7 @@ std::optional<std::string> Math::fn_exp(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sqrt(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_sqrt(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'v' requires one operand";
@@ -314,7 +314,7 @@ std::optional<std::string> Math::fn_sqrt(DCStack<std::string> &stack, Parameters
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -335,7 +335,7 @@ std::optional<std::string> Math::fn_sqrt(DCStack<std::string> &stack, Parameters
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sin(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_sin(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'sin' requires one operand";
@@ -343,7 +343,7 @@ std::optional<std::string> Math::fn_sin(DCStack<std::string> &stack, Parameters 
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -360,7 +360,7 @@ std::optional<std::string> Math::fn_sin(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_cos(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_cos(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'cos' requires one operand";
@@ -368,7 +368,7 @@ std::optional<std::string> Math::fn_cos(DCStack<std::string> &stack, Parameters 
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -385,7 +385,7 @@ std::optional<std::string> Math::fn_cos(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_tan(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_tan(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'tan' requires one operand";
@@ -393,7 +393,7 @@ std::optional<std::string> Math::fn_tan(DCStack<std::string> &stack, Parameters 
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -410,7 +410,7 @@ std::optional<std::string> Math::fn_tan(DCStack<std::string> &stack, Parameters 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_asin(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_asin(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'asin' requires one operand";
@@ -418,7 +418,7 @@ std::optional<std::string> Math::fn_asin(DCStack<std::string> &stack, Parameters
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -435,7 +435,7 @@ std::optional<std::string> Math::fn_asin(DCStack<std::string> &stack, Parameters
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_acos(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_acos(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'acos' requires one operand";
@@ -443,7 +443,7 @@ std::optional<std::string> Math::fn_acos(DCStack<std::string> &stack, Parameters
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -460,7 +460,7 @@ std::optional<std::string> Math::fn_acos(DCStack<std::string> &stack, Parameters
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_atan(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_atan(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'atan' requires one operand";
@@ -468,7 +468,7 @@ std::optional<std::string> Math::fn_atan(DCStack<std::string> &stack, Parameters
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -485,7 +485,7 @@ std::optional<std::string> Math::fn_atan(DCStack<std::string> &stack, Parameters
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_fact(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_fact(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'!' requires one operand";
@@ -493,7 +493,7 @@ std::optional<std::string> Math::fn_fact(DCStack<std::string> &stack, Parameters
 
     // Extract one entry from the stack
     auto len = stack.size()-1;
-    auto x = stack.at(len);
+    auto x = stack[len];
     auto is_x_num = is_num<double>(x);
 
     // Check whether the entry is a number
@@ -506,7 +506,7 @@ std::optional<std::string> Math::fn_fact(DCStack<std::string> &stack, Parameters
             factorial = 1;
         }
 
-        for(size_t i = 2; i <= (size_t)val; i++) {
+        for(std::size_t i = 2; i <= (std::size_t)val; i++) {
             factorial *= i;
         }
 
@@ -519,13 +519,13 @@ std::optional<std::string> Math::fn_fact(DCStack<std::string> &stack, Parameters
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_pi(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_pi(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     stack.push(trim_digits(std::numbers::pi, parameters.precision));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_e(DCStack<std::string> &stack, Parameters &parameters) {
+std::optional<std::string> Math::fn_e(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     stack.push(trim_digits(std::numbers::e, parameters.precision));
 
     return std::nullopt;

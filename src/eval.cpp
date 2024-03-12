@@ -71,7 +71,7 @@ std::optional<std::string> Evaluate::eval() {
     // Set up environment
     init_environment();
 
-    for(size_t idx = 0; idx < this->expr.size(); idx++) {
+    for(std::size_t idx = 0; idx < this->expr.size(); idx++) {
         std::optional<std::string> err = std::nullopt;
         auto token = this->expr.at(idx);
 
@@ -123,7 +123,7 @@ std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
     return std::nullopt;
 }
 
-std::optional<std::string> Evaluate::parse_macro(size_t &idx) {
+std::optional<std::string> Evaluate::parse_macro(std::size_t &idx) {
     // A macro is any string surrounded by square brackets
     std::string dc_macro;
     bool closing_bracket = false;
@@ -250,8 +250,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         // i.e., initialize a new instance of register 'reg_name'
         this->regs.erase(reg_name);
         this->regs.insert(
-                std::make_pair(reg_name, Register{
-                    DCStack<std::string>(),
+                std::make_pair(reg_name, dc::Register{
+                    dc::Stack<std::string>(),
                     std::unordered_map<int, std::string>()
                 })
         );
@@ -279,8 +279,8 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         if(it != this->regs.end()) { // Register exists
             it->second.stack.push(head);
         } else { // Register doesn't exist
-            this->regs[reg_name] = Register{
-                DCStack<std::string>(),
+            this->regs[reg_name] = dc::Register{
+                dc::Stack<std::string>(),
                 std::unordered_map<int, std::string>()
             };
         }
@@ -359,8 +359,8 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
             it->second.array.erase(idx);
             it->second.array.insert(std::pair<int, std::string>(idx, arr_val));
         } else { // Register doesn't exist
-            this->regs[reg_name] = Register{
-                DCStack<std::string>(),
+            this->regs[reg_name] = dc::Register{
+                dc::Stack<std::string>(),
                 std::unordered_map<int, std::string>{{idx, arr_val}}
             };
         }
