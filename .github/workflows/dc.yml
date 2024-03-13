@@ -10,9 +10,11 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@main
-    - name: Build dc
+    - name: Install dependencies
       run: |
         sudo apt -y update && sudo apt -y install cmake ninja-build build-essential
+    - name: Build DC
+      run: |
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release .
         cmake --build build
     - name: Run unit tests

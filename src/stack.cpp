@@ -46,7 +46,7 @@ std::optional<std::string> Stack::exec(dc::Stack<std::string> &stack, dc::Parame
     return err;
 }
 
-std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Parameters  &parameters, bool new_line) {
+std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Parameters &parameters, bool new_line) {
     // Check if the stack is empty
     if(stack.empty()) {
         return "Cannot print empty stack";
@@ -129,30 +129,30 @@ std::optional<std::string> Stack::fn_dup_head(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_print_stack(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Stack::fn_print_stack(const dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     const auto& const_ref = stack.get_ref();
 
     switch(parameters.oradix) {
         case dc::radix_base::DEC: {
-            for(auto & it : std::ranges::reverse_view(const_ref)) {
+            for(const auto& it : std::ranges::reverse_view(const_ref)) {
                 std::cout << it << std::endl;
             }
             break;
         }
         case dc::radix_base::BIN: {
-            for(auto & it : std::ranges::reverse_view(const_ref)) {
+            for(const auto& it : std::ranges::reverse_view(const_ref)) {
                 std::cout << to_bin(std::stol(it)) << 'b' << std::endl;
             }
             break;
         }
         case dc::radix_base::OCT: {
-            for(auto & it : std::ranges::reverse_view(const_ref)) {
+            for(const auto& it : std::ranges::reverse_view(const_ref)) {
                 std::cout << std::oct << std::stol(it) << 'o' << std::dec << std::endl;
             }
             break;
         }
         case dc::radix_base::HEX: {
-            for(auto & it : std::ranges::reverse_view(const_ref)) {
+            for(const auto& it : std::ranges::reverse_view(const_ref)) {
                 std::cout << std::hex << std::uppercase << std::stol(it) << 'h'
                           << std::dec << std::nouppercase << std::endl;
                 }
@@ -224,7 +224,7 @@ std::optional<std::string> Stack::fn_set_precision(dc::Stack<std::string> &stack
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_precision(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Stack::fn_get_precision(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(std::to_string(parameters.precision));
 
     return std::nullopt;
@@ -283,7 +283,7 @@ std::optional<std::string> Stack::fn_set_iradix(dc::Stack<std::string> &stack, d
     return std::nullopt;
 }
 
-std::optional<std::string> Stack::fn_get_iradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Stack::fn_get_iradix(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(std::to_string(parameters.iradix));
 
     return std::nullopt;

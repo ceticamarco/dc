@@ -34,7 +34,7 @@ std::optional<std::string> Math::exec(dc::Stack<std::string> &stack, dc::Paramet
     return err;
 }
 
-std::optional<std::string> Math::fn_add(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_add(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'+' requires two operands";
@@ -62,7 +62,7 @@ std::optional<std::string> Math::fn_add(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sub(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_sub(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'-' requires two operands";
@@ -100,7 +100,7 @@ std::optional<std::string> Math::fn_sub(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mul(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_mul(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'*' requires two operands";
@@ -128,7 +128,7 @@ std::optional<std::string> Math::fn_mul(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_div(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'/' requires two operands";
@@ -161,7 +161,7 @@ std::optional<std::string> Math::fn_div(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_mod(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'%' requires two operands";
@@ -194,7 +194,7 @@ std::optional<std::string> Math::fn_mod(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_div_mod(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_div_mod(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'~' requires two operands";
@@ -229,7 +229,7 @@ std::optional<std::string> Math::fn_div_mod(dc::Stack<std::string> &stack, dc::P
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_mod_exp(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_mod_exp(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 3) {
         return "'|' requires three operands";
@@ -278,7 +278,7 @@ std::optional<std::string> Math::fn_mod_exp(dc::Stack<std::string> &stack, dc::P
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_exp(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_exp(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
         return "'^' requires two operands";
@@ -306,7 +306,7 @@ std::optional<std::string> Math::fn_exp(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sqrt(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_sqrt(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'v' requires one operand";
@@ -335,7 +335,7 @@ std::optional<std::string> Math::fn_sqrt(dc::Stack<std::string> &stack, dc::Para
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_sin(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_sin(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'sin' requires one operand";
@@ -360,7 +360,7 @@ std::optional<std::string> Math::fn_sin(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_cos(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_cos(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'cos' requires one operand";
@@ -385,7 +385,7 @@ std::optional<std::string> Math::fn_cos(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_tan(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_tan(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'tan' requires one operand";
@@ -410,7 +410,7 @@ std::optional<std::string> Math::fn_tan(dc::Stack<std::string> &stack, dc::Param
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_asin(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_asin(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'asin' requires one operand";
@@ -435,7 +435,7 @@ std::optional<std::string> Math::fn_asin(dc::Stack<std::string> &stack, dc::Para
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_acos(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_acos(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'acos' requires one operand";
@@ -460,7 +460,7 @@ std::optional<std::string> Math::fn_acos(dc::Stack<std::string> &stack, dc::Para
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_atan(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_atan(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'atan' requires one operand";
@@ -485,7 +485,7 @@ std::optional<std::string> Math::fn_atan(dc::Stack<std::string> &stack, dc::Para
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_fact(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_fact(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
         return "'!' requires one operand";
@@ -519,13 +519,13 @@ std::optional<std::string> Math::fn_fact(dc::Stack<std::string> &stack, dc::Para
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_pi(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_pi(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(trim_digits(std::numbers::pi, parameters.precision));
 
     return std::nullopt;
 }
 
-std::optional<std::string> Math::fn_e(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
+std::optional<std::string> Math::fn_e(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(trim_digits(std::numbers::e, parameters.precision));
 
     return std::nullopt;
