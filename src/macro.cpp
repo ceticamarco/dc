@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iterator>
 #include <limits>
+#include <fstream>
 
 #include "adt.cpp"
 #include "eval.h"
@@ -15,6 +16,7 @@ std::optional<std::string> Macro::exec(dc::Stack<std::string> &stack, dc::Parame
         case OPType::EX: err = fn_execute(stack, parameters, regs); break;
         case OPType::CMP: err = fn_evaluate_macro(stack, parameters, regs); break;
         case OPType::RI: err = fn_read_input(stack, parameters, regs); break;
+        case OPType::LF: err = fn_evaluate_file(stack, parameters, regs); break;
         default: break;
     }
 
@@ -150,7 +152,7 @@ std::optional<std::string> Macro::fn_read_input(dc::Stack<std::string> &stack, d
     // Read user input from stdin
     std::string user_input;
 
-    std::cin >> user_input;
+    std::getline(std::cin, user_input);
     if(std::cin.fail()) {
         return "Error while reading from stdin";
     }
@@ -162,6 +164,63 @@ std::optional<std::string> Macro::fn_read_input(dc::Stack<std::string> &stack, d
     auto err = evaluator.eval();
     if(err != std::nullopt) {
         return err;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Macro::fn_evaluate_file(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
+    // Check whether the main stack has enough elements
+    if(stack.empty()) {
+        return "This operation does not work on empty stack";
+    }
+
+    // If the head of the stack is a string,
+    auto file_name = stack.pop(false);
+    if(!is_num<double>(file_name)) {
+        // Pop it from the stack
+        stack.copy_xyz();
+        stack.pop(true);
+        // And use it as a filename
+        std::fstream source_file(file_name, std::ios::in | std::ios::binary);
+        if(source_file.fail()) {
+            return std::string("Cannot open source file \"") + file_name + std::string("\"");
+        }
+        
+        // Read whole file into a buffer
+        std::stringstream buf;
+        buf << source_file.rdbuf();
+
+        // Execute file line by line
+        std::string line;
+        while(std::getline(buf, line, '\n')) {
+            // Ignore comments or empty lines
+            if(line.empty() || line.starts_with('#')) {
+                continue;
+            }
+
+            // Remove inline comments
+            auto comment_pos = line.find('#');
+            std::vector<std::string> tokens;
+
+            if(comment_pos != std::string::npos) {
+                // Convert only the first part of the line
+                tokens = split(line.substr(0, comment_pos));
+            } else {
+                // Otherwise split the whole string
+                tokens = split(line);
+            }
+
+            // Evaluate expression
+            Evaluate evaluator(tokens, regs, stack, parameters);
+            auto err = evaluator.eval();
+            // Handle errors
+            if(err != std::nullopt) {
+                return err;
+            }
+        }
+    } else {
+        return "This operation requires string values";
     }
 
     return std::nullopt;

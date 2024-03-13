@@ -1,0 +1,39 @@
+#!/bin/sh
+
+tearup() {
+    cat <<EOF > test_lfile.dc
+    [ 5 d ! + ] sX # Computes 5! + 5
+EOF
+}
+
+teardown() {
+    rm test_lfile.dc
+}
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    tearup
+
+    # Test empty stack
+    EXPECTED="This operation does not work on empty stack"
+    ACTUAL=$("$PROGRAM" -e "'" 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test non string values
+    EXPECTED="This operation requires string values"
+    ACTUAL=$("$PROGRAM" -e "[ 5 ] '" 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test file not found
+    EXPECTED="Cannot open source file \"foo.dc\""
+    ACTUAL=$("$PROGRAM" -e "[ foo.dc ] '" 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test normal behaviour
+    EXPECTED="125"
+    ACTUAL=$("$PROGRAM" -e "[ test_lfile.dc ] ' lX x p")
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    teardown
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

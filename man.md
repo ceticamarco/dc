@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 12, 2024
+date: March 13, 2024
 ---
 
 
@@ -385,6 +385,10 @@ Exit with return code `0`.
 
 Reads a line from the terminal and executes it. This command allows a macro to request input from the user.
 
+**'**
+
+Pops a string off the stack, use it as a filepath, read its content and execute it.
+
 # EXAMPLES
 Below, there are some practical problems solved using **dc**.
 
@@ -467,6 +471,16 @@ lB -1 * lD + lA # POSITIVE DELTA
 8AB6F B783E +
 [ Result in base 10: ] P R p
 [ Result in base 2: ] P R pb
+```
+
+11. Load an external file:
+```sh
+$> echo "[ p 1 + d lN >=L ] sL" > loop.dc
+$> cat prg.dc
+[ loop.dc ] ' # Load loop macro
+[ Enter limit: ] P # Ask user for limit 'N'
+? 1 + sN # Read from stdin
+c 1 lL x # Clear the stack, add lower bound, load and execute macro
 ```
 
 # AUTHORS

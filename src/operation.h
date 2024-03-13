@@ -17,5 +17,5 @@ enum class OPType {
     PCG, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS, 
     SP, GP, SOR, GOR, SIR, GIR, LX, LY, LZ,
     // Macro operations
-    EX, CMP, RI
+    EX, CMP, RI, LF
 };

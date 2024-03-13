@@ -65,6 +65,7 @@ void Evaluate::init_environment() {
     // Macro operations
     this->op_factory.emplace("x", MAKE_UNIQUE_PTR(Macro, OPType::EX));
     this->op_factory.emplace("?", MAKE_UNIQUE_PTR(Macro, OPType::RI));
+    this->op_factory.emplace("'", MAKE_UNIQUE_PTR(Macro, OPType::LF));
 }
 
 std::optional<std::string> Evaluate::eval() {

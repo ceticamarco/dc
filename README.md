@@ -46,7 +46,8 @@ Some of the supported features are:
 - Macros:
     - Define a new macro inside square brackets(`[ ]`);  
     - Executing a macro from the stack(`x`);  
-    - Evaluate a macro by comparing top-of-head and second-of-head elements(`>X`, `<X`, `>=X`, `<=X`, `!=` where `X` is a register).
+    - Evaluate a macro by comparing top-of-head and second-of-head elements(`>X`, `<X`, `>=X`, `<=X`, `!=` where `X` is a register);  
+    - Load external file(`'`).
 
 And much more. You can find the complete manual [here](https://github.com/ice-bit/dc/blob/master/man.md).
 
