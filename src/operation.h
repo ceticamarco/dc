@@ -12,7 +12,8 @@ public:
 enum class OPType {
     // Numerical operations
     ADD, SUB, MUL, DIV, MOD, DIV_MOD, MOD_EXP, EXP,
-    SQRT, SIN, COS, TAN, ASIN, ACOS, ATAN, FACT, PI, E,
+    SQRT, SIN, COS, TAN, ASIN, ACOS, ATAN, FACT, PI, 
+    E, RND, INT,
     // Stack operations
     PCG, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS, 
     SP, GP, SOR, GOR, SIR, GIR, LX, LY, LZ,

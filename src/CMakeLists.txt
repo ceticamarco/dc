@@ -3,7 +3,7 @@ project(src)
 set(HEADER_FILES
         eval.h
         macro.h
-        math.h
+        mathematics.h
         operation.h
         stack.h
         adt.h
@@ -12,7 +12,7 @@ set(HEADER_FILES
 set(SOURCE_FILES
         eval.cpp
         macro.cpp
-        math.cpp
+        mathematics.cpp
         stack.cpp
         adt.cpp
 )

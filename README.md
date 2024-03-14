@@ -26,6 +26,8 @@ Some of the supported features are:
 - Trigonometrical functions(`sin`, `cos`, `tan`, `asin`, `acos`, `atan`);  
 - Base conversion(binary: `pb`, octal: `po`, hexadecimal: `px`);  
 - Factorial and constants(`!`, `pi`, `e`);  
+- Random number generator(`@`);  
+- Integer conversion(`$`);  
 - Stack operations:
     - Print top element(`p`, `P`);  
     - Clear the stack(`c`); 
@@ -244,6 +246,17 @@ lB -1 * lD + lA # POSITIVE DELTA
 2 * / SS # SECOND SOLUTION
 [ X1: ] P R lS p
 [ X2: ] P R LS lS p
+```
+
+16. Generate $n$ (pseudo)random numbers from user-defined range:
+```
+5 k
+[ lA lB @ p ] sR
+[ Enter number of samples: ] P ? sN
+[ Enter lower bound: ] P ? sA
+[ Enter upper bound: ] P ? sB
+[ lR x r 1 + d lN >=L ] sL
+0 lL x
 ```
 
 ## License

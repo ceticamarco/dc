@@ -2,9 +2,9 @@
 
 #include "operation.h"
 
-class Math : public IOperation {
+class Mathematics : public IOperation {
 public:
-    explicit Math(const OPType op_t) : op_type(op_t) {}
+    explicit Mathematics(const OPType op_t) : op_type(op_t) {}
     std::optional<std::string> exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) override;
 
 private:
@@ -26,6 +26,8 @@ private:
     static std::optional<std::string> fn_fact(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
     static std::optional<std::string> fn_pi(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
     static std::optional<std::string> fn_e(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
+    static std::optional<std::string> fn_random(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
+    static std::optional<std::string> fn_integer(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
     static std::string trim_digits(double number, unsigned int precision);
 
     OPType op_type;

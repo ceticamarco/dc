@@ -2,7 +2,7 @@
 
 #include "adt.cpp"
 #include "eval.h"
-#include "math.h"
+#include "mathematics.h"
 #include "stack.h"
 #include "macro.h"
 #include "is_num.h"
@@ -22,24 +22,26 @@
 
 void Evaluate::init_environment() {
     // Numerical operations
-    this->op_factory.emplace("+", MAKE_UNIQUE_PTR(Math, OPType::ADD));
-    this->op_factory.emplace("-", MAKE_UNIQUE_PTR(Math, OPType::SUB));
-    this->op_factory.emplace("*", MAKE_UNIQUE_PTR(Math, OPType::MUL));
-    this->op_factory.emplace("/", MAKE_UNIQUE_PTR(Math, OPType::DIV));
-    this->op_factory.emplace("%", MAKE_UNIQUE_PTR(Math, OPType::MOD));
-    this->op_factory.emplace("~", MAKE_UNIQUE_PTR(Math, OPType::DIV_MOD));
-    this->op_factory.emplace("|", MAKE_UNIQUE_PTR(Math, OPType::MOD_EXP));
-    this->op_factory.emplace("^", MAKE_UNIQUE_PTR(Math, OPType::EXP));
-    this->op_factory.emplace("v", MAKE_UNIQUE_PTR(Math, OPType::SQRT));
-    this->op_factory.emplace("sin", MAKE_UNIQUE_PTR(Math, OPType::SIN));
-    this->op_factory.emplace("cos", MAKE_UNIQUE_PTR(Math, OPType::COS));
-    this->op_factory.emplace("tan", MAKE_UNIQUE_PTR(Math, OPType::TAN));
-    this->op_factory.emplace("asin", MAKE_UNIQUE_PTR(Math, OPType::ASIN));
-    this->op_factory.emplace("acos", MAKE_UNIQUE_PTR(Math, OPType::ACOS));
-    this->op_factory.emplace("atan", MAKE_UNIQUE_PTR(Math, OPType::ATAN));
-    this->op_factory.emplace("!", MAKE_UNIQUE_PTR(Math, OPType::FACT));
-    this->op_factory.emplace("pi", MAKE_UNIQUE_PTR(Math, OPType::PI));
-    this->op_factory.emplace("e", MAKE_UNIQUE_PTR(Math, OPType::E));
+    this->op_factory.emplace("+", MAKE_UNIQUE_PTR(Mathematics, OPType::ADD));
+    this->op_factory.emplace("-", MAKE_UNIQUE_PTR(Mathematics, OPType::SUB));
+    this->op_factory.emplace("*", MAKE_UNIQUE_PTR(Mathematics, OPType::MUL));
+    this->op_factory.emplace("/", MAKE_UNIQUE_PTR(Mathematics, OPType::DIV));
+    this->op_factory.emplace("%", MAKE_UNIQUE_PTR(Mathematics, OPType::MOD));
+    this->op_factory.emplace("~", MAKE_UNIQUE_PTR(Mathematics, OPType::DIV_MOD));
+    this->op_factory.emplace("|", MAKE_UNIQUE_PTR(Mathematics, OPType::MOD_EXP));
+    this->op_factory.emplace("^", MAKE_UNIQUE_PTR(Mathematics, OPType::EXP));
+    this->op_factory.emplace("v", MAKE_UNIQUE_PTR(Mathematics, OPType::SQRT));
+    this->op_factory.emplace("sin", MAKE_UNIQUE_PTR(Mathematics, OPType::SIN));
+    this->op_factory.emplace("cos", MAKE_UNIQUE_PTR(Mathematics, OPType::COS));
+    this->op_factory.emplace("tan", MAKE_UNIQUE_PTR(Mathematics, OPType::TAN));
+    this->op_factory.emplace("asin", MAKE_UNIQUE_PTR(Mathematics, OPType::ASIN));
+    this->op_factory.emplace("acos", MAKE_UNIQUE_PTR(Mathematics, OPType::ACOS));
+    this->op_factory.emplace("atan", MAKE_UNIQUE_PTR(Mathematics, OPType::ATAN));
+    this->op_factory.emplace("!", MAKE_UNIQUE_PTR(Mathematics, OPType::FACT));
+    this->op_factory.emplace("pi", MAKE_UNIQUE_PTR(Mathematics, OPType::PI));
+    this->op_factory.emplace("e", MAKE_UNIQUE_PTR(Mathematics, OPType::E));
+    this->op_factory.emplace("@", MAKE_UNIQUE_PTR(Mathematics, OPType::RND));
+    this->op_factory.emplace("$", MAKE_UNIQUE_PTR(Mathematics, OPType::INT));
     // Stack operations
     this->op_factory.emplace("p", MAKE_UNIQUE_PTR(Stack, OPType::PCG));
     this->op_factory.emplace("pb", MAKE_UNIQUE_PTR(Stack, OPType::PBB));

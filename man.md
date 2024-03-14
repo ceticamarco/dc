@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 13, 2024
+date: March 14, 2024
 ---
 
 
@@ -102,7 +102,7 @@ the map's `key` and the associated value is represented by the map's `value`.
 By default each value of any kind of stack is represented by a string. Each operation is in charge to type convert the value before and after
 their invocation. The user can store both numeric and alphanumeric values on the stack. The latter using the _macro_ syntax(see below).
 
-Arrays are homogeneous, thus the only supported data type is the `string`(the internal string type and not the **dc** one).
+Arrays are homogeneous data structures that implement the same data type of the stack, i.e. the string.
 
 # COMMANDS
 Below, there is a list of supported **dc** commands.
@@ -121,7 +121,7 @@ Pops off the value on top of the stack, without altering the stack.
 
 Prints the entire contents of the stack without altering anything.
 
-## Arithmetic
+## Mathematics
 
 **+**
 
@@ -167,11 +167,20 @@ Pops one value, computes its factorial, and pushes that.
 
 **pi**
 
-Pushes pi approximation
+Pushes pi approximation.
 
 **e**
 
-Pushes e approximation
+Pushes e approximation.
+
+**@**
+
+Pops two values from the stack and generate a random number, using the first value popped as the upper bound and the second popped as the lower bound.
+The random value is generated using a 64-bit Mersenne Twister pseudorandom number generator and a real uniform distribution. 
+
+**$**
+
+Pops one value from the stack and convert it to the nearest integer of lesser magnitute.
 
 ## Trigonometrical
 
@@ -474,13 +483,24 @@ lB -1 * lD + lA # POSITIVE DELTA
 ```
 
 11. Load an external file:
-```sh
+```
 $> echo "[ p 1 + d lN >=L ] sL" > loop.dc
 $> cat prg.dc
 [ loop.dc ] ' # Load loop macro
 [ Enter limit: ] P # Ask user for limit 'N'
 ? 1 + sN # Read from stdin
 c 1 lL x # Clear the stack, add lower bound, load and execute macro
+```
+
+12. Generate *n* (pseudo)random numbers from user-defined range:
+```
+5 k
+[ lA lB @ p ] sR
+[ Enter number of samples: ] P ? sN
+[ Enter lower bound: ] P ? sA
+[ Enter upper bound: ] P ? sB
+[ lR x r 1 + d lN >=L ] sL
+0 lL x
 ```
 
 # AUTHORS
