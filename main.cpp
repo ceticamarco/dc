@@ -11,14 +11,23 @@
 
 using namespace dc;
 
-#define DC_VERSION "1.0.3"
-
 void helper() {
     std::cout << "RPN desktop calculator with macro support. Usage: \n"
               << "-e, --expression <EXPRESSION> | Evaluate an expression\n"
               << "-f, --file <FILE>             | Evaluate a file\n"
               << "-h, --help                    | Show this helper\n"
               << "-V, --version                 | Show version" << std::endl;
+}
+
+void version() {
+    std::cout << "dc (v" << DC_VER << ", " << DC_HASH << ", " << DC_BUILD ")" << std::endl;
+    std::cout << "Compile flags: " << DC_FLAGS << std::endl;
+    std::cout << "Copyright (c) 2024 Marco Cetica" << std::endl;
+    std::cout << "License GPLv3+: GNU GPL version 3 or later\n" << std::endl;
+    std::cout << "The original version of the dc command was written by Robert Morris\n"
+              << "and Lorinda Cherry. This version of dc is developed by Marco Cetica.\n" << std::endl;
+    std::cout << "Project homepage: <https://git.marcocetica.com/marco/dc>.\n"
+              << "Email bug reports to: <email@marcocetica.com>." << std::endl;
 }
 
 int main(int argc, char **argv) {
@@ -57,7 +66,7 @@ int main(int argc, char **argv) {
             }
             break;
             case 'V': {
-                std::cout << "dc v" << DC_VERSION << std::endl;
+                version();
                 return 0;
             }
             break;
