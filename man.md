@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 14, 2024
+date: March 15, 2024
 ---
 
 
@@ -501,6 +501,20 @@ c 1 lL x # Clear the stack, add lower bound, load and execute macro
 [ Enter upper bound: ] P ? sB
 [ lR x r 1 + d lN >=L ] sL
 0 lL x
+```
+
+13. Estimate *pi* using Monte Carlo simulation
+```
+10 k
+[ 0 1 @ sX 0 1 @ sY ] sR
+[ lX 2 ^ sX lY 2 ^ sY ] sQ
+[ 0 ;A 1 + 0 :A ] sI
+[ 1 lX lY + <=I ] sC
+[ lR x lQ x lC x 1 + d lN >=L ] sL
+0 0 :A
+0 6500 sN
+lL x 0 ;A lN /
+4 * p
 ```
 
 # AUTHORS

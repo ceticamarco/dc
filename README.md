@@ -259,6 +259,20 @@ lB -1 * lD + lA # POSITIVE DELTA
 0 lL x
 ```
 
+17. Estimate $\pi$ using Monte Carlo simulation
+```
+10 k
+[ 0 1 @ sX 0 1 @ sY ] sR
+[ lX 2 ^ sX lY 2 ^ sY ] sQ
+[ 0 ;A 1 + 0 :A ] sI
+[ 1 lX lY + <=I ] sC
+[ lR x lQ x lC x 1 + d lN >=L ] sL
+0 0 :A
+0 6500 sN
+lL x 0 ;A lN /
+4 * p
+```
+
 ## License
 
 [GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
