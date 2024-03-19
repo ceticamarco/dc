@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.12)
 # Project name and version
 project(dc VERSION 1.0.4)
 
+# Retrieve build date
+string(TIMESTAMP BUILD_DATE "%d-%b-%Y %H:%M:%S")
+
 # Retrieve git hash
 execute_process(
     COMMAND git rev-parse --short HEAD
@@ -52,3 +55,4 @@ add_compile_definitions(DC_VER="${PROJECT_VERSION}")
 add_compile_definitions(DC_HASH="${DC_GIT_HASH}")
 add_compile_definitions(DC_BUILD="${CMAKE_BUILD_TYPE}")
 add_compile_definitions(DC_FLAGS="${DC_FLAGS}")
+add_compile_definitions(DC_BUILD_DATE="${BUILD_DATE}")

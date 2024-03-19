@@ -24,7 +24,7 @@ private:
     std::optional<std::string> fn_get_lastx(dc::Stack<std::string> &stack);
     std::optional<std::string> fn_get_lasty(dc::Stack<std::string> &stack);
     std::optional<std::string> fn_get_lastz(dc::Stack<std::string> &stack);
-    constexpr std::string to_bin(auto num);
+    std::string bin_prettify(std::string s);
 
     OPType op_type;
 };

@@ -4,6 +4,7 @@ set(HEADER_FILES
         eval.h
         macro.h
         mathematics.h
+        bitwise.h
         operation.h
         stack.h
         adt.h
@@ -13,6 +14,7 @@ set(SOURCE_FILES
         eval.cpp
         macro.cpp
         mathematics.cpp
+        bitwise.cpp
         stack.cpp
         adt.cpp
 )

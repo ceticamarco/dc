@@ -1,0 +1,19 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="101000b" # 40
+    ACTUAL=$("$PROGRAM" -e '2 d i o 1010 10 m p') # 10 * 2^2
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="'m' requires two operands"
+    ACTUAL=$("$PROGRAM" -e 'm' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test non numerical values
+    EXPECTED="'m' requires numeric values"
+    ACTUAL=$("$PROGRAM" -e '5 [ foo ] m' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

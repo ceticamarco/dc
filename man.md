@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 15, 2024
+date: March 19, 2024
 ---
 
 
@@ -45,6 +45,23 @@ options(see below).
 
 **dc** reads from the standard input, but it can also work with text files using the `-f` flag. Futhermore, you can decide to evaluate an expression
 without opening the REPL by using the `-e` flag.
+
+# PROGRAMMING IN DC
+As a stack-based, concatenative and procedural programming language, **dc** programs follow a *bottom up* approach where the program is built by
+starting with the most minimal facts about the problem and then is build up towards the complete solution. Following this programming paradigm means
+creating many short and simple routines that are defined either in terms or existing routines or in terms of built-in primitives.
+
+The main strength of this paradigm is that you have full control on what happens at the lower levels of your program. This means that your
+programming logic is not abstracted away into generic protocols, everything you write has to as concrete as possible. 
+Another advantage of this approach is the ability to test and debug interactively each definition and each routines as you build up your solution, without having
+to rely on external testing framework.
+Finally, the last major advantage is that dc is very extensible: the core language consists on only a few primitives, which are enough for building solutions
+and extending the programming language. Furthermore, just as LISP languages, dc does not make any distinctions between code and data, thus it is homoiconic.
+
+On the other hand, the *bottom up* approach is not suitable for building large infrastructures: the ability to abstract away methods, procedures and to shape
+real-world objects into templates is essential for many modern programming use cases. As a result, dc excels when used for what it was originally 
+developed for: computations and small math-oriented programs.
+
 
 # ARCHITECTURE
 As an advanced scientific calculator, **dc** has a complex architecture defined by the following two data structures:
@@ -103,6 +120,7 @@ By default each value of any kind of stack is represented by a string. Each oper
 their invocation. The user can store both numeric and alphanumeric values on the stack. The latter using the _macro_ syntax(see below).
 
 Arrays are homogeneous data structures that implement the same data type of the stack, i.e. the string.
+
 
 # COMMANDS
 Below, there is a list of supported **dc** commands.
@@ -221,6 +239,34 @@ Prints the value on the top of the stack in base 8, without altering the stack. 
 **ph**
 
 Prints the value on the top of the stack in base 16, without altering the stack. A newline is printed after the value.
+
+## Bitwise Operations
+**dc** supports various bitwise operations. These operations support integral types only and are represented using
+a 64bit data type.
+
+**{**
+
+Pops two numbers from the stack and computes bitwise *AND* between the second one popped and the first one popped. Pushes the result.
+
+**}**
+
+Pops two numbers from the stack and computes bitwise *OR* between the second one popped and the first one popped. Pushes the result.
+
+**l**
+
+Pops one **signed integer** from the stack and computes bitwise *NOT*(one's complement). Pushes the result.
+
+**L**
+
+Pops two numbers from the stack and computes bitwise *XOR* between the second one popped and the first one popped. Pushes the result.
+
+**m**
+
+Pops two numbers from the stack *left shift* the second one popped by *n* bits, where *n* is the first one popped. Pushes the result.
+
+**M**
+
+Pops two numbers from the stack *right shift* the second one popped by *n* bits, where *n* is the first one popped. Pushes the result.
 
 ## Stack Control
 
@@ -515,6 +561,18 @@ c 1 lL x # Clear the stack, add lower bound, load and execute macro
 0 6500 sN
 lL x 0 ;A lN /
 4 * p
+```
+
+14. Convert an hex color to RGB:
+```
+16 i
+[ Enter hex value: ] P R ? sV
+lV FF { 0 :A # Blue
+lV 8 M FF { 1 :A # Green
+lV 10 M FF { 2 :A # Red
+[ RED: ] P R 2 ;A p
+[ GREEN: ] P R 1 ;A p
+[ RED: ] P R 0 ;A p
 ```
 
 # AUTHORS

@@ -53,8 +53,8 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
         stack.copy_xyz();
-        auto lhs = std::stod(stack.pop(true));
         auto rhs = std::stod(stack.pop(true));
+        auto lhs = std::stod(stack.pop(true));
 
         // Push back the result as a string
         stack.push(trim_digits((lhs + rhs), parameters.precision));
@@ -81,11 +81,11 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
         stack.copy_xyz();
-        auto lhs = std::stod(stack.pop(true));
         auto rhs = std::stod(stack.pop(true));
+        auto lhs = std::stod(stack.pop(true));
 
         // Subtract the two operands
-        auto result = (-(lhs - rhs));
+        auto result = (lhs - rhs);
 
         // Compare the result with an epsilon value
         // to prevent -0/+0 results
@@ -119,8 +119,8 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
         stack.copy_xyz();
-        auto lhs = std::stod(stack.pop(true));
         auto rhs = std::stod(stack.pop(true));
+        auto lhs = std::stod(stack.pop(true));
 
         // Push back the result as a string
         stack.push(trim_digits((lhs * rhs), parameters.precision));
@@ -253,9 +253,9 @@ std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack
 	// 		c ≡ b^e (mod n)
     if(is_n_num && is_e_num && is_b_num) {
         stack.copy_xyz();
-        auto modulus = std::stoi(stack.pop(true));
-        auto exponent = std::stoi(stack.pop(true));
-        auto base = std::stoi(stack.pop(true));
+        auto modulus = std::stol(stack.pop(true));
+        auto exponent = std::stol(stack.pop(true));
+        auto base = std::stol(stack.pop(true));
 
         if(modulus == 1) {
             stack.push("0");

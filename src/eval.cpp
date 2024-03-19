@@ -3,6 +3,7 @@
 #include "adt.cpp"
 #include "eval.h"
 #include "mathematics.h"
+#include "bitwise.h"
 #include "stack.h"
 #include "macro.h"
 #include "is_num.h"
@@ -42,6 +43,13 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("e", MAKE_UNIQUE_PTR(Mathematics, OPType::E));
     this->op_factory.emplace("@", MAKE_UNIQUE_PTR(Mathematics, OPType::RND));
     this->op_factory.emplace("$", MAKE_UNIQUE_PTR(Mathematics, OPType::INT));
+    // Bitwise operations
+    this->op_factory.emplace("{", MAKE_UNIQUE_PTR(Bitwise, OPType::BAND));
+    this->op_factory.emplace("}", MAKE_UNIQUE_PTR(Bitwise, OPType::BOR));
+    this->op_factory.emplace("l", MAKE_UNIQUE_PTR(Bitwise, OPType::BNOT));
+    this->op_factory.emplace("L", MAKE_UNIQUE_PTR(Bitwise, OPType::BXOR));
+    this->op_factory.emplace("m", MAKE_UNIQUE_PTR(Bitwise, OPType::BSL));
+    this->op_factory.emplace("M", MAKE_UNIQUE_PTR(Bitwise, OPType::BSR));
     // Stack operations
     this->op_factory.emplace("p", MAKE_UNIQUE_PTR(Stack, OPType::PCG));
     this->op_factory.emplace("pb", MAKE_UNIQUE_PTR(Stack, OPType::PBB));
@@ -82,6 +90,8 @@ std::optional<std::string> Evaluate::eval() {
         if (this->op_factory.find(token) != this->op_factory.end()) {
             std::unique_ptr<IOperation> operation = this->op_factory[token]();
             err = operation->exec(this->stack, this->parameters, this->regs);
+        } else if(token == "q") {
+            std::exit(0);
         } else if(MACRO_COND(token)) {
             err = parse_macro(idx);
         } else if(MACRO_CMD_COND(token)) {
@@ -94,8 +104,6 @@ std::optional<std::string> Evaluate::eval() {
             err = parse_base_n(token);
         } else if(is_num<double>(token)) {
             this->stack.push(token);
-        } else if(token == "q") {
-            std::exit(0);
         } else {
             return "Unrecognized option";
         }

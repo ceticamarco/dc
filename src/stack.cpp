@@ -1,4 +1,5 @@
 #include <iostream>
+#include <bitset>
 #include <algorithm>
 #include <ranges>
 
@@ -67,8 +68,10 @@ std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Pa
             break;
         }
         case dc::radix_base::BIN: {
-            auto head = std::stol(stack.pop(false));
-            std::cout << to_bin(head) << 'b' << std::endl;
+            std::bitset<64> head{std::stoul(stack.pop(false))};
+            auto bin_value = bin_prettify(head.to_string());
+
+            std::cout << bin_value << std::endl;
             break;
         }
         case dc::radix_base::OCT: {
@@ -141,7 +144,10 @@ std::optional<std::string> Stack::fn_print_stack(const dc::Stack<std::string> &s
         }
         case dc::radix_base::BIN: {
             for(const auto& it : std::ranges::reverse_view(const_ref)) {
-                std::cout << to_bin(std::stol(it)) << 'b' << std::endl;
+                std::bitset<64> head{std::stoul(it)};
+                auto bin_value = bin_prettify(head.to_string());
+
+                std::cout << bin_value << std::endl;
             }
             break;
         }
@@ -313,22 +319,22 @@ std::optional<std::string> Stack::fn_get_lastz(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
-constexpr std::string Stack::to_bin(auto num) {
-    if(num == 0) {
-        return "0";
+std::string Stack::bin_prettify(std::string s) {
+    std::string result;
+
+    // Find the first '1' on the binary string
+    auto pos = s.find('1');
+
+    if(pos != std::string::npos) {
+        // Take only the significant part of the number
+        result = s.substr(pos);
+    } else {
+        // Otherwise the number is 'zero'
+        result = '0';
     }
 
-    std::string res;
-    while(num > 0) {
-        res = (std::to_string(num % 2) + res);
-        num /= 2;
-    }
+    // Add 'b' suffix
+    result.push_back('b');
 
-    // Remove extra zeros
-    auto first_one = res.find('1');
-    if(first_one != std::string::npos) {
-        res = res.substr(first_one);
-    }
-
-    return res;
+    return result;
 }

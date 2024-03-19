@@ -14,8 +14,6 @@ public:
     Evaluate(const std::vector<std::string>& e, std::unordered_map<char, dc::Register> &r,
              dc::Stack<std::string> &s, dc::Parameters &p)
         : expr(e), regs(r), stack(s), parameters(p) {}
-    Evaluate(std::unordered_map<char, dc::Register> &r, dc::Stack<std::string> &s, dc::Parameters &p)
-        : regs(r), stack(s), parameters(p) {}
     std::optional<std::string> eval();
 
 private:

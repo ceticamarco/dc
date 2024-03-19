@@ -28,6 +28,7 @@ Some of the supported features are:
 - Factorial and constants(`!`, `pi`, `e`);  
 - Random number generator(`@`);  
 - Integer conversion(`$`);  
+- Bitwise operations(`{`, `}`, `l`, `L`, `m`, `M`);  
 - Stack operations:
     - Print top element(`p`, `P`);  
     - Clear the stack(`c`); 
@@ -259,7 +260,7 @@ lB -1 * lD + lA # POSITIVE DELTA
 0 lL x
 ```
 
-17. Estimate $\pi$ using Monte Carlo simulation
+17. Estimate $\pi$ using Monte Carlo simulation:
 ```
 10 k
 [ 0 1 @ sX 0 1 @ sY ] sR
@@ -271,6 +272,18 @@ lB -1 * lD + lA # POSITIVE DELTA
 0 6500 sN
 lL x 0 ;A lN /
 4 * p
+```
+
+18. Convert an hex color to RGB:
+```
+16 i
+[ Enter hex value: ] P R ? sV
+lV FF { 0 :A # Blue
+lV 8 M FF { 1 :A # Green
+lV 10 M FF { 2 :A # Red
+[ RED: ] P R 2 ;A p
+[ GREEN: ] P R 1 ;A p
+[ RED: ] P R 0 ;A p
 ```
 
 ## License

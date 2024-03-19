@@ -14,6 +14,8 @@ enum class OPType {
     ADD, SUB, MUL, DIV, MOD, DIV_MOD, MOD_EXP, EXP,
     SQRT, SIN, COS, TAN, ASIN, ACOS, ATAN, FACT, PI, 
     E, RND, INT,
+    // Bitwise operations
+    BAND, BOR, BNOT, BXOR, BSL, BSR,
     // Stack operations
     PCG, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS, 
     SP, GP, SOR, GOR, SIR, GIR, LX, LY, LZ,

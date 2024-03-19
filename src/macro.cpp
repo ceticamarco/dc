@@ -158,8 +158,8 @@ std::optional<std::string> Macro::fn_read_input(dc::Stack<std::string> &stack, d
     }
 
     // Push the input onto the main stack and execute it as a macro
-    stack.push(user_input);
-    Evaluate evaluator(regs, stack, parameters);
+    std::vector<std::string> tokens = split(user_input);
+    Evaluate evaluator(tokens, regs, stack, parameters);
         
     auto err = evaluator.eval();
     if(err != std::nullopt) {

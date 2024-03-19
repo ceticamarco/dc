@@ -32,6 +32,11 @@ test_print_bin() {
     EXPECTED="This output radix requires integer values"
     ACTUAL=$("$PROGRAM" -e '[ foo ] pb' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test negative number
+    EXPECTED="1111111111111111111111111111111111111111111111111111111111110001b"
+    ACTUAL=$("$PROGRAM" -e "-15 pb")
+    assert_eq "$EXPECTED" "$ACTUAL"
 }
 
 test_print_hex() {

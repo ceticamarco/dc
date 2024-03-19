@@ -21,6 +21,7 @@ void helper() {
 
 void version() {
     std::cout << "dc (v" << DC_VER << ", " << DC_HASH << ", " << DC_BUILD ")" << std::endl;
+    std::cout << "Build date: " << DC_BUILD_DATE << std::endl;
     std::cout << "Compile flags: " << DC_FLAGS << std::endl;
     std::cout << "Copyright (c) 2024 Marco Cetica" << std::endl;
     std::cout << "License GPLv3+: GNU GPL version 3 or later\n" << std::endl;
@@ -126,6 +127,7 @@ int main(int argc, char **argv) {
             // Handle errors
             if(err != std::nullopt) {
                 std::cerr << err.value() << std::endl;
+                return 1;
             }
         }
 
