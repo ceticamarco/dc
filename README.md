@@ -4,11 +4,11 @@
 By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions. 
 Its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
 
-**dc** reads from the standard input, but it can also work with text files using the `-f` flag. Futhermore, you can decide to evaluate an expression
+**dc** reads from the standard input, but it can also work with text files using the `-f` flag. Furthermore, you can decide to evaluate an expression
 without opening the REPL by using the `-e` flag.
 
 Operands are pushed onto the stack following the LIFO policy; operators, on the other hand, pop one or more values
-from the stack and push back the result. By default **dc** is very quiet, in order to inquiry the stack you need to use one of the supported
+from the stack and push back the result. By default, **dc** is very quiet, in order to inquiry the stack you need to use one of the supported
 options(see below).
 
 `dc` can be invoked with the following command line options:
@@ -274,7 +274,7 @@ lL x 0 ;A lN /
 4 * p
 ```
 
-18. Convert an hex color to RGB:
+18. Convert a hex color to RGB:
 ```
 16 i
 [ Enter hex value: ] P R ? sV
@@ -283,7 +283,7 @@ lV 8 M FF { 1 :A # Green
 lV 10 M FF { 2 :A # Red
 [ RED: ] P R 2 ;A p
 [ GREEN: ] P R 1 ;A p
-[ RED: ] P R 0 ;A p
+[ BLUE: ] P R 0 ;A p
 ```
 
 ## License

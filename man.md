@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 19, 2024
+date: March 20, 2024
 ---
 
 
@@ -40,28 +40,26 @@ In RPN, this would be:
 ```
 
 Operands are pushed onto the stack following the LIFO policy; operators, on the other hand, pop one or more values
-from the stack and push back the result. By default **dc** is very quiet, in order to inquiry the stack you need to use one of the supported
+from the stack and push back the result. By default, **dc** is very quiet, in order to inquiry the stack you need to use one of the supported
 options(see below).
 
-**dc** reads from the standard input, but it can also work with text files using the `-f` flag. Futhermore, you can decide to evaluate an expression
+**dc** reads from the standard input, but it can also work with text files using the `-f` flag. Furthermore, you can decide to evaluate an expression
 without opening the REPL by using the `-e` flag.
 
 # PROGRAMMING IN DC
 As a stack-based, concatenative and procedural programming language, **dc** programs follow a *bottom up* approach where the program is built by
-starting with the most minimal facts about the problem and then is build up towards the complete solution. Following this programming paradigm means
-creating many short and simple routines that are defined either in terms or existing routines or in terms of built-in primitives.
+starting with the most minimal facts about the problem and then is built up towards the complete solution. Following this programming paradigm means
+creating many short and simple routines that are defined either in terms of existing routines or in terms of built-in primitives.
 
 The main strength of this paradigm is that you have full control on what happens at the lower levels of your program. This means that your
-programming logic is not abstracted away into generic protocols, everything you write has to as concrete as possible. 
-Another advantage of this approach is the ability to test and debug interactively each definition and each routines as you build up your solution, without having
-to rely on external testing framework.
-Finally, the last major advantage is that dc is very extensible: the core language consists on only a few primitives, which are enough for building solutions
-and extending the programming language. Furthermore, just as LISP languages, dc does not make any distinctions between code and data, thus it is homoiconic.
+programming logic is not abstracted away into generic protocols, everything you write has to be as concrete as possible. 
+Another advantage of this approach is the ability to test and debug interactively each definition and each routine as you build up your solution, without having
+to rely on external testing framework. The dc programming language is also very extensible: the core language consists on only a few primitives, which are enough for
+building new programs and extending the programming language itself. Also, dc - just like LISP-like languages, is homoiconic: there is no distinction between code and data.
 
 On the other hand, the *bottom up* approach is not suitable for building large infrastructures: the ability to abstract away methods, procedures and to shape
-real-world objects into templates is essential for many modern programming use cases. As a result, dc excels when used for what it was originally 
+real-world objects into templates is essential for many modern programming use cases. In fact, dc excels when used for what it was originally 
 developed for: computations and small math-oriented programs.
-
 
 # ARCHITECTURE
 As an advanced scientific calculator, **dc** has a complex architecture defined by the following two data structures:
@@ -102,7 +100,7 @@ The _main stack_ is the primary form of memory available in this program. Every 
 within the main stack. The _main stack_ is virtually infinite and grows as much as needed; the _main stack_ is **public**, i.e. it is
 shared between any **dc** command.
 
-The **register** is an hash map-like abstract data type that allows users to operate on an _isolated_ environment formed by a _stack_
+The **register** is a hash map-like abstract data type that allows users to operate on an _isolated_ environment formed by a _stack_
 and an _array_. Each instance of the register is an ordered pair `(key, value)` where the _key_ is a character representing the name of the 
 register and the _value_ is a **private** instance of a stack and a **private** instance of an array. **dc** commands - exception made for registers, macro and array commands -
 cannot operate directly on the auxiliary stacks or on the auxiliary arrays. In order to use a value stored on an auxiliary stack, you need to pop it
@@ -112,11 +110,11 @@ Both the _main stack_ and the _auxiliary stack_ implement the same abstract data
 stack - as well as any other property or feature supported by the main stack - is also supported by the register's stack.
 
 _Arrays_ are dynamic, homogeneous and private abstract data type associated with a register.
-The underlying data type of a dc array is a hashmap where the index is represented by
+The underlying data type of dc array is a hashmap where the index is represented by
 the map's `key` and the associated value is represented by the map's `value`.
 
 # TYPE SYSTEM
-By default each value of any kind of stack is represented by a string. Each operation is in charge to type convert the value before and after
+By default, each value of any kind of stack is represented by a string. Each operation is in charge to type convert the value before and after
 their invocation. The user can store both numeric and alphanumeric values on the stack. The latter using the _macro_ syntax(see below).
 
 Arrays are homogeneous data structures that implement the same data type of the stack, i.e. the string.
@@ -343,14 +341,14 @@ Pushes the curent output radix on the stack
 Pushes the current precision on the stack
 
 ## Register(Stack)
-As mentioned before, **dc** supports an hashmap ADT called **register** represented by an ordered pair `(key, value)`. 
+As mentioned before, **dc** supports a hashmap ADT called **register** represented by an ordered pair `(key, value)`. 
 A register maps the `key`(represented by a single character) with a `value`(represented by an auxiliary stack and a private array).
 At least 256 registers are available. Below, you can see the supported operations on register's stack.
 
 **s**`r`
 
 Pop the value off the top of the (main) stack and store it into top of the stack of register _r_.
-This overwrite the top of the stack and does **NOT** follow the LIFO policy.
+This overwrites the top of the stack and does **NOT** follow the LIFO policy.
 
 **l**`r`
 
@@ -382,7 +380,7 @@ is then pushed onto the stack.
 
 ## Strings
 
-_dc_ has a limited ability to operate on strings as well as on numbers; the only things you can do with strings are print them and execute them as macros (which means that the content of a string can executed as a _dc_ program). Any kind of stack can hold strings, and _dc_ always knows whether any given object is a string or a number. 
+_dc_ has a limited ability to operate on strings as well as on numbers; the only things you can do with strings are print them and execute them as macros (which means that the content of a string can execute as a _dc_ program). Any kind of stack can hold strings, and _dc_ always knows whether any given object is a string or a number. 
 Some commands such as arithmetic operations demand numbers as arguments and print errors if given strings. 
 Other commands can accept either a number or a string; for example, the **p** command can accept either and prints the object according to its type.
 
@@ -563,7 +561,7 @@ lL x 0 ;A lN /
 4 * p
 ```
 
-14. Convert an hex color to RGB:
+14. Convert a hex color to RGB:
 ```
 16 i
 [ Enter hex value: ] P R ? sV
@@ -572,7 +570,7 @@ lV 8 M FF { 1 :A # Green
 lV 10 M FF { 2 :A # Red
 [ RED: ] P R 2 ;A p
 [ GREEN: ] P R 1 ;A p
-[ RED: ] P R 0 ;A p
+[ BLUE: ] P R 0 ;A p
 ```
 
 # AUTHORS

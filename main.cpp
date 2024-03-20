@@ -5,7 +5,7 @@
 #include <iterator>
 #include <fstream>
 
-#include "src//adt.h"
+#include "src/adt.h"
 #include "src/eval.h"
 #include "src/macro.h" // for split static method
 
