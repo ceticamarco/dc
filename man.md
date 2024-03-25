@@ -355,6 +355,8 @@ This overwrites the top of the stack and does **NOT** follow the LIFO policy.
 Copy the value in top of the stack of register _r_ and push it onto the main stack. 
 The value 0 is retrieved if the register is uninitialized. This does not alter the contents of _r_.
 
+The current register value is the top of the register's stack.
+
 **S**`r`
 
 Pop the value off the top of the (main) stack and push it onto the stack of register _r_.

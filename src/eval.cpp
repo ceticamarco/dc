@@ -262,18 +262,20 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         auto reg_name = token.at(1);
         auto head = this->stack.pop(true);
 
-        // Always discard previous instance of the register
-        // i.e., initialize a new instance of register 'reg_name'
-        this->regs.erase(reg_name);
-        this->regs.insert(
-                std::make_pair(reg_name, dc::Register{
-                    dc::Stack<std::string>(),
-                    std::unordered_map<int, std::string>()
-                })
-        );
 
-         // Populate register's 'reg_name' stack with top of main stack
-         this->regs[reg_name].stack.push(head);
+        // if register's stack exist, overwrite top of the stack
+        // Otherwise allocate a new instance of the register
+        auto it = this->regs.find(reg_name);
+        if(it != this->regs.end()) { // Register exist
+            auto head_idx = it->second.stack.size()-1;
+            it->second.stack[head_idx] = head;
+        } else { // Register does not exist
+            this->regs[reg_name] = dc::Register{
+                dc::Stack<std::string>(),
+                std::unordered_map<int, std::string>()
+            };
+            this->regs[reg_name].stack.push(head);
+        }
     } else if(token.at(0) == 'S') {
         // An uppercase 'S' pops the top of the main stack and
         // pushes it onto the stack of selected register.
@@ -299,6 +301,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
                 dc::Stack<std::string>(),
                 std::unordered_map<int, std::string>()
             };
+            this->regs[reg_name].stack.push(head);
         }
     } else if(token.at(0) == 'L') {
         // An uppercase 'L' pops the top of the register's stack
