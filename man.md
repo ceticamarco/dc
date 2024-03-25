@@ -367,6 +367,14 @@ The previous of the register becomes inaccessible, thus it follows the LIFO poli
 Pop the value off the top of register _r_'s stack and push it onto the main stack. The previous value in register _r_'s stack, if any,
 is now accessible via the **l**r command.
 
+**c**`r`
+
+Clear the register `r` from memory.
+
+**z**`r`
+
+Pushes the current register's stack depth: the number of objects on the register's stack before the execution of the **z**`r` command.
+
 ## Register(Array)
 Arrays support random access through an index. You can store a value in an array and retrieve it later.
 

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    # Fill some values into the register
+    EXPECTED="4"
+    ACTUAL=$("$PROGRAM" -e '1 2 3 4 SA SA SA SA zA p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test with empty register
+    EXPECTED="0"
+    ACTUAL=$("$PROGRAM" -e 'zA p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

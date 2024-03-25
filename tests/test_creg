@@ -1,0 +1,20 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    # Fill some values into the register
+    EXPECTED="1 2"
+    ACTUAL=$("$PROGRAM" -e '1 2 SA SA 2 0 :A lA p. 0 ;A p cA')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test whether the register stack is empty
+    EXPECTED="0"
+    ACTUAL=$("$PROGRAM" -e 'lA p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test whether the register array is empty
+    EXPECTED="Register 'A' is undefined"
+    ACTUAL=$("$PROGRAM" -e '0 ;A' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

@@ -14,7 +14,8 @@
                VAL.at(0) == '=' || VAL.at(0) == '!'))
 #define REGISTER_COND(VAL) ((VAL.length() == 2) && \
               (VAL.at(0) == 's' || VAL.at(0) == 'S' || \
-               VAL.at(0) == 'l' || VAL.at(0) == 'L'))
+               VAL.at(0) == 'l' || VAL.at(0) == 'L' || \
+               VAL.at(0) == 'c' || VAL.at(0) == 'z'))
 #define ARRAY_COND(VAL) ((VAL.length() == 2) && \
         (VAL.at(0) == ':' || VAL.at(0) == ';'))
 
@@ -43,6 +44,8 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("e", MAKE_UNIQUE_PTR(Mathematics, OPType::E));
     this->op_factory.emplace("@", MAKE_UNIQUE_PTR(Mathematics, OPType::RND));
     this->op_factory.emplace("$", MAKE_UNIQUE_PTR(Mathematics, OPType::INT));
+    // Statistical operations
+
     // Bitwise operations
     this->op_factory.emplace("{", MAKE_UNIQUE_PTR(Bitwise, OPType::BAND));
     this->op_factory.emplace("}", MAKE_UNIQUE_PTR(Bitwise, OPType::BOR));
@@ -262,13 +265,17 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         auto reg_name = token.at(1);
         auto head = this->stack.pop(true);
 
-
-        // if register's stack exist, overwrite top of the stack
+        // If register's stack exist, overwrite top of the stack
         // Otherwise allocate a new instance of the register
         auto it = this->regs.find(reg_name);
         if(it != this->regs.end()) { // Register exist
-            auto head_idx = it->second.stack.size()-1;
-            it->second.stack[head_idx] = head;
+            // If register exists but stack is empty, push the first element
+            if(it->second.stack.empty()) {
+                it->second.stack.push(head);
+            } else {
+                auto head_idx = it->second.stack.size()-1;
+                it->second.stack[head_idx] = head;
+            }
         } else { // Register does not exist
             this->regs[reg_name] = dc::Register{
                 dc::Stack<std::string>(),
@@ -322,7 +329,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         // Otherwise, pop an element from the register's stack and push it onto the main stack
         auto value = this->regs[reg_name].stack.pop(true);
         this->stack.push(value);
-    } else {
+    } else if(token.at(0) == 'l') {
         // Otherwise retrieve the register name and push its value
     	// to the stack without altering the register's stack.
 	    // If the register is empty, push '0' to the stack
@@ -338,6 +345,17 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
         // Otherwise, peek an element from the register's stack and push it onto the main stack
         auto value = this->regs[reg_name].stack.pop(false);
         this->stack.push(value);
+    } else if(token.at(0) == 'c') {
+        // Delete register from memory
+        auto reg_name = token.at(1);
+        this->regs.erase(reg_name);
+    } else if(token.at(0) == 'z') {
+        // Pushes register's stack size on main stack
+        auto reg_name = token.at(1);
+        auto size = std::to_string(this->regs[reg_name].stack.size());
+        this->stack.push(size);
+    } else {
+        return "Unmanaged error";
     }
 
     return std::nullopt;
