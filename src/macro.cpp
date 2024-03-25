@@ -70,7 +70,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
         auto second = std::stod(second_str);
 
         switch(this->op) {
-            case Operator::GT: {
+            case MacroOP::GT: {
                 if(head > second) {
                     std::vector<std::string> tokens = split(dc_macro);
                     Evaluate evaluator(tokens, regs, stack, parameters);
@@ -82,7 +82,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
                 }
                 break;
             }
-            case Operator::LT: {
+            case MacroOP::LT: {
                 if(head < second) {
                     std::vector<std::string> tokens = split(dc_macro);
                     Evaluate evaluator(tokens, regs, stack, parameters);
@@ -94,7 +94,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
                 }
                 break;
             }
-            case Operator::EQ: {
+            case MacroOP::EQ: {
                 if(head == second) {
                     std::vector<std::string> tokens = split(dc_macro);
                     Evaluate evaluator(tokens, regs, stack, parameters);
@@ -106,7 +106,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
                 }
                 break;
             }
-            case Operator::GEQ: {
+            case MacroOP::GEQ: {
                 if(head >= second) {
                     std::vector<std::string> tokens = split(dc_macro);
                     Evaluate evaluator(tokens, regs, stack, parameters);
@@ -118,7 +118,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
                 }
                 break;
             }
-            case Operator::LEQ: {
+            case MacroOP::LEQ: {
                 if(head <= second) {
                     std::vector<std::string> tokens = split(dc_macro);
                     Evaluate evaluator(tokens, regs, stack, parameters);
@@ -130,7 +130,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
                 }
                 break;
             }
-            case Operator::NEQ: {
+            case MacroOP::NEQ: {
                 if(head != second) {
                     std::vector<std::string> tokens = split(dc_macro);
                     Evaluate evaluator(tokens, regs, stack, parameters);

@@ -30,7 +30,7 @@ Some of the supported features are:
 - Integer conversion(`$`);  
 - Bitwise operations(`{`, `}`, `l`, `L`, `m`, `M`);  
 - Stack operations:
-    - Print top element(`p`, `P`);  
+    - Print top element(`p`, `P`, `p.`);  
     - Clear the stack(`c`); 
     - Remove top element(`R`);  
     - Swap order of top two elements(`r`);  
@@ -281,9 +281,8 @@ lL x 0 ;A lN /
 lV FF { 0 :A # Blue
 lV 8 M FF { 1 :A # Green
 lV 10 M FF { 2 :A # Red
-[ RED: ] P R 2 ;A p
-[ GREEN: ] P R 1 ;A p
-[ BLUE: ] P R 0 ;A p
+[ , ] sc
+[ [ RGB( ] P 2 ;A P lc p. 1 ;A P lc p. 0 ;A P [ ) ] p. [ = ] p. lV ph ] x
 ```
 
 ## License

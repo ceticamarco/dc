@@ -2,13 +2,17 @@
 
 #include "operation.h"
 
+enum class StackOP {
+    P, PNL, PS
+};
+
 class Stack : public IOperation {
 public:
     explicit Stack(const OPType op_t) : op_type(op_t) {}
     std::optional<std::string> exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) override;
 
 private:
-    std::optional<std::string> fn_print(dc::Stack<std::string> &stack, dc::Parameters  &parameters, bool new_line);
+    std::optional<std::string> fn_print(dc::Stack<std::string> &stack, dc::Parameters  &parameters, const StackOP op);
     static std::optional<std::string> fn_pop_head(dc::Stack<std::string> &stack);
     static std::optional<std::string> fn_swap_xy(dc::Stack<std::string> &stack);
     static std::optional<std::string> fn_dup_head(dc::Stack<std::string> &stack);

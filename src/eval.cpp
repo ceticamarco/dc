@@ -52,6 +52,7 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("M", MAKE_UNIQUE_PTR(Bitwise, OPType::BSR));
     // Stack operations
     this->op_factory.emplace("p", MAKE_UNIQUE_PTR(Stack, OPType::PCG));
+    this->op_factory.emplace("p.", MAKE_UNIQUE_PTR(Stack, OPType::PWS));
     this->op_factory.emplace("pb", MAKE_UNIQUE_PTR(Stack, OPType::PBB));
     this->op_factory.emplace("ph", MAKE_UNIQUE_PTR(Stack, OPType::PBH));
     this->op_factory.emplace("po", MAKE_UNIQUE_PTR(Stack, OPType::PBO));
@@ -137,17 +138,21 @@ std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
 std::optional<std::string> Evaluate::parse_macro(std::size_t &idx) {
     // A macro is any string surrounded by square brackets
     std::string dc_macro;
-    bool closing_bracket = false;
+    std::int8_t brackets_count = 1;
 
     // Scan next token
     idx++;
 
     // Parse the macro
     while(idx < this->expr.size()) {
-        // Continue to parse until the clsoing square brackets
-        if(this->expr.at(idx) == "]") {
-            closing_bracket = true;
-            break;
+        // Parse nested macros as well
+        if(this->expr.at(idx) == "[") {
+            brackets_count++;
+        } else if(this->expr.at(idx) == "]") {
+            brackets_count--;
+            if(brackets_count == 0) {
+                break;
+            }
         }
 
         // Otherwise append the token to the macro.
@@ -164,7 +169,7 @@ std::optional<std::string> Evaluate::parse_macro(std::size_t &idx) {
     }
 
     // Check if macro is properly formatted
-    if(!closing_bracket) {
+    if(brackets_count != 0) {
         return "Unbalanced parenthesis";
     }
 
@@ -201,37 +206,37 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string token) {
     // execute register's content as a macro
     std::optional<std::string> err = std::nullopt;
     if(operation == ">") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GT, dc_register);
+        auto macro = std::make_unique<Macro>(OPType::CMP, MacroOP::GT, dc_register);
         err = macro->exec(this->stack, this->parameters, this->regs);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "<") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LT, dc_register);
+        auto macro = std::make_unique<Macro>(OPType::CMP, MacroOP::LT, dc_register);
         err = macro->exec(this->stack, this->parameters, this->regs);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::EQ, dc_register);
+        auto macro = std::make_unique<Macro>(OPType::CMP, MacroOP::EQ, dc_register);
         err = macro->exec(this->stack, this->parameters, this->regs);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == ">=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::GEQ, dc_register);
+        auto macro = std::make_unique<Macro>(OPType::CMP, MacroOP::GEQ, dc_register);
         err = macro->exec(this->stack, this->parameters, this->regs);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "<=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::LEQ, dc_register);
+        auto macro = std::make_unique<Macro>(OPType::CMP, MacroOP::LEQ, dc_register);
         err = macro->exec(this->stack, this->parameters, this->regs);
         if(err != std::nullopt) {
             return err;
         }
     } else if(operation == "!=") {
-        auto macro = std::make_unique<Macro>(OPType::CMP, Operator::NEQ, dc_register);
+        auto macro = std::make_unique<Macro>(OPType::CMP, MacroOP::NEQ, dc_register);
         err = macro->exec(this->stack, this->parameters, this->regs);
         if(err != std::nullopt) {
             return err;

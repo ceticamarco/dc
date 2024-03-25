@@ -13,15 +13,16 @@ std::optional<std::string> Stack::exec(dc::Stack<std::string> &stack, dc::Parame
     auto print_oradix = [&stack, &parameters, this](dc::radix_base base) {
         auto old_rdx = parameters.oradix;
         parameters.oradix = base;
-        auto res = fn_print(stack, parameters, false);
+        auto res = fn_print(stack, parameters, StackOP::P);
         parameters.oradix = old_rdx;
 
         return res;
     };
 
     switch(this->op_type) {
-        case OPType::PCG: err = fn_print(stack, parameters, true); break;
-        case OPType::P: err = fn_print(stack, parameters, false); break;
+        case OPType::PCG: err = fn_print(stack, parameters, StackOP::PNL); break;
+        case OPType::P: err = fn_print(stack, parameters, StackOP::P); break;
+        case OPType::PWS: err = fn_print(stack, parameters, StackOP::PS); break;
         case OPType::PBB: err = print_oradix(dc::radix_base::BIN); break;
         case OPType::PBO: err = print_oradix(dc::radix_base::OCT); break;
         case OPType::PBH: err = print_oradix(dc::radix_base::HEX); break;
@@ -47,7 +48,7 @@ std::optional<std::string> Stack::exec(dc::Stack<std::string> &stack, dc::Parame
     return err;
 }
 
-std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Parameters &parameters, bool new_line) {
+std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Parameters  &parameters, const StackOP op) {
     // Check if the stack is empty
     if(stack.empty()) {
         return "Cannot print empty stack";
@@ -60,10 +61,10 @@ std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Pa
 
     switch(parameters.oradix) {
         case dc::radix_base::DEC: {
-            if(new_line) {
-                std::cout << stack.pop(false) << std::endl;
-            } else {
-                std::cout << stack.pop(false);
+            switch(op) {
+                case StackOP::PNL: std::cout << stack.pop(false) << std::endl; break;
+                case StackOP::P: std::cout << stack.pop(false); break;
+                case StackOP::PS: std::cout << stack.pop(false) << ' '; break;
             }
             break;
         }

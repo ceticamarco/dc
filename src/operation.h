@@ -17,7 +17,7 @@ enum class OPType {
     // Bitwise operations
     BAND, BOR, BNOT, BXOR, BSL, BSR,
     // Stack operations
-    PCG, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS, 
+    PCG, PWS, P, PBB, PBH, PBO, CLR, PH, SO, DP, PS, CH, CS, 
     SP, GP, SOR, GOR, SIR, GIR, LX, LY, LZ,
     // Macro operations
     EX, CMP, RI, LF

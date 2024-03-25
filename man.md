@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 20, 2024
+date: March 25, 2024
 ---
 
 
@@ -378,11 +378,21 @@ the array `r`, indexed by the top-of-stack value.
 Pops the top-of-stack and uses it as an index into array `r`. The selected value
 is then pushed onto the stack.
 
-## Strings
+## Strings/Macros
 
-_dc_ has a limited ability to operate on strings as well as on numbers; the only things you can do with strings are print them and execute them as macros (which means that the content of a string can execute as a _dc_ program). Any kind of stack can hold strings, and _dc_ always knows whether any given object is a string or a number. 
-Some commands such as arithmetic operations demand numbers as arguments and print errors if given strings. 
-Other commands can accept either a number or a string; for example, the **p** command can accept either and prints the object according to its type.
+_dc_ has a limited ability to operate on strings as well as on numbers; strings can be printed or executed as a macro, that is as a dc program.
+Strings can be nested, i.e. a string can contain another string. For example:
+
+- **\[ 1 \] p**: Prints the string(note: `1` is a string and not a number);  
+- **\[ \[ Hello World \] p \] x**: pushes a string containing another string and a command and execute it;  
+- **\[ Executing: \] p \[ 2 p 10 p \[ r / p \] p x \] x**: Prints the ongoing operation and execute it using homoiconicity property.
+
+When a string is used as a macro, dc *lazily evaluate* it; that is, the evaluation of subprograms is delayed until the evaluator requires their values.
+Avoiding eagerly evaluation allows the programmer to take advantage of DC's homoiconicity and to make macro evaluation more lightweight.
+
+Any kind of stack can hold strings, and _dc_ always knows whether any given object is a string or a number. Some commands such as arithmetic operations demand
+numbers as arguments and print errors if given strings. Other commands can accept either a number or a string; for example, the **p** 
+command can accept either and prints the object according to its type.
 
 **[ characters ]**
 
@@ -568,9 +578,8 @@ lL x 0 ;A lN /
 lV FF { 0 :A # Blue
 lV 8 M FF { 1 :A # Green
 lV 10 M FF { 2 :A # Red
-[ RED: ] P R 2 ;A p
-[ GREEN: ] P R 1 ;A p
-[ BLUE: ] P R 0 ;A p
+[ , ] sc
+[ [ RGB( ] P 2 ;A P lc p. 1 ;A P lc p. 0 ;A P [ ) ] p. [ = ] p. lV ph ] x
 ```
 
 # AUTHORS

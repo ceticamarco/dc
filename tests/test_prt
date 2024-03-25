@@ -90,9 +90,28 @@ test_print_no_newline() {
     assert_eq "$EXPECTED" "$ACTUAL"
 }
 
+test_print_space() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="0 1"
+    ACTUAL=$("$PROGRAM" -e '1 0 p. R P')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="Cannot print empty stack"
+    ACTUAL=$("$PROGRAM" -e 'p.' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test non numerical values
+    EXPECTED="foo "
+    ACTUAL=$("$PROGRAM" -e '[ foo ] p.' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+
+
 utest() {
     test_print
     test_print_no_newline
+    test_print_space
     test_print_bin
     test_print_hex
     test_print_oct
