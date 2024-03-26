@@ -3,6 +3,7 @@
 #include "adt.cpp"
 #include "eval.h"
 #include "mathematics.h"
+#include "statistics.h"
 #include "bitwise.h"
 #include "stack.h"
 #include "macro.h"
@@ -45,7 +46,12 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("@", MAKE_UNIQUE_PTR(Mathematics, OPType::RND));
     this->op_factory.emplace("$", MAKE_UNIQUE_PTR(Mathematics, OPType::INT));
     // Statistical operations
-
+    this->op_factory.emplace("gP", MAKE_UNIQUE_PTR(Statistics, OPType::PERM));
+    this->op_factory.emplace("gC", MAKE_UNIQUE_PTR(Statistics, OPType::COMB));
+    this->op_factory.emplace("gs", MAKE_UNIQUE_PTR(Statistics, OPType::SUMX));
+    this->op_factory.emplace("gS", MAKE_UNIQUE_PTR(Statistics, OPType::SUMXX));
+    this->op_factory.emplace("gM", MAKE_UNIQUE_PTR(Statistics, OPType::MEAN));
+    this->op_factory.emplace("gD", MAKE_UNIQUE_PTR(Statistics, OPType::SDEV));
     // Bitwise operations
     this->op_factory.emplace("{", MAKE_UNIQUE_PTR(Bitwise, OPType::BAND));
     this->op_factory.emplace("}", MAKE_UNIQUE_PTR(Bitwise, OPType::BOR));

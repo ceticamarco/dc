@@ -11,6 +11,11 @@ utest() {
     ACTUAL=$("$PROGRAM" -e '!' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
 
+    # Test negative numbers
+    EXPECTED="'!' is not defined for negative numbers"
+    ACTUAL=$("$PROGRAM" -e '-5 !' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
     # Test non numerical values
     EXPECTED="'!' requires numeric values"
     ACTUAL=$("$PROGRAM" -e '[ foo ] !' 2>&1) || true

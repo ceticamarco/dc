@@ -245,17 +245,17 @@ std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack
     auto n = stack[len];
     auto e = stack[len-1];
     auto b = stack[len-2];
-    auto is_n_num = is_num<double>(n);
-    auto is_e_num = is_num<double>(e);
-    auto is_b_num = is_num<double>(b);
+    auto is_n_num = is_num<long long>(n);
+    auto is_e_num = is_num<long long>(e);
+    auto is_b_num = is_num<long long>(b);
 
     // This functions computes
 	// 		c ≡ b^e (mod n)
     if(is_n_num && is_e_num && is_b_num) {
         stack.copy_xyz();
-        auto modulus = std::stol(stack.pop(true));
-        auto exponent = std::stol(stack.pop(true));
-        auto base = std::stol(stack.pop(true));
+        auto modulus = std::stoll(stack.pop(true));
+        auto exponent = std::stoll(stack.pop(true));
+        auto base = std::stoll(stack.pop(true));
 
         if(modulus == 1) {
             stack.push("0");
@@ -502,14 +502,14 @@ std::optional<std::string> Mathematics::fn_fact(dc::Stack<std::string> &stack, c
     // Check whether the entry is a number
     if(is_x_num) {
         stack.copy_xyz();
-        unsigned long factorial = 1;
+        unsigned long long factorial = 1;
         auto val = std::stod(stack.pop(true));
 
-        if(val == 0.0) {
-            factorial = 1;
+        if(val < 0.0) {
+            return "'!' is not defined for negative numbers";
         }
 
-        for(std::size_t i = 2; i <= (std::size_t)val; i++) {
+        for(unsigned long long i = 2; i <= val; i++) {
             factorial *= i;
         }
 

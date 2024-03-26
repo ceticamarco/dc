@@ -1,3 +1,4 @@
+#include <numeric>
 #include "adt.h"
 
 #define GET_X this->stack.back()
@@ -120,6 +121,43 @@ namespace dc {
     std::size_t Stack<T>::size() {
         return this->stack.size();
     }
+
+    /*
+     * Returns the summation of all items
+     */
+    template<typename T>
+    requires is_num_or_str<T>
+    double Stack<T>::summation() {
+        auto sum = std::accumulate(this->stack.begin(), this->stack.end(), 0.0,
+            [](auto accumulator, const T& val) -> double {
+                if constexpr(std::is_same_v<T, std::string>) {
+                    return accumulator + std::stod(val);
+                } else {
+                    return accumulator + val;
+                }
+            });
+
+        return sum;
+    }
+
+    /*
+     * Returns the summation of squares of all items
+     */
+    template<typename T>
+    requires is_num_or_str<T>
+    double Stack<T>::summation_squared() {
+        auto sum = std::accumulate(this->stack.begin(), this->stack.end(), 0.0,
+            [](auto accumulator, const T& val) -> double {
+                if constexpr(std::is_same_v<T, std::string>) {
+                    return accumulator + (std::stod(val) * std::stod(val));
+                } else {
+                    return accumulator + (val * val);
+                }
+            });
+
+        return sum;
+    }
+
 
     /**
      * Returns true if stack is empty

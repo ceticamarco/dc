@@ -22,6 +22,8 @@ namespace dc {
         T& at(std::size_t index);
         T& operator[](std::size_t index);
         std::size_t size();
+        double summation();
+        double summation_squared();
         bool empty();
         [[nodiscard]] const std::vector<T>& get_ref() const;
 

@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 25, 2024
+date: March 26, 2024
 ---
 
 
@@ -179,7 +179,7 @@ Pops one value, computes its square root, and pushes that.
 
 **!**
 
-Pops one value, computes its factorial, and pushes that.
+Pops one non-negative integer, computes its factorial, and pushes that.
 
 **pi**
 
@@ -223,6 +223,43 @@ Pops one value, computes its `acos`, and pushes that.
 **atan**
 
 Pops one value, computes its `atan`, and pushes that.
+
+## Statistics Operations
+**dc** supports various common statistics operations, such as permutations, combinations, mean, standard deviation
+summation, sum of squares and linear regression. All statistics functions are limited to **non-negative integers**.
+Accumulating functions use the `X` register.
+
+**gP**
+
+Pops two non-negative integers(that is, >=0) and computes `P_{y, x}`, that is the number of possible different arrangements of
+`y` different items taken in quantities of `x` items at a time. No item shall occur more than once in an arrangmement and different orders of same `x` 
+items are counted separately. The `y` parameter correspond to the second one value popped while the `x` parameter correspond to the first one popped.
+
+**gC**
+
+Pops two non-negative integers(that is, >=0) and computes `C_{y, x}`, that is the number of possible sets of
+`y` different items taken in quantities of `x` items at a time. No item shall occur more than once in a set and different orders of the same `x`
+items are not counted separately. The `y` parameter correspond to the second one value popped while the `x` parameter correspond to the first one popped.
+
+**gN**
+
+Counts the number of accumulated elements of the `X` register's stack and pushes that.
+
+**gs**
+
+Computes Σx of the `X` register's stack and pushes that.
+
+**gS**
+
+Computes Σx^2 of the `X` register's stack and pushes that.
+
+**gM**
+
+Computes x̄(mean) of the `X` register's stack and pushes that.
+
+**gD**
+
+Computes σ(standard deviation) of the `X` register's stack and pushes that.
 
 ## Base Conversion
 
