@@ -50,7 +50,7 @@ std::optional<std::string> Statistics::fn_perm(dc::Stack<std::string> &stack, co
         }
 
         unsigned long long permutation = numerator_opt.value() / denominator_opt.value();
-        stack.push(trim_digits(permutation, parameters.precision));
+        stack.push(trim_digits(static_cast<double>(permutation), parameters.precision));
     } else {
         return "'gP' requires integer values";
     }
@@ -89,7 +89,7 @@ std::optional<std::string> Statistics::fn_comb(dc::Stack<std::string> &stack, co
             combination /= i;
         }
 
-        stack.push(trim_digits(combination, parameters.precision));
+        stack.push(trim_digits(static_cast<double>(combination), parameters.precision));
     } else {
         return "'gC' requires integer values";
     }
@@ -144,10 +144,10 @@ std::optional<std::string> Statistics::fn_mean(dc::Stack<std::string> &stack, co
         return "The stack of register 'X' is empty";
     }
 
-    // Othewise compute mean
+    // Otherwise compute mean
     auto summation = regs['X'].stack.summation();
     auto size = regs['X'].stack.size();
-    auto mean = summation / size;
+    auto mean = summation / static_cast<double>(size);
     stack.push(trim_digits(mean, parameters.precision));
 
     return std::nullopt;
@@ -164,10 +164,10 @@ std::optional<std::string> Statistics::fn_sdev(dc::Stack<std::string> &stack, co
         return "The stack of register 'X' is empty";
     }
 
-    // Othewise, compute the mean
+    // Otherwise, compute the mean
     auto summation = regs['X'].stack.summation();
     auto count = regs['X'].stack.size();
-    auto mean = summation / count;
+    auto mean = summation / static_cast<double>(count);
 
     // Then compute the sum of the deviations from the mean and square the result
     const auto& const_vec = regs['X'].stack.get_ref();
@@ -176,8 +176,8 @@ std::optional<std::string> Statistics::fn_sdev(dc::Stack<std::string> &stack, co
             double deviation = std::stod(val) - mean;
             return acc + std::pow(deviation, 2);
     });
-    // Then compute the mean of previos values(variance)
-    auto variance = sum_of_deviations / (count-1);
+    // Then compute the mean of previous values(variance)
+    auto variance = sum_of_deviations / (static_cast<double>(count) - 1);
     
     // Finally, compute the square root of the variance(standard deviation)
     auto s_dev = sqrt(variance);
@@ -212,7 +212,7 @@ std::optional<std::string> Statistics::fn_lreg(dc::Stack<std::string> &stack, co
         return "'X' and 'Y' registers must be of the same length";
     }
 
-    // Othwerise, retrieve count and summations of both sets
+    // Otherwise, retrieve count and summations of both sets
     auto count = regs['X'].stack.size();
     auto x_sum = regs['X'].stack.summation();
     auto y_sum = regs['Y'].stack.summation();
@@ -223,7 +223,7 @@ std::optional<std::string> Statistics::fn_lreg(dc::Stack<std::string> &stack, co
     std::size_t idx = 0;
     double sum_of_products = 0.0;
 
-    for(auto it : x_ref) {
+    for(const auto& it : x_ref) {
         auto x = std::stod(it);
         auto y = std::stod(y_ref[idx++]);
         sum_of_products += (x * y);
@@ -233,12 +233,12 @@ std::optional<std::string> Statistics::fn_lreg(dc::Stack<std::string> &stack, co
     auto x_sum_squares = regs['X'].stack.summation_squared();
 
     // Then compute the slope of the line(m)
-    auto slope_numerator = ((count * sum_of_products) - (x_sum * y_sum));
-    auto slope_denominator = ((count * x_sum_squares) - std::pow(x_sum, 2));
+    auto slope_numerator = ((static_cast<double>(count) * sum_of_products) - (x_sum * y_sum));
+    auto slope_denominator = ((static_cast<double>(count) * x_sum_squares) - std::pow(x_sum, 2));
     auto slope = slope_numerator / slope_denominator;
 
     // Then compute the intercept of the line(b)
-    auto intercept = (y_sum - (slope * x_sum)) / count;
+    auto intercept = (y_sum - (slope * x_sum)) / static_cast<double>(count);
 
     // Finally push the slope and the intercept(in this order) into the main stack
     stack.push(trim_digits(slope, parameters.precision));
