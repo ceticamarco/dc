@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 26, 2024
+date: March 27, 2024
 ---
 
 
@@ -225,9 +225,10 @@ Pops one value, computes its `acos`, and pushes that.
 Pops one value, computes its `atan`, and pushes that.
 
 ## Statistics Operations
-**dc** supports various common statistics operations, such as permutations, combinations, mean, standard deviation
-summation, sum of squares and linear regression. All statistics functions are limited to **non-negative integers**.
-Accumulating functions use the `X` register.
+**dc** supports various common statistics operations, such as permutations, combinations, mean, standard deviation,
+summation, sum of squares and linear regression. Most statistics functions are limited to **non-negative integers**.
+The accumulating functions(such as the mean, the standard deviation and the linear regression) use the `X` and 
+the `Y` registers.
 
 **gP**
 
@@ -240,10 +241,6 @@ items are counted separately. The `y` parameter correspond to the second one val
 Pops two non-negative integers(that is, >=0) and computes `C_{y, x}`, that is the number of possible sets of
 `y` different items taken in quantities of `x` items at a time. No item shall occur more than once in a set and different orders of the same `x`
 items are not counted separately. The `y` parameter correspond to the second one value popped while the `x` parameter correspond to the first one popped.
-
-**gN**
-
-Counts the number of accumulated elements of the `X` register's stack and pushes that.
 
 **gs**
 
@@ -260,6 +257,31 @@ Computes x̄(mean) of the `X` register's stack and pushes that.
 **gD**
 
 Computes σ(standard deviation) of the `X` register's stack and pushes that.
+
+**gL**
+
+Computes linear regression of the `X` register's stack and the `Y` register's stack. Linear regression is a
+simple statistical model to find a relationship beetween a *dependent variable*(`Y`) and an independent 
+variable(`X`). This function will compute the following linear equation:
+$$
+    y = mx + b
+$$
+
+using the following formulae:
+
+```      
+        ( n * ∑(x_i * y_i) ) - ( ∑x_i * ∑y_i )
+    m = ---------------------------------------
+               n * ∑x^2 - (∑x)^2
+
+    
+                 ∑y_i - (m * ∑x_i)
+    b = ---------------------------------------
+                        n
+``` 
+
+Where **n** is the number of elements of each set.
+The results - the _slope_ **m** and the _y-intercept_ **b** - will be pushed onto the stack in that order.
 
 ## Base Conversion
 
@@ -629,10 +651,18 @@ lV 10 M FF { 2 :A # Red
 [ [ RGB( ] P 2 ;A P lc p. 1 ;A P lc p. 0 ;A P [ ) ] p. [ = ] p. lV ph ] x
 ```
 
+15. Find the mean of the following temperatures(Celsius): `[25, 15, 9.5, 10, 20, 16, 20]`:
+```
+4 k
+25 15 9.5 10 20 16 20
+SX SX SX  SX SX SX SX
+gM p # Prints 16.5000
+```
+
 # AUTHORS
 The original version of the **dc** command was written by Robert Morris and Lorinda Cherry. 
 This version of **dc** is developed by Marco Cetica.
 
 # BUGS
 
-If you encounter any kind of problem, email me at [email@marcocetica.com](mailto:email@marcocetica.com) or open an issue at [https://github.com/ice-bit/dc](https://github.com/ice-bit/dc).
+If you encounter any kind of problem, email me at [email@marcocetica.com](mailto:email@marcocetica.com) or open an issue at [https://github.com/ceticamarco/dc](https://github.com/ceticamarco/dc).

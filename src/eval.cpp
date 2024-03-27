@@ -52,6 +52,7 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("gS", MAKE_UNIQUE_PTR(Statistics, OPType::SUMXX));
     this->op_factory.emplace("gM", MAKE_UNIQUE_PTR(Statistics, OPType::MEAN));
     this->op_factory.emplace("gD", MAKE_UNIQUE_PTR(Statistics, OPType::SDEV));
+    this->op_factory.emplace("gL", MAKE_UNIQUE_PTR(Statistics, OPType::LREG));
     // Bitwise operations
     this->op_factory.emplace("{", MAKE_UNIQUE_PTR(Bitwise, OPType::BAND));
     this->op_factory.emplace("}", MAKE_UNIQUE_PTR(Bitwise, OPType::BOR));

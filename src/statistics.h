@@ -14,6 +14,7 @@ private:
     std::optional<std::string> fn_sum_squared(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs);
     std::optional<std::string> fn_mean(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs);
     std::optional<std::string> fn_sdev(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs);
+    std::optional<std::string> fn_lreg(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs);
     std::optional<unsigned long long> factorial(const long long n);
     std::string trim_digits(double number, unsigned int precision);
 

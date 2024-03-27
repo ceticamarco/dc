@@ -1,0 +1,38 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    # Test undefined register
+    EXPECTED="Register 'X' is undefined"
+    ACTUAL=$("$PROGRAM" -e 'gL' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="The stack of register 'X' is empty"
+    ACTUAL=$("$PROGRAM" -e '0 5 :X gL' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test undefined register
+    EXPECTED="Register 'Y' is undefined"
+    ACTUAL=$("$PROGRAM" -e '5 SX gL' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="The stack of register 'Y' is empty"
+    ACTUAL=$("$PROGRAM" -e '5 SX 0 5 :Y gL' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test stacks of different sizes
+    EXPECTED="'X' and 'Y' registers must be of the same length"
+    ACTUAL=$("$PROGRAM" -e '5 SX 5 SY 7 SY gL' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test with real values
+    EXPECTED="1 0"
+    ACTUAL=$("$PROGRAM" -e "cX cY \
+                   1 2 3 4 5 6 7 8 9 SX SX SX SX SX SX SX SX SX \
+                   1 2 3 4 5 6 7 8 9 SY SY SY SY SY SY SY SY SY \
+                   gL r p. r p")
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="2520"
+    ACTUAL=$("$PROGRAM" -e '7 5 gP p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="'gP' requires two operands"
+    ACTUAL=$("$PROGRAM" -e 'gP' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test non numerical values
+    EXPECTED="'gP' requires integer values"
+    ACTUAL=$("$PROGRAM" -e '[ foo ] 5 gP' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

@@ -24,6 +24,7 @@ Some of the supported features are:
 - Basic arithmetical operations(`+`, `-`, `*`, `/`, `^`, `%`);  
 - Scientific notation support(`5e3` -> `5000`);  
 - Trigonometrical functions(`sin`, `cos`, `tan`, `asin`, `acos`, `atan`);  
+- Statistical functions(permutations, combinations, summation, sum of squares, mean, standard deviation, linear regression);  
 - Base conversion(binary: `pb`, octal: `po`, hexadecimal: `px`);  
 - Factorial and constants(`!`, `pi`, `e`);  
 - Random number generator(`@`);  
@@ -283,6 +284,14 @@ lV 8 M FF { 1 :A # Green
 lV 10 M FF { 2 :A # Red
 [ , ] sc
 [ [ RGB( ] P 2 ;A P lc p. 1 ;A P lc p. 0 ;A P [ ) ] p. [ = ] p. lV ph ] x
+```
+
+19. Find the mean of the following temperatures(Celsius): `[25, 15, 9.5, 10, 20, 16, 20]`:
+```
+4 k
+25 15 9.5 10 20 16 20
+SX SX SX  SX SX SX SX
+gM p # Prints 16.5000
 ```
 
 ## License

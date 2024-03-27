@@ -15,6 +15,7 @@ std::optional<std::string> Statistics::exec(dc::Stack<std::string> &stack, dc::P
         case OPType::SUMXX: err = fn_sum_squared(stack, parameters, regs); break;
         case OPType::MEAN: err = fn_mean(stack, parameters, regs); break;
         case OPType::SDEV: err = fn_sdev(stack, parameters, regs); break;
+        case OPType::LREG: err = fn_lreg(stack, parameters, regs); break;
         default: break;
     }
 
@@ -51,7 +52,7 @@ std::optional<std::string> Statistics::fn_perm(dc::Stack<std::string> &stack, co
         unsigned long long permutation = numerator_opt.value() / denominator_opt.value();
         stack.push(trim_digits(permutation, parameters.precision));
     } else {
-        return "'gP' requires integers values";
+        return "'gP' requires integer values";
     }
 
     return std::nullopt;
@@ -90,7 +91,7 @@ std::optional<std::string> Statistics::fn_comb(dc::Stack<std::string> &stack, co
 
         stack.push(trim_digits(combination, parameters.precision));
     } else {
-        return "'gC' requires integers values";
+        return "'gC' requires integer values";
     }
 
     return std::nullopt;
@@ -176,12 +177,73 @@ std::optional<std::string> Statistics::fn_sdev(dc::Stack<std::string> &stack, co
             return acc + std::pow(deviation, 2);
     });
     // Then compute the mean of previos values(variance)
-    auto variance = sum_of_deviations / count;
+    auto variance = sum_of_deviations / (count-1);
     
     // Finally, compute the square root of the variance(standard deviation)
     auto s_dev = sqrt(variance);
 
     stack.push(trim_digits(s_dev, parameters.precision));
+    return std::nullopt;
+}
+
+std::optional<std::string> Statistics::fn_lreg(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
+     // Check whether 'x' register exists
+    if(regs.find('X') == regs.end()) {
+        return "Register 'X' is undefined";
+    }
+
+    // Check if register's stack is empty
+    if(regs['X'].stack.empty()) {
+        return "The stack of register 'X' is empty";
+    }
+
+     // Check whether 'y' register exists
+    if(regs.find('Y') == regs.end()) {
+        return "Register 'Y' is undefined";
+    }
+
+    // Check if register's stack is empty
+    if(regs['Y'].stack.empty()) {
+        return "The stack of register 'Y' is empty";
+    }
+
+    // Check that both registers have the same length
+    if(regs['X'].stack.size() != regs['Y'].stack.size()) {
+        return "'X' and 'Y' registers must be of the same length";
+    }
+
+    // Othwerise, retrieve count and summations of both sets
+    auto count = regs['X'].stack.size();
+    auto x_sum = regs['X'].stack.summation();
+    auto y_sum = regs['Y'].stack.summation();
+
+    // Then compute the sum of products
+    const auto& x_ref = regs['X'].stack.get_ref();
+    const auto& y_ref = regs['Y'].stack.get_ref();
+    std::size_t idx = 0;
+    double sum_of_products = 0.0;
+
+    for(auto it : x_ref) {
+        auto x = std::stod(it);
+        auto y = std::stod(y_ref[idx++]);
+        sum_of_products += (x * y);
+    }
+
+    // Then compute the sum of squares
+    auto x_sum_squares = regs['X'].stack.summation_squared();
+
+    // Then compute the slope of the line(m)
+    auto slope_numerator = ((count * sum_of_products) - (x_sum * y_sum));
+    auto slope_denominator = ((count * x_sum_squares) - std::pow(x_sum, 2));
+    auto slope = slope_numerator / slope_denominator;
+
+    // Then compute the intercept of the line(b)
+    auto intercept = (y_sum - (slope * x_sum)) / count;
+
+    // Finally push the slope and the intercept(in this order) into the main stack
+    stack.push(trim_digits(slope, parameters.precision));
+    stack.push(trim_digits(intercept, parameters.precision));
+
     return std::nullopt;
 }
 
