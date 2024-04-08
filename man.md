@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: March 27, 2024
+date: April 8, 2024
 ---
 
 

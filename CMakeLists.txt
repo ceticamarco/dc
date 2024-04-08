@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 # Project name and version
-project(dc VERSION 1.0.4)
+project(dc VERSION 1.0.5)
 
 # Retrieve build date
 string(TIMESTAMP BUILD_DATE "%d-%b-%Y %H:%M:%S")
