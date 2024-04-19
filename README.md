@@ -1,8 +1,8 @@
 # dc ![](https://github.com/ceticamarco/dc/actions/workflows/dc.yml/badge.svg) [![CodeFactor](https://www.codefactor.io/repository/github/ceticamarco/dc/badge/master)](https://www.codefactor.io/repository/github/ceticamarco/dc/overview/master)
 
 **dc** is an advanced, scientific and programmable RPN desktop calculator with macro support (re)written in C++. 
-By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions. 
-Its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
+By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions and 
+its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
 
 **dc** reads from the standard input, but it can also work with text files using the `-f` flag. Furthermore, you can decide to evaluate an expression
 without opening the REPL by using the `-e` flag.
@@ -23,7 +23,9 @@ RPN desktop calculator with macro support. Usage:
 Some of the supported features are:
 - Basic arithmetical operations(`+`, `-`, `*`, `/`, `^`, `%`);  
 - Scientific notation support(`5e3` -> `5000`);  
+- Support for complex numbers(`-1 v` -> `(0,1)`);  
 - Trigonometrical functions(`sin`, `cos`, `tan`, `asin`, `acos`, `atan`);  
+- Base-10 logarithm(`y`);  
 - Statistical functions(permutations, combinations, summation, sum of squares, mean, standard deviation, linear regression);  
 - Base conversion(binary: `pb`, octal: `po`, hexadecimal: `px`);  
 - Factorial and constants(`!`, `pi`, `e`);  
@@ -233,8 +235,7 @@ $$x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
 #!/usr/local/bin/dc -f
 # GIVEN A QUADRATIC EQUATION OF THE FORM
 # AX^2 + BX + C = 0
-# COMPUTE ITS REAL ROOTS
-# THIS PROGRAM DOES NOT WORK WITH CMPLX NUMBERS
+# COMPUTE ITS REAL OR COMPLEX ROOTS
 # DEVELOPED BY MARCO CETICA 2023
 #
 3 k

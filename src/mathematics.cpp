@@ -1,5 +1,6 @@
 #include <cmath>
 #include <numbers>
+#include <complex>
 #include <iomanip>
 #include <random>
 
@@ -31,6 +32,10 @@ std::optional<std::string> Mathematics::exec(dc::Stack<std::string> &stack, dc::
         case OPType::E: err = fn_e(stack, parameters); break;
         case OPType::RND: err = fn_random(stack, parameters); break;
         case OPType::INT: err = fn_integer(stack, parameters); break;
+        case OPType::TO_CMPLX: err = fn_to_complex(stack, parameters); break;
+        case OPType::GET_RE: err = fn_get_real(stack, parameters); break;
+        case OPType::GET_IM: err = fn_get_imaginary(stack, parameters); break;
+        case OPType::LOG: err = fn_log10(stack, parameters); break;
         default: break;
     }
 
@@ -49,6 +54,8 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
     auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
+    auto is_x_cmplx = is_complex(x);
+    auto is_y_cmplx = is_complex(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -58,6 +65,23 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits((lhs + rhs), parameters.precision));
+    } else if(is_x_cmplx || is_y_cmplx) {
+        stack.copy_xyz();
+        // Convert complex dc objects(ie strings) to std::complex
+        std::complex<double> rhs, lhs;
+        std::istringstream ss1(stack.pop(true));
+        std::istringstream ss2(stack.pop(true));
+        ss1 >> rhs, ss2 >> lhs;
+
+        std::complex<double> sum = (rhs + lhs);
+
+        // trim their digits
+        auto real_trimmed = trim_digits(sum.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(sum.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'+' requires numeric values";
     }
@@ -77,6 +101,8 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
     auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
+    auto is_x_cmplx = is_complex(x);
+    auto is_y_cmplx = is_complex(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -96,6 +122,23 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits(result, parameters.precision));
+    } else if(is_x_cmplx || is_y_cmplx) {
+        stack.copy_xyz();
+        // Convert complex dc objects(ie strings) to std::complex
+        std::complex<double> rhs, lhs;
+        std::istringstream ss1(stack.pop(true));
+        std::istringstream ss2(stack.pop(true));
+        ss1 >> rhs, ss2 >> lhs;
+
+        std::complex<double> diff = (lhs - rhs);
+
+        // trim their digits
+        auto real_trimmed = trim_digits(diff.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(diff.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'-' requires numeric values";
     }
@@ -115,6 +158,8 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
     auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
+    auto is_x_cmplx = is_complex(x);
+    auto is_y_cmplx = is_complex(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -124,6 +169,23 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits((lhs * rhs), parameters.precision));
+    } else if(is_x_cmplx || is_y_cmplx) {
+        stack.copy_xyz();
+        // Convert complex dc objects(ie strings) to std::complex
+        std::complex<double> rhs, lhs;
+        std::istringstream ss1(stack.pop(true));
+        std::istringstream ss2(stack.pop(true));
+        ss1 >> rhs, ss2 >> lhs;
+
+        std::complex<double> mul = (lhs * rhs);
+
+        // trim their digits
+        auto real_trimmed = trim_digits(mul.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(mul.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'*' requires numeric values";
     }
@@ -143,6 +205,8 @@ std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, co
     auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
+    auto is_x_cmplx = is_complex(x);
+    auto is_y_cmplx = is_complex(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -157,6 +221,28 @@ std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits((dividend / divisor), parameters.precision));
+    } else if(is_x_cmplx || is_y_cmplx) {
+        stack.copy_xyz();
+        // Convert complex dc objects(ie strings) to std::complex
+        std::complex<double> divisor, dividend;
+        std::istringstream ss1(stack.pop(true));
+        std::istringstream ss2(stack.pop(true));
+        ss1 >> divisor, ss2 >> dividend;
+
+        // Check whether divisor is equal to zero
+        if(divisor == 0.0) {
+            return "Cannot divide by zero";
+        }
+
+        std::complex<double> div = (dividend / divisor);
+
+        // trim their digits
+        auto real_trimmed = trim_digits(div.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(div.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'/' requires numeric values";
     }
@@ -293,6 +379,8 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
     auto y = stack[len-1];
     auto is_x_num = is_num<double>(x);
     auto is_y_num = is_num<double>(y);
+    auto is_x_cmplx = is_complex(x);
+    auto is_y_cmplx = is_complex(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -302,6 +390,23 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits(pow(base, exp), parameters.precision));
+    } else if(is_x_cmplx || is_y_cmplx) {
+        stack.copy_xyz();
+        // Convert complex dc objects(ie strings) to std::complex
+        std::complex<double> exp, base;
+        std::istringstream ss1(stack.pop(true));
+        std::istringstream ss2(stack.pop(true));
+        ss1 >> exp, ss2 >> base;
+
+        std::complex<double> power = std::pow(base, exp);
+
+        // trim their digits
+        auto real_trimmed = trim_digits(power.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(power.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'^' requires numeric values";
     }
@@ -319,18 +424,31 @@ std::optional<std::string> Mathematics::fn_sqrt(dc::Stack<std::string> &stack, c
     auto len = stack.size()-1;
     auto x = stack[len];
     auto is_x_num = is_num<double>(x);
+    auto is_y_cmplx = is_complex(x);
 
     // Check whether the entry is a number
-    if(is_x_num) {
+    if(is_x_num || is_y_cmplx) {
         stack.copy_xyz();
-        auto val = std::stod(stack.pop(true));
+        auto val = stack.pop(true);
 
-        if(val <= 0.0) {
-            return "'v' domain error";
+        if(is_complex(val) || std::stod(val) < 0) {
+            std::complex<double> c_val;
+            std::istringstream ss1(val);
+            ss1 >> c_val;
+
+            std::complex<double> sq = std::sqrt(c_val);
+
+            // trim their digits
+            auto real_trimmed = trim_digits(sq.real(), parameters.precision);
+            auto imag_trimmed = trim_digits(sq.imag(), parameters.precision);
+            auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+            // Push the result back onto the stack
+            stack.push(complex_str);
+        } else {
+            stack.push(trim_digits(sqrt(std::stod(val)), parameters.precision));
         }
-
-        // Push back the result as a string
-        stack.push(trim_digits(sqrt(val), parameters.precision));
+        
     } else {
         return "'v' requires numeric values";
     }
@@ -348,6 +466,7 @@ std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto is_x_num = is_num<double>(x);
+    auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
     if(is_x_num) {
@@ -356,6 +475,21 @@ std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits(sin(val), parameters.precision));
+    } else if(is_x_cmplx) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        std::complex<double> s = sin(c_val);
+        
+        // trim their digits
+        auto real_trimmed = trim_digits(s.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'sin' requires numeric values";
     }
@@ -373,6 +507,7 @@ std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto is_x_num = is_num<double>(x);
+    auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
     if(is_x_num) {
@@ -381,6 +516,21 @@ std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits(cos(val), parameters.precision));
+    } else if(is_x_cmplx) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        std::complex<double> s = cos(c_val);
+        
+        // trim their digits
+        auto real_trimmed = trim_digits(s.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'cos' requires numeric values";
     }
@@ -398,6 +548,7 @@ std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto is_x_num = is_num<double>(x);
+    auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
     if(is_x_num) {
@@ -406,6 +557,21 @@ std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, co
 
         // Push back the result as a string
         stack.push(trim_digits(tan(val), parameters.precision));
+    } else if(is_x_cmplx) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        std::complex<double> s = tan(c_val);
+        
+        // trim their digits
+        auto real_trimmed = trim_digits(s.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'tan' requires numeric values";
     }
@@ -423,6 +589,7 @@ std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, c
     auto len = stack.size()-1;
     auto x = stack[len];
     auto is_x_num = is_num<double>(x);
+    auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
     if(is_x_num) {
@@ -431,6 +598,21 @@ std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, c
 
         // Push back the result as a string
         stack.push(trim_digits(asin(val), parameters.precision));
+    } else if(is_x_cmplx) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        std::complex<double> s = asin(c_val);
+        
+        // trim their digits
+        auto real_trimmed = trim_digits(s.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'asin' requires numeric values";
     }
@@ -448,6 +630,7 @@ std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, c
     auto len = stack.size()-1;
     auto x = stack[len];
     auto is_x_num = is_num<double>(x);
+    auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
     if(is_x_num) {
@@ -456,6 +639,21 @@ std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, c
 
         // Push back the result as a string
         stack.push(trim_digits(acos(val), parameters.precision));
+    } else if(is_x_cmplx) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        std::complex<double> s = acos(c_val);
+        
+        // trim their digits
+        auto real_trimmed = trim_digits(s.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'acos' requires numeric values";
     }
@@ -473,6 +671,7 @@ std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, c
     auto len = stack.size()-1;
     auto x = stack[len];
     auto is_x_num = is_num<double>(x);
+    auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
     if(is_x_num) {
@@ -481,6 +680,21 @@ std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, c
 
         // Push back the result as a string
         stack.push(trim_digits(atan(val), parameters.precision));
+    } else if(is_x_cmplx) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        std::complex<double> s = atan(c_val);
+        
+        // trim their digits
+        auto real_trimmed = trim_digits(s.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
     } else {
         return "'atan' requires numeric values";
     }
@@ -590,6 +804,41 @@ std::optional<std::string> Mathematics::fn_integer(dc::Stack<std::string> &stack
 
     return std::nullopt;
 }
+
+std::optional<std::string> Mathematics::fn_to_complex(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
+    // Check if stack has enough elements
+    if(stack.size() < 2) {
+        return "'b' requires two values";
+    }
+
+    auto len = stack.size()-1;
+    auto x = stack.at(len);
+    auto y = stack.at(len-1);
+    auto is_x_num = is_num<double>(x);
+    auto is_y_num = is_num<double>(y);
+
+    // Check whether both values are numbers
+    if(is_x_num && is_y_num) {
+        // Extract the real and imaginary part of the complex number
+        auto imag = std::stod(stack.pop(true));
+        auto real = std::stod(stack.pop(true));
+
+        // trim their digits
+        auto real_trimmed = trim_digits(real, parameters.precision);
+        auto imag_trimmed = trim_digits(imag, parameters.precision);
+
+        // Complex numbers are represented on the stack as "(Re,Im)"
+        // They are then converted to std::complex before computations
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+        stack.push(complex_str);
+    } else {
+        return "'b' requires numeric values";
+    }
+
+    return std::nullopt;
+}
+
+
 std::string Mathematics::trim_digits(double number, unsigned int precision) {
     std::ostringstream oss;
 
@@ -602,4 +851,110 @@ std::string Mathematics::trim_digits(double number, unsigned int precision) {
     std::string s = oss.str();
 
     return s;
+}
+
+std::optional<std::string> Mathematics::fn_get_real(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'re' requires one value";
+    }
+
+    auto head = stack.pop(false);
+    auto is_head_complex = is_complex(head);
+
+    if(is_head_complex) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        // Get real part
+        auto real = c_val.real();
+    
+        // Push the result back onto the stack
+        stack.push(trim_digits(real, parameters.precision));
+    } else {
+        return "'re' requires complex values";
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Mathematics::fn_get_imaginary(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'im' requires one value";
+    }
+
+    auto head = stack.pop(false);
+    auto is_head_complex = is_complex(head);
+
+    if(is_head_complex) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        // Get imaginary part
+        auto imag = c_val.imag();
+    
+        // Push the result back onto the stack
+        stack.push(trim_digits(imag, parameters.precision));
+    } else {
+        return "'im' requires complex values";
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> Mathematics::fn_log10(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
+    // Check if stack has enough elements
+    if(stack.empty()) {
+        return "'y' requires one value";
+    }
+
+    auto head = stack.pop(false);
+    auto is_head_num = is_num<double>(head);
+    auto is_head_complex = is_complex(head);
+
+    if(is_head_num) {
+        stack.copy_xyz();
+        auto val = std::stod(stack.pop(true));
+
+        // Push back the result as a string
+        stack.push(trim_digits(log10(val), parameters.precision));
+    } else if(is_head_complex) {
+        stack.copy_xyz();
+        std::complex<double> c_val;
+        std::istringstream ss1(stack.pop(true));
+        ss1 >> c_val;
+
+        std::complex<double> lg = log(c_val);
+
+        // trim their digits
+        auto real_trimmed = trim_digits(lg.real(), parameters.precision);
+        auto imag_trimmed = trim_digits(lg.imag(), parameters.precision);
+        auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+        // Push the result back onto the stack
+        stack.push(complex_str);
+    } else {
+        return "'y' requires numeric values";
+    }
+
+    return std::nullopt;
+}
+
+bool Mathematics::is_complex(const std::string &str) {
+    // Complex numbers are represented on the stack as "(Re,Im)"
+    if(str.front() != '(' || str.back() != ')') {
+        return false;
+    }
+
+    // Extract "Re,Im" without parenthesis
+    std::istringstream ss(str.substr(1, str.size() - 2));
+    double real, imag;
+    char comma;
+
+    return (ss >> real >> comma >> imag) && ss.eof();
 }

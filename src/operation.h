@@ -13,7 +13,7 @@ enum class OPType {
     // Numerical operations
     ADD, SUB, MUL, DIV, MOD, DIV_MOD, MOD_EXP, EXP,
     SQRT, SIN, COS, TAN, ASIN, ACOS, ATAN, FACT, PI, 
-    E, RND, INT,
+    E, RND, INT, TO_CMPLX, GET_RE, GET_IM, LOG,
     // Statistical operations
     PERM, COMB, SUMX, SUMXX, MEAN, SDEV, LREG,
     // Bitwise operations

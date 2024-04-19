@@ -16,5 +16,9 @@ utest() {
     ACTUAL=$("$PROGRAM" -e '[ foo ] 5 *' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
 
+    # Test complex values
+    EXPECTED="(13,-18)"
+    ACTUAL=$("$PROGRAM" -e '2 -5 b 4 1 b * p')
+    assert_eq "$EXPECTED" "$ACTUAL"
 }
 # vim: ts=4 sw=4 softtabstop=4 expandtab:

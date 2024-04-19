@@ -16,9 +16,9 @@ utest() {
     ACTUAL=$("$PROGRAM" -e '[ foo ] v' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
 
-    # Test domain error
-    EXPECTED="'v' domain error"
-    ACTUAL=$("$PROGRAM" -e '-1 v' 2>&1) || true
+    # Test complex number
+    EXPECTED="(0,1)"
+    ACTUAL=$("$PROGRAM" -e '-1 v p')
     assert_eq "$EXPECTED" "$ACTUAL"
 }
 # vim: ts=4 sw=4 softtabstop=4 expandtab:

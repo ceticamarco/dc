@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: April 8, 2024
+date: April 19, 2024
 ---
 
 
@@ -21,8 +21,8 @@ RPN desktop calculator with macro support. Usage:
 
 # DESCRIPTION
 **dc** is an advanced, scientific and programmable RPN desktop calculator with macro support (re)written in C++.
-By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions. 
-Its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
+By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions and
+its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
 
 **dc** uses the reverse polish notation(**RPN**) to parse mathematical expressions. Unlike the infix notation, where operators
 are placed _between_ operands, the polish notation(also called prefix notation) places operators _before_ the operands. The **reverse**
@@ -198,6 +198,10 @@ The random value is generated using a 64-bit Mersenne Twister pseudorandom numbe
 
 Pops one value from the stack and convert it to the nearest integer of lesser magnitute.
 
+**y**
+
+Pops one value from the stack and compute the _common_(base-10) logarithm of that number.
+
 ## Trigonometrical
 
 **sin**
@@ -224,6 +228,61 @@ Pops one value, computes its `acos`, and pushes that.
 
 Pops one value, computes its `atan`, and pushes that.
 
+## Complex Numbers
+**dc** allows you to operate on complex numbers in an easy and straightforward way:
+most arithmetical functions that work with real numbers also work with complex numbers. Complex
+numbers are stored on the stack just like any other real, rational, integer or natural number. To enter
+a new complex number of the form
+
+$$
+    z = a + ib
+$$
+
+write the _real_ part($a$) into the _second-to-top_ of the stack, the _imaginary_ part($b$) into the `x` _head_ of the stack and then issue the `b` command. For example, to enter $(9 + 4i)$, write:
+
+```
+9 4 b p
+(9,4)
+```
+
+As you can see, complex numbers are represented as a tuple $(Re,Im)$ and can be printed just like
+any other `dc` type.
+
+You can then operate on them just like any other number. Consider the following example:
+
+``` 
+    (6 + 4i) - (5 - 2i)
+    -------------------
+         (7 + i)^2
+```
+
+This can easily be calculated using the following sequence of commands:
+
+```
+10 k
+6 4 b 5 -2 b - 7 1 b 2 ^ / p
+(0.0528000000,0.1096000000)
+```
+
+And if you want to extract only the real or imaginary part of the number, issue one of the 
+following command, respectively:
+
+```
+re p .x im p
+0.0528000000
+0.1096000000
+```
+
+That is:
+
+**re**
+
+Pops one value, if it is a complex number retrieve its real part and pushes that.
+
+**im**
+
+Pops one value, if it is a complex number retrieve its imaginary part and pushes that.
+
 ## Statistics Operations
 **dc** supports various common statistics operations, such as permutations, combinations, mean, standard deviation,
 summation, sum of squares and linear regression. Most statistics functions are limited to **non-negative integers**.
@@ -233,7 +292,7 @@ the `Y` registers.
 **gP**
 
 Pops two non-negative integers(that is, >=0) and computes `P_{y, x}`, that is the number of possible different arrangements of
-`y` different items taken in quantities of `x` items at a time. No item shall occur more than once in an arrangmement and different orders of same `x` 
+`y` different items taken in quantities of `x` items at a time. No item shall occur more than once in an arrangement and different orders of same `x` 
 items are counted separately. The `y` parameter correspond to the second one value popped while the `x` parameter correspond to the first one popped.
 
 **gC**

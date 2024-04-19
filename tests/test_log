@@ -2,23 +2,23 @@
 
 utest() {
     PROGRAM="$PWD/build/dc"
-    EXPECTED="9"
-    ACTUAL=$("$PROGRAM" -e '5 4 + p')
+    EXPECTED="2"
+    ACTUAL=$("$PROGRAM" -e '100 y p')
     assert_eq "$EXPECTED" "$ACTUAL"
 
     # Test empty stack
-    EXPECTED="'+' requires two operands"
-    ACTUAL=$("$PROGRAM" -e '+' 2>&1) || true
+    EXPECTED="'y' requires one value"
+    ACTUAL=$("$PROGRAM" -e 'y' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
 
     # Test non numerical values
-    EXPECTED="'+' requires numeric values"
-    ACTUAL=$("$PROGRAM" -e '[ foo ] 5 +' 2>&1) || true
+    EXPECTED="'y' requires numeric values"
+    ACTUAL=$("$PROGRAM" -e '5 [ foo ] y' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
 
     # Test complex values
-    EXPECTED="(6,-4)"
-    ACTUAL=$("$PROGRAM" -e '2 -5 b 4 1 b + p')
+    EXPECTED="(0,3.14)"
+    ACTUAL=$("$PROGRAM" -e '0 1 b y 2 * p')
     assert_eq "$EXPECTED" "$ACTUAL"
 }
 # vim: ts=4 sw=4 softtabstop=4 expandtab:

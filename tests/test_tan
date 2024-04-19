@@ -15,5 +15,10 @@ utest() {
     EXPECTED="'tan' requires numeric values"
     ACTUAL=$("$PROGRAM" -e '[ foo ] tan' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test complex number
+    EXPECTED="(0,1.00)"
+    ACTUAL=$("$PROGRAM" -e '0 pi b tan p')
+    assert_eq "$EXPECTED" "$ACTUAL"
 }
 # vim: ts=4 sw=4 softtabstop=4 expandtab:

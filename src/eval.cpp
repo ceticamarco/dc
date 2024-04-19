@@ -45,6 +45,10 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("e", MAKE_UNIQUE_PTR(Mathematics, OPType::E));
     this->op_factory.emplace("@", MAKE_UNIQUE_PTR(Mathematics, OPType::RND));
     this->op_factory.emplace("$", MAKE_UNIQUE_PTR(Mathematics, OPType::INT));
+    this->op_factory.emplace("b", MAKE_UNIQUE_PTR(Mathematics, OPType::TO_CMPLX));
+    this->op_factory.emplace("re", MAKE_UNIQUE_PTR(Mathematics, OPType::GET_RE));
+    this->op_factory.emplace("im", MAKE_UNIQUE_PTR(Mathematics, OPType::GET_IM));
+    this->op_factory.emplace("y", MAKE_UNIQUE_PTR(Mathematics, OPType::LOG));
     // Statistical operations
     this->op_factory.emplace("gP", MAKE_UNIQUE_PTR(Statistics, OPType::PERM));
     this->op_factory.emplace("gC", MAKE_UNIQUE_PTR(Statistics, OPType::COMB));

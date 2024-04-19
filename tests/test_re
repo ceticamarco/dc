@@ -1,0 +1,24 @@
+#!/bin/sh
+
+utest() {
+    PROGRAM="$PWD/build/dc"
+    EXPECTED="1"
+    ACTUAL=$("$PROGRAM" -e '1 0 b re p')
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test empty stack
+    EXPECTED="'re' requires one value"
+    ACTUAL=$("$PROGRAM" -e 're' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test non complex values
+    EXPECTED="'re' requires complex values"
+    ACTUAL=$("$PROGRAM" -e '1 re' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test with macro
+    EXPECTED="'re' requires complex values"
+    ACTUAL=$("$PROGRAM" -e '[ foo ] re' 2>&1) || true
+    assert_eq "$EXPECTED" "$ACTUAL"
+}
+# vim: ts=4 sw=4 softtabstop=4 expandtab:

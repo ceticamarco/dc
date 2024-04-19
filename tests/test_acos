@@ -15,5 +15,10 @@ utest() {
     EXPECTED="'acos' requires numeric values"
     ACTUAL=$("$PROGRAM" -e '[ foo ] acos' 2>&1) || true
     assert_eq "$EXPECTED" "$ACTUAL"
+
+    # Test complex number
+    EXPECTED="(0,3.14)"
+    ACTUAL=$("$PROGRAM" -e '11.57 -0 b acos p')
+    assert_eq "$EXPECTED" "$ACTUAL"
 }
 # vim: ts=4 sw=4 softtabstop=4 expandtab:
