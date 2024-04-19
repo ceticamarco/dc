@@ -3,7 +3,7 @@ title: dc
 section: 1
 header: General Commands Manual
 footer: Marco Cetica
-date: April 19, 2024
+date: April 22, 2024
 ---
 
 
@@ -238,7 +238,7 @@ $$
     z = a + ib
 $$
 
-write the _real_ part($a$) into the _second-to-top_ of the stack, the _imaginary_ part($b$) into the `x` _head_ of the stack and then issue the `b` command. For example, to enter $(9 + 4i)$, write:
+write the _real_ part($a$) into the _second-to-top_ of the stack, the _imaginary_ part($b$) into the _head_ of the stack and then issue the `b` command. For example, to enter $(9 + 4i)$, write:
 
 ```
 9 4 b p

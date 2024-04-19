@@ -388,8 +388,30 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
         auto exp = std::stod(stack.pop(true));
         auto base = std::stod(stack.pop(true));
 
-        // Push back the result as a string
-        stack.push(trim_digits(pow(base, exp), parameters.precision));
+        std::complex<double> power;
+
+        // If base is positive or exponent is an integer
+        // calculate pow with real numbers. Otherwise
+        // with complex numbers
+        if(base > 0 || std::fmod(exp, 1.0) == 0) {
+            power = std::pow(base, exp);
+        } else {
+            power = std::pow(std::complex<double>(base), exp);
+        }
+
+        // Check if result is a complex number
+        if(std::imag(power) != 0) {
+            // trim their digits
+            auto real_trimmed = trim_digits(power.real(), parameters.precision);
+            auto imag_trimmed = trim_digits(power.imag(), parameters.precision);
+            auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
+
+            // Push the result back onto the stack
+            stack.push(complex_str);
+        } else {
+            // Push the result back onto the stack
+            stack.push(trim_digits(std::real(power), parameters.precision));
+        }
     } else if(is_x_cmplx || is_y_cmplx) {
         stack.copy_xyz();
         // Convert complex dc objects(ie strings) to std::complex
