@@ -5,9 +5,17 @@
 #include <unordered_map>
 
 namespace dc {
+    /**
+     * @brief Concept to constrain a generic type to either integral/float types or to a string
+     */
     template<typename T>
     concept is_num_or_str = (std::is_arithmetic_v<T> || std::is_same_v<T, std::string>);
 
+    /**
+     * @brief Class to represent the DC Stack abstract data type
+     * 
+     * This class wraps the C++ std::vector container to create a stack-like data structure
+     */
     template<typename T>
     requires is_num_or_str<T>
     class Stack {
@@ -35,9 +43,9 @@ namespace dc {
     };
     
     /**
-     * @brief the Register data structure
+     * @brief Register data structure
      * 
-     * This Abstract Data Type is made of a private and isolated stack
+     * This abstract data type is made of an isolated stack, represented by the Stack data type, 
      * and an array represented by an hashmap
      */
     typedef struct {
@@ -46,6 +54,12 @@ namespace dc {
     } Register;
 
     enum class radix_base : std::uint8_t { BIN = 2, OCT = 8, DEC = 10, HEX = 16 };
+    /**
+     * @brief Parameters data structure
+     * 
+     * This abstract data type groups together the precision of numeric operations, the input radix
+     * and the output radix
+     */
     typedef struct {
         unsigned int precision;
         unsigned short iradix;

@@ -7,7 +7,8 @@
 
 namespace dc {
     /**
-     * Add @value to the stack
+     * @brief push a value onto the stack
+     * @param value The value to be pushed
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -16,7 +17,7 @@ namespace dc {
     }
 
     /**
-     * Clear the stack
+     * @brief Empty the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -27,9 +28,12 @@ namespace dc {
     }
 
     /**
-     * If @remove is true, pop head of the stack
-     * otherwise return it without popping.
-     * If stack is empty it causes undefined behavior
+     * @brief Pop the head of the stack and return it
+     * if the _remove_ flag is true, otherwise return the 
+     * head of the stack without removing it(i.e. peek it)
+     * 
+     * @param remove Specify whether the operation is disruptive or not
+     * @return The head of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -44,8 +48,8 @@ namespace dc {
     }
 
     /**
-     * Make a copy of head, 2nd and 3rd element
-     * of the stack
+     * @brief Make a copy of the head, the 2nd and the 3rd 
+     * elements of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -64,8 +68,9 @@ namespace dc {
     }
 
     /**
-     * Returns last x of the stack
-     * If stack is empty returns '0' or empty string
+     * @brief Get the _last x_(i.e., the previous head) value of the stack. If stack is empty,
+     * return '0' or empty string
+     * @return _last x_ element of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -74,8 +79,9 @@ namespace dc {
     }
 
     /**
-     * Returns last y of the stack
-     * If stack is empty returns '0' or empty string
+     * @brief Get the _last y_(i.e., the previous second-to-top) value of the stack. If stack is empty,
+     * return '0' or empty string
+     * @return _last y_ element of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -84,8 +90,9 @@ namespace dc {
     }
 
     /**
-     * Returns last z of the stack
-     * If stack is empty returns '0' or empty string
+     * @brief Get the _last z_(i.e., the previous third-to-top) value of the stack. If stack is empty,
+     * return '0' or empty string
+     * @return _last z_ element of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -94,7 +101,9 @@ namespace dc {
     }
 
     /**
-     * Reads stack at @index
+     * @brief Get the _nth_ element of the stack
+     * @param index The index of the element to get
+     * @return The _nth_ value of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -105,7 +114,9 @@ namespace dc {
     }
 
     /**
-     * Reads stack at @index using '[]' syntax
+     * @brief Overload the '[]' operator to match the 'at' function
+     * @param index The index of the element to get
+     * @return The _nth_ value of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -114,7 +125,8 @@ namespace dc {
     }
 
     /**
-     * Returns stack size
+     * @brief Get the current value of the stack
+     * @return The value of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -122,8 +134,9 @@ namespace dc {
         return this->stack.size();
     }
 
-    /*
-     * Returns the summation of all items
+    /**
+     * @brief Get the summation of all items on the stack
+     * @return The sum of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -140,8 +153,9 @@ namespace dc {
         return sum;
     }
 
-    /*
-     * Returns the summation of squares of all items
+    /**
+     * @brief Get the summation of squares of all items
+     * @return The summation of squares of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -160,8 +174,8 @@ namespace dc {
 
 
     /**
-     * Returns true if stack is empty
-     * false otherwise
+     * @brief Return true if stack is empty false otherwise
+     * @return Boolean value
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -170,7 +184,8 @@ namespace dc {
     }
 
     /**
-    * Returns a const reference to the stack
+    * @brief Get a const reference to the stack
+    * @return The const reference to the stack
     */
     template<typename T>
     requires is_num_or_str<T>
