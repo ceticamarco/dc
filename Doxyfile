@@ -1,0 +1,11 @@
+PROJECT_NAME = "dc"
+PROJECT_BRIEF = "Programmable RPN desktop calculator with macro support"
+INPUT = main.cpp src
+RECURSIVE = YES
+OUTPUT_DIRECTORY = docs
+FILE_PATTERNS = *.cpp *.h
+INLINE_SOURCES = NO
+EXTRACT_ALL = YES
+EXTRACT_PRIVATE = YES
+GENERATE_HTML = YES
+GENERATE_LATEX = NO

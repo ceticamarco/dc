@@ -22,11 +22,13 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
 
+#-fsanitize=address -fsanitize=undefined
+
 # Debug build flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} \
     -Wall -Wextra -pedantic -Werror \
     -fstack-protector-strong -D_FORTIFY_SOURCE=2 \
-    -Wformat-security -fsanitize=address -fsanitize=undefined \
+    -Wformat-security \
     -fstack-clash-protection -Wundef -Wshadow -Wpointer-arith \
     -Wcast-align -Wwrite-strings -ftrapv -std=c++20 -g -O2")
 

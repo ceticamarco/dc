@@ -11,6 +11,10 @@
 
 using namespace dc;
 
+/**
+ * @brief helper function of the program
+ */
+
 void helper() {
     std::cout << "RPN desktop calculator with macro support. Usage: \n"
               << "-e, --expression <EXPRESSION> | Evaluate an expression\n"
@@ -18,6 +22,10 @@ void helper() {
               << "-h, --help                    | Show this helper\n"
               << "-V, --version                 | Show version" << std::endl;
 }
+
+/**
+ * @brief print various information about the program
+ */
 
 void version() {
     std::cout << "dc (v" << DC_VER << ", " << DC_HASH << ", " << DC_BUILD ")" << std::endl;

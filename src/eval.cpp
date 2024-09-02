@@ -23,6 +23,11 @@
 #define X_CONTAINS_Y(X, Y) ((Y.find_first_of(X) != std::string::npos))
 #define MAKE_UNIQUE_PTR(CLASS, ARG) [](){ return std::make_unique<CLASS>(ARG); }
 
+/**
+ * @brief Initialize the DC environment
+ * 
+ * Map each operation to the appropriate function
+ */
 void Evaluate::init_environment() {
     // Numerical operations
     this->op_factory.emplace("+", MAKE_UNIQUE_PTR(Mathematics, OPType::ADD));
@@ -93,6 +98,10 @@ void Evaluate::init_environment() {
     this->op_factory.emplace("'", MAKE_UNIQUE_PTR(Macro, OPType::LF));
 }
 
+/**
+ * @brief Evaluate the source code of a DC program
+ * @return Errors of evaluation, if any.
+ */
 std::optional<std::string> Evaluate::eval() {
     // Set up environment
     init_environment();
@@ -131,6 +140,11 @@ std::optional<std::string> Evaluate::eval() {
     return std::nullopt;
 }
 
+/**
+ * @brief Parse numbers in a non decimal numeric system
+ * @param token The value to be parsed in the chosen base
+ * @return Parsing errors, if any
+ */
 std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
     // Discard values that are neither integers neither within "ABCDEF"
     if(!is_num<long>(token) && !X_CONTAINS_Y("ABCDEF", token)) {
@@ -149,6 +163,11 @@ std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
     return std::nullopt;
 }
 
+/**
+ * @brief Parse a DC macro
+ * @param idx The position of the current token to be parsed
+ * @return Syntax errors, if any
+ */
 std::optional<std::string> Evaluate::parse_macro(std::size_t &idx) {
     // A macro is any string surrounded by square brackets
     std::string dc_macro;
@@ -198,6 +217,15 @@ std::optional<std::string> Evaluate::parse_macro(std::size_t &idx) {
     return std::nullopt;
 }
 
+/**
+ * @brief Parse a DC macro command and execute it
+ * 
+ * This method parses a macro command, then it pops two values from the stack.
+ * If the top-of-stack is greater(or less, equal, etc.), execute register;s content
+ * as a macro.
+ * @param token The comparison symbol
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Evaluate::parse_macro_command(std::string token) {
     // A macro command is a comparison symbol(>, <, =, >=, <=, !=)
     // followed by a register name(e.g, >A)
@@ -216,7 +244,7 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string token) {
 
     // Macro commands works as follows
     // Pop two values off the stack and compares them assuming
-    // they are numbers. If top-of-stack is greater,
+    // they are numbers. If top-of-stack is greater(or less, equal, etc.),
     // execute register's content as a macro
     std::optional<std::string> err = std::nullopt;
     if(operation == ">") {
@@ -260,6 +288,11 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string token) {
     return err;
 }
 
+/**
+ * @brief Parse a DC register command.
+ * @param token The command folloed by the register's name
+ * @return Parsing errors, if any
+ */
 std::optional<std::string> Evaluate::parse_register_command(std::string token) {
     // A register command has length equal to 2
     // and starts either with 's', 'l'(i.e. "sX" or "lX")
@@ -372,6 +405,11 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
     return std::nullopt;
 }
 
+/**
+ * @brief Parse DC array commands
+ * @param token The command followed by the array name
+ * @return Parsing errors, if any.
+ */
 std::optional<std::string> Evaluate::parse_array_command(std::string token) {
     // An array command has length equal to 2, starts
     // with either ':'(store) or ';'(read) and ends with

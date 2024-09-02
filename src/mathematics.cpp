@@ -42,6 +42,16 @@ std::optional<std::string> Mathematics::exec(dc::Stack<std::string> &stack, dc::
     return err;
 }
 
+/**
+ * @brief Perform a sum
+ * 
+ * Take two numbers from the stack and sum them together. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -89,6 +99,17 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Perform a subtraction
+ * 
+ * Take two numbers from the stack and subtract the first one popped from the second one popped. 
+ * Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -146,6 +167,17 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Perform a multiplication
+ * 
+ * Take two numbers from the stack and multiply them together. 
+ * Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -193,6 +225,17 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Perform a division
+ * 
+ * Take two numbers from the stack and divide the second one popped from the first one popped.
+ * Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -250,6 +293,17 @@ std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Computes the modulo
+ * 
+ * Take two values from the stack and compute the remainder of the division between the second one popped
+ * and the first one popped. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_mod(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -283,6 +337,17 @@ std::optional<std::string> Mathematics::fn_mod(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the quotient and the remainder
+ * 
+ * Take two values from the stack and divide the second one popped from the first one popped. The quotient is pushed first,
+ * and then the remainder.
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_div_mod(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -318,6 +383,18 @@ std::optional<std::string> Mathematics::fn_div_mod(dc::Stack<std::string> &stack
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the modular exponentiation
+ * 
+ * Take three values from the stack and compute their modular exponentiation using the first value popped as the reduction
+ * modulus, the second one popped as the exponent and the third one popped as the base to be exponentiated. 
+ * This method computes the following modular equivalence: c ≡ b^e (mod n)
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 3) {
@@ -367,6 +444,17 @@ std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the exponentiation
+ * 
+ * Take two values from the stack and compute their exponentiates, using the first value popped as the
+ * exponent and the second popped as the base
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -436,6 +524,16 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the square root
+ * 
+ * Take one value from the stack and compute its square root. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_sqrt(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -478,6 +576,16 @@ std::optional<std::string> Mathematics::fn_sqrt(dc::Stack<std::string> &stack, c
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the sine
+ * 
+ * Take one value from the stack and compute the sine function. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -519,6 +627,16 @@ std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the cosine
+ * 
+ * Take one value from the stack and compute the cosine. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -560,6 +678,16 @@ std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the tangent
+ * 
+ * Take one value from the stack and compute the tangent. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -601,6 +729,16 @@ std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the arcsine
+ * 
+ * Take one value from the stack and compute the arcsine. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -642,6 +780,16 @@ std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, c
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the arcosine
+ * 
+ * Take one value from the stack and compute the arcosine. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -683,6 +831,16 @@ std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, c
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the arctangent
+ * 
+ * Take one value from the stack and compute the arctangent. Push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -724,6 +882,16 @@ std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, c
     return std::nullopt;
 }
 
+/**
+ * @brief Compute the factorial
+ * 
+ * Take one value from the stack and compute the factorial. Pushe the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_fact(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -758,18 +926,46 @@ std::optional<std::string> Mathematics::fn_fact(dc::Stack<std::string> &stack, c
     return std::nullopt;
 }
 
+/**
+ * @brief Push the PI constant
+ * 
+ * Push the PI constant onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ */
 std::optional<std::string> Mathematics::fn_pi(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(trim_digits(std::numbers::pi, parameters.precision));
 
     return std::nullopt;
 }
 
+/**
+ * @brief Push the _e_ constant
+ * 
+ * Push the _e_ constant onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ */
 std::optional<std::string> Mathematics::fn_e(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(trim_digits(std::numbers::e, parameters.precision));
 
     return std::nullopt;
 }
 
+/**
+ * @brief Generate a random number
+ * 
+ * Take two values from the stack and convert and generate a random number using the first value popped as the upper bound and the second one popped
+ * as the lower bound.
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_random(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -804,6 +1000,14 @@ std::optional<std::string> Mathematics::fn_random(dc::Stack<std::string> &stack,
     return std::nullopt;
 }
 
+/**
+ * @brief Convert a number to the nearest integer of lesser magnitude
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_integer(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -827,6 +1031,17 @@ std::optional<std::string> Mathematics::fn_integer(dc::Stack<std::string> &stack
     return std::nullopt;
 }
 
+/**
+ * @brief Insert a complex number to the stack
+ * 
+ * Take two number from the stack and use them to create a new complex number of the form a + ib, where _a_
+ * is the second-to-top of the stack and _b_ is the head of the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_to_complex(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -875,6 +1090,16 @@ std::string Mathematics::trim_digits(double number, unsigned int precision) {
     return s;
 }
 
+/**
+ * @brief Extract the real part of a complex number
+ * 
+ * Take one complex number from the stack and extract its real part
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_get_real(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -902,6 +1127,16 @@ std::optional<std::string> Mathematics::fn_get_real(dc::Stack<std::string> &stac
     return std::nullopt;
 }
 
+/**
+ * @brief Extract the imaginary part of a complex number
+ * 
+ * Take one complex number from the stack and extract its imaginary part
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_get_imaginary(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -929,6 +1164,17 @@ std::optional<std::string> Mathematics::fn_get_imaginary(dc::Stack<std::string> 
     return std::nullopt;
 }
 
+/**
+ * @brief Calculate the common logarithm
+ * 
+ * Take one value from the stack and compute its common(base 10) logarith, then 
+ * push the result back onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Paramaters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Mathematics::fn_log10(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -967,6 +1213,13 @@ std::optional<std::string> Mathematics::fn_log10(dc::Stack<std::string> &stack, 
     return std::nullopt;
 }
 
+/**
+ * @brief Return true if **str** is a complex number, false otherwise
+ * 
+ * @param str A string containing a number
+ * 
+ * @return boolean value
+ */
 bool Mathematics::is_complex(const std::string &str) {
     // Complex numbers are represented on the stack as "(Re,Im)"
     if(str.front() != '(' || str.back() != ')') {

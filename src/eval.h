@@ -9,8 +9,22 @@
 #include "adt.h"
 #include "operation.h"
 
+/**
+ * @brief Class for evaluating DC commands
+ *
+ *  This class parses and evaluates DC commands. It serves as an entry
+ *  point for the whole program.
+ */
+
 class Evaluate {
 public:
+    /**
+     * @brief Constructor of Evaluate.
+     * @param e The expression to be evaluated
+     * @param r An instance of the @ref dc::Register data structure
+     * @param s An instance of the @ref dc::Stack data structure
+     * @param p An instance of the @ref dc::Parameters data structure
+     */
     Evaluate(const std::vector<std::string>& e, std::unordered_map<char, dc::Register> &r,
              dc::Stack<std::string> &s, dc::Parameters &p)
         : expr(e), regs(r), stack(s), parameters(p) {}

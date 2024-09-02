@@ -165,7 +165,7 @@ Pops two values, divides the second one popped from the first one popped. The qu
 
 **^**
 
-Pops two values and computes their exponentiated, using the first value popped as the exponent and the second popped as the base.
+Pops two values and computes their exponentiates, using the first value popped as the exponent and the second popped as the base.
 
 **|**
 
@@ -189,9 +189,9 @@ Pushes pi approximation.
 
 Pushes e approximation.
 
-**@**
+**\@**
 
-Pops two values from the stack and generate a random number, using the first value popped as the upper bound and the second popped as the lower bound.
+Pops two values from the stack and generates a random number, using the first value popped as the upper bound and the second popped as the lower bound.
 The random value is generated using a 64-bit Mersenne Twister pseudorandom number generator and a real uniform distribution. 
 
 **$**

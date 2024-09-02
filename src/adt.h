@@ -33,7 +33,13 @@ namespace dc {
         T last_y{};
         T last_z{};
     };
-
+    
+    /**
+     * @brief the Register data structure
+     * 
+     * This Abstract Data Type is made of a private and isolated stack
+     * and an array represented by an hashmap
+     */
     typedef struct {
         Stack<std::string> stack;
         std::unordered_map<int, std::string> array;

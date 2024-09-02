@@ -37,3 +37,6 @@ dc.1
 
 # CMake folders
 build
+
+# Doxygen output
+docs
