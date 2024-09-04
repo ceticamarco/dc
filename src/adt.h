@@ -6,15 +6,15 @@
 
 namespace dc {
     /**
-     * @brief Concept to constrain a generic type to either integral/float types or to a string
+     * @brief Constrains a generic type to either integral/float types or to a string
      */
     template<typename T>
     concept is_num_or_str = (std::is_arithmetic_v<T> || std::is_same_v<T, std::string>);
 
     /**
-     * @brief Class to represent the DC Stack abstract data type
+     * @brief Stack abstract data type
      * 
-     * This class wraps the C++ std::vector container to create a stack-like data structure
+     * Wraps the C++ std::vector container to create a stack-like data structure
      */
     template<typename T>
     requires is_num_or_str<T>

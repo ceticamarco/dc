@@ -23,6 +23,18 @@ std::optional<std::string> Macro::exec(dc::Stack<std::string> &stack, dc::Parame
     return err;
 }
 
+/**
+ * @brief Executes the head of the stack as a macro
+ * 
+ * Takes one value from the stack and executes it as a macro if it is a string. If the value
+ * is a number, pushes it back onto the stack
+ * 
+ * @param stack An instance of dc::Stack
+ * @param parameters An instance of dc::Parameters
+ * @param regs An instance of the dc::Register
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Macro::fn_execute(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -47,6 +59,19 @@ std::optional<std::string> Macro::fn_execute(dc::Stack<std::string> &stack, dc::
     return std::nullopt;
 }
 
+/**
+ * @brief Executes a comparison operation
+ * 
+ * Takes two values from the stack and compares them. If the top-of-stack
+ * is greater than the second-to-top of the stack, executes the content
+ * of the register specified by Macro::op as a macro
+ * 
+ * @param stack An instance of dc::Stack
+ * @param parameters An instance of dc::Parameters
+ * @param regs An instance of the dc::Register
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check whether the main stack has enough elements
     if(stack.size() < 2) {
@@ -148,6 +173,17 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
     return std::nullopt;
 }
 
+/**
+ * @brief Executes a macro from standard input
+ * 
+ * Reads a string from standard input and executes it as a macro
+ * 
+ * @param stack An instance of dc::Stack
+ * @param parameters An instance of dc::Parameters
+ * @param regs An instance of the dc::Register
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Macro::fn_read_input(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Read user input from stdin
     std::string user_input;
@@ -169,6 +205,18 @@ std::optional<std::string> Macro::fn_read_input(dc::Stack<std::string> &stack, d
     return std::nullopt;
 }
 
+/**
+ * @brief Executes the content of a file
+ * 
+ * Takes a string from the stack and uses it as a filepath, then reads its content
+ * and executes it as a macro
+ * 
+ * @param stack An instance of dc::Stack
+ * @param parameters An instance of dc::Parameters
+ * @param regs An instance of the dc::Register
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Macro::fn_evaluate_file(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check whether the main stack has enough elements
     if(stack.empty()) {

@@ -43,12 +43,12 @@ std::optional<std::string> Mathematics::exec(dc::Stack<std::string> &stack, dc::
 }
 
 /**
- * @brief Perform a sum
+ * @brief Evaluates a sum
  * 
- * Take two numbers from the stack and sum them together. Push the result back onto the stack
+ * Takes two numbers from the stack and sums them together. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -100,13 +100,13 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Perform a subtraction
+ * @brief Evaluates a difference
  * 
- * Take two numbers from the stack and subtract the first one popped from the second one popped. 
- * Push the result back onto the stack
+ * Takes two numbers from the stack and subtracts the first one popped from the second one popped. 
+ * Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -168,13 +168,13 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Perform a multiplication
+ * @brief Evaluates a product
  * 
- * Take two numbers from the stack and multiply them together. 
- * Push the result back onto the stack
+ * Takes two numbers from the stack and multiplies them together. 
+ * Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -226,13 +226,13 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Perform a division
+ * @brief Evaluates a division
  * 
- * Take two numbers from the stack and divide the second one popped from the first one popped.
- * Push the result back onto the stack
+ * Takes two numbers from the stack and divides the second one popped from the first one popped.
+ * Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -294,13 +294,13 @@ std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Computes the modulo
+ * @brief Evaluates the modulo
  * 
- * Take two values from the stack and compute the remainder of the division between the second one popped
- * and the first one popped. Push the result back onto the stack
+ * Takes two values from the stack and computes the remainder of the division between the second one popped
+ * and the first one popped. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -338,13 +338,13 @@ std::optional<std::string> Mathematics::fn_mod(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Compute the quotient and the remainder
+ * @brief Evaluates the quotient and the remainder
  * 
- * Take two values from the stack and divide the second one popped from the first one popped. The quotient is pushed first,
+ * Takes two values from the stack and divides the second one popped from the first one popped. The quotient is pushed first,
  * and then the remainder.
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -384,14 +384,14 @@ std::optional<std::string> Mathematics::fn_div_mod(dc::Stack<std::string> &stack
 }
 
 /**
- * @brief Compute the modular exponentiation
+ * @brief Evaluates a modular exponentiation
  * 
- * Take three values from the stack and compute their modular exponentiation using the first value popped as the reduction
+ * Takes three values from the stack and computes their modular exponentiation using the first value popped as the reduction
  * modulus, the second one popped as the exponent and the third one popped as the base to be exponentiated. 
  * This method computes the following modular equivalence: c ≡ b^e (mod n)
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -445,13 +445,13 @@ std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack
 }
 
 /**
- * @brief Compute the exponentiation
+ * @brief Evaluates the exponentiation
  * 
- * Take two values from the stack and compute their exponentiates, using the first value popped as the
+ * Takes two values from the stack and computes their exponentiates, using the first value popped as the
  * exponent and the second popped as the base
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -525,12 +525,12 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Compute the square root
+ * @brief Evaluates a square root
  * 
- * Take one value from the stack and compute its square root. Push the result back onto the stack
+ * Takes one value from the stack and computes its square root. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -577,12 +577,12 @@ std::optional<std::string> Mathematics::fn_sqrt(dc::Stack<std::string> &stack, c
 }
 
 /**
- * @brief Compute the sine
+ * @brief Evaluates the sine
  * 
- * Take one value from the stack and compute the sine function. Push the result back onto the stack
+ * Takes one value from the stack and computes the sine function. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -628,12 +628,12 @@ std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Compute the cosine
+ * @brief Evaluates the cosine
  * 
- * Take one value from the stack and compute the cosine. Push the result back onto the stack
+ * Takes one value from the stack and computes the cosine. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -679,12 +679,12 @@ std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Compute the tangent
+ * @brief Evaluates the tangent
  * 
- * Take one value from the stack and compute the tangent. Push the result back onto the stack
+ * Takes one value from the stack and computes the tangent. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -730,12 +730,12 @@ std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, co
 }
 
 /**
- * @brief Compute the arcsine
+ * @brief Evaluates the arcsine
  * 
- * Take one value from the stack and compute the arcsine. Push the result back onto the stack
+ * Takes one value from the stack and computes the arcsine. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -781,12 +781,12 @@ std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, c
 }
 
 /**
- * @brief Compute the arcosine
+ * @brief Evaluates the arccosine
  * 
- * Take one value from the stack and compute the arcosine. Push the result back onto the stack
+ * Takes one value from the stack and computes the arccosine. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -832,12 +832,12 @@ std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, c
 }
 
 /**
- * @brief Compute the arctangent
+ * @brief Evaluates the arctangent
  * 
- * Take one value from the stack and compute the arctangent. Push the result back onto the stack
+ * Takes one value from the stack and computes the arctangent. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -883,12 +883,12 @@ std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, c
 }
 
 /**
- * @brief Compute the factorial
+ * @brief Evaluates the factorial
  * 
- * Take one value from the stack and compute the factorial. Pushe the result back onto the stack
+ * Takes one value from the stack and computes the factorial. Pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -927,12 +927,12 @@ std::optional<std::string> Mathematics::fn_fact(dc::Stack<std::string> &stack, c
 }
 
 /**
- * @brief Push the PI constant
+ * @brief Pushes the PI constant
  * 
- * Push the PI constant onto the stack
+ * Pushes the PI constant onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  */
 std::optional<std::string> Mathematics::fn_pi(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
@@ -942,12 +942,12 @@ std::optional<std::string> Mathematics::fn_pi(dc::Stack<std::string> &stack, con
 }
 
 /**
- * @brief Push the _e_ constant
+ * @brief Pushes the _e_ constant
  * 
- * Push the _e_ constant onto the stack
+ * Pushes the _e_ constant onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  */
 std::optional<std::string> Mathematics::fn_e(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
@@ -957,12 +957,12 @@ std::optional<std::string> Mathematics::fn_e(dc::Stack<std::string> &stack, cons
 }
 
 /**
- * @brief Generate a random number
+ * @brief Generates a random number
  * 
- * Take two values from the stack and convert and generate a random number using the first value popped as the upper bound and the second one popped
+ * Takes two values from the stack and generates a random number using the first value popped as the upper bound and the second one popped
  * as the lower bound.
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -1001,10 +1001,10 @@ std::optional<std::string> Mathematics::fn_random(dc::Stack<std::string> &stack,
 }
 
 /**
- * @brief Convert a number to the nearest integer of lesser magnitude
+ * @brief Converts a number to the nearest integer of lesser magnitude
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -1032,13 +1032,13 @@ std::optional<std::string> Mathematics::fn_integer(dc::Stack<std::string> &stack
 }
 
 /**
- * @brief Insert a complex number to the stack
+ * @brief Pushes a complex number to the stack
  * 
- * Take two number from the stack and use them to create a new complex number of the form a + ib, where _a_
+ * Takes two number from the stack and uses them to create a new complex number of the form a + ib, where _a_
  * is the second-to-top of the stack and _b_ is the head of the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -1091,12 +1091,12 @@ std::string Mathematics::trim_digits(double number, unsigned int precision) {
 }
 
 /**
- * @brief Extract the real part of a complex number
+ * @brief Extracts the real part of a complex number
  * 
- * Take one complex number from the stack and extract its real part
+ * Takes one complex number from the stack and extracts its real part
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -1128,12 +1128,12 @@ std::optional<std::string> Mathematics::fn_get_real(dc::Stack<std::string> &stac
 }
 
 /**
- * @brief Extract the imaginary part of a complex number
+ * @brief Extracts the imaginary part of a complex number
  * 
- * Take one complex number from the stack and extract its imaginary part
+ * Takes one complex number from the stack and extracts its imaginary part
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -1165,13 +1165,13 @@ std::optional<std::string> Mathematics::fn_get_imaginary(dc::Stack<std::string> 
 }
 
 /**
- * @brief Calculate the common logarithm
+ * @brief Evaluates the common logarithm
  * 
- * Take one value from the stack and compute its common(base 10) logarith, then 
- * push the result back onto the stack
+ * Takes one value from the stack and computes its common(base 10) logarithm, then 
+ * pushes the result back onto the stack
  * 
  * @param stack An instance of the dc::Stack data structure
- * @param parameters An instance of the dc::Paramaters data structure
+ * @param parameters An instance of the dc::Parameters data structure
  * 
  * @return Evaluation errors, if any
  */
@@ -1214,7 +1214,7 @@ std::optional<std::string> Mathematics::fn_log10(dc::Stack<std::string> &stack, 
 }
 
 /**
- * @brief Return true if **str** is a complex number, false otherwise
+ * @brief Returns true if **str** is a complex number, false otherwise
  * 
  * @param str A string containing a number
  * 

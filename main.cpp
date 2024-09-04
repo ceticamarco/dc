@@ -16,7 +16,7 @@ using namespace dc;
  */
 
 void helper() {
-    std::cout << "RPN desktop calculator with macro support. Usage: \n"
+    std::cout << "RPN desktop calculator and stack-based programming language. Usage:\n"
               << "-e, --expression <EXPRESSION> | Evaluate an expression\n"
               << "-f, --file <FILE>             | Evaluate a file\n"
               << "-h, --help                    | Show this helper\n"
@@ -24,7 +24,7 @@ void helper() {
 }
 
 /**
- * @brief print various information about the program
+ * @brief Prints various information about the program
  */
 
 void version() {

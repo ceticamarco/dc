@@ -1,6 +1,7 @@
 # dc ![](https://github.com/ceticamarco/dc/actions/workflows/dc.yml/badge.svg) [![CodeFactor](https://www.codefactor.io/repository/github/ceticamarco/dc/badge/master)](https://www.codefactor.io/repository/github/ceticamarco/dc/overview/master)
 
-**dc** is an advanced, scientific and programmable RPN desktop calculator with macro support (re)written in C++. 
+**dc** is an advanced, scientific and extensible RPN desktop calculator and a 
+stack-based programming language (re)written in C++. 
 By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions and 
 its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
 
@@ -13,7 +14,7 @@ options(see below).
 
 `dc` can be invoked with the following command line options:
 ```
-RPN desktop calculator with macro support. Usage: 
+RPN desktop calculator and stack-based programming language. Usage: 
 -e, --expression <EXPRESSION> | Evaluate an expression
 -f, --file <FILE>             | Evaluate a file
 -h, --help                    | Show this helper

@@ -6,9 +6,26 @@ enum class StackOP {
     P, PNL, PS
 };
 
+/**
+ * @brief Evaluates stack operations
+ */
 class Stack : public IOperation {
 public:
+    /**
+     * @brief Constructor of Stack
+     * @param op_t The identifier of the operation
+     */
     explicit Stack(const OPType op_t) : op_type(op_t) {}
+
+    /**
+     * @brief Executes the selected operation by switching on the **op_t** identifier
+     * 
+     * @param stack An instance of the dc::Stack data structure
+     * @param parameters An instance of the dc::Parameters data structure
+     * @param regs An instance of the dc::Register data structure
+     * 
+     * @return Runtime errors, if any
+     */
     std::optional<std::string> exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) override;
 
 private:

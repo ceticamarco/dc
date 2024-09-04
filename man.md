@@ -8,11 +8,11 @@ date: April 22, 2024
 
 
 # NAME
-dc − RPN desktop calculator with macro support
+dc − RPN desktop calculator and stack-based programming language
 
 # SYNOPSIS
 ```
-RPN desktop calculator with macro support. Usage: 
+RPN desktop calculator and stack-based programming language. Usage: 
 -e, --expression <EXPRESSION> | Evaluate an expression
 -f, --file <FILE>             | Evaluate a file
 -h, --help                    | Show this helper
@@ -20,8 +20,9 @@ RPN desktop calculator with macro support. Usage:
 ```
 
 # DESCRIPTION
-**dc** is an advanced, scientific and programmable RPN desktop calculator with macro support (re)written in C++.
-By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions and
+**dc** is an advanced, scientific and extensible RPN desktop calculator and a 
+stack-based programming language (re)written in C++. 
+By default, dc supports a wide range of arithmetical, trigonometrical and numeric functions and 
 its capabilities can be further extended by writing user-defined programs using the embedded, turing-complete, macro system.
 
 **dc** uses the reverse polish notation(**RPN**) to parse mathematical expressions. Unlike the infix notation, where operators
@@ -196,7 +197,7 @@ The random value is generated using a 64-bit Mersenne Twister pseudorandom numbe
 
 **$**
 
-Pops one value from the stack and convert it to the nearest integer of lesser magnitute.
+Pops one value from the stack and convert it to the nearest integer of lesser magnitude.
 
 **y**
 
@@ -320,7 +321,7 @@ Computes σ(standard deviation) of the `X` register's stack and pushes that.
 **gL**
 
 Computes linear regression of the `X` register's stack and the `Y` register's stack. Linear regression is a
-simple statistical model to find a relationship beetween a *dependent variable*(`Y`) and an independent 
+simple statistical model to find a relationship between a *dependent variable*(`Y`) and an independent 
 variable(`X`). This function will compute the following linear equation:
 $$
     y = mx + b
@@ -404,17 +405,17 @@ Pops the top-of-stack without printing it
 
 **.x**
 
-Retrieve the value that was last the top-of-stack *before execution of any operation*(stack, macro, arithmetical, etc.).
+Retrieve the value that was last in the top-of-stack *before execution of any operation*(stack, macro, arithmetical, etc.).
 This function can be used to quickly key back numbers when you are recovering from errors, such as typing in the wrong number
 or executing the wrong operation.
 
 **.y**
 
-Retrieve the value that was last the second-to-top of the stack *before execution of any operation*(stack, macro, arithmetical, etc.).
+Retrieve the value that was last in the second-to-top of the stack *before execution of any operation*(stack, macro, arithmetical, etc.).
 
 **.z**
 
-Retrieve the value that was last the third-to-top of the stack *before execution of any operation*(stack, macro, arithmetical, etc.).
+Retrieve the value that was last in the third-to-top of the stack *before execution of any operation*(stack, macro, arithmetical, etc.).
 
 ## Parameters
 **dc** has three parameters that control its operation: the *precision*, the *input radix* and the *output radix*.
@@ -423,10 +424,10 @@ input radix controls the interpretation of numbers typed in(i.e., the input base
 base used to print numbers.
 
 The input and the output radixes are separate parameters which are, by default, equal to 10(i.e., the decimal numeral system); you
-can make them unequal using the `i` and `o` options(see below). The input radix must be within the range 2-16. The ouput radix, instead, 
+can make them unequal using the `i` and `o` options(see below). The input radix must be within the range 2-16. The output radix, instead, 
 can either be equal to 2, 8, 10 or 16. The precision parameter must be zero or greater and cannot be a float value.
 
-The input base affect the behaviour of the whole program, even the parameters commands. For example, the sequence `8 i` will change
+The input base affect the behavior of the whole program, even the parameters commands. For example, the sequence `8 i` will change
 the input base to the octal numeric system and thus every new numeric input after this step will be evaluated in base 8(and not in base 10).
 Therefore, to reset the input base from the octal system to the decimal system, you will need to issue the following sequence: `12 i`.
 
@@ -452,7 +453,7 @@ Pushes the current input radix on the stack
 
 **O**
 
-Pushes the curent output radix on the stack
+Pushes the current output radix on the stack
 
 **K**
 

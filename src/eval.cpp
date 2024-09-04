@@ -24,9 +24,9 @@
 #define MAKE_UNIQUE_PTR(CLASS, ARG) [](){ return std::make_unique<CLASS>(ARG); }
 
 /**
- * @brief Initialize the DC environment
+ * @brief Initializes the DC environment
  * 
- * Map each operation to the appropriate function
+ * Maps each operation to the appropriate function
  */
 void Evaluate::init_environment() {
     // Numerical operations
@@ -99,7 +99,7 @@ void Evaluate::init_environment() {
 }
 
 /**
- * @brief Evaluate the source code of a DC program
+ * @brief Evaluates the source code of a DC program
  * @return Errors of evaluation, if any.
  */
 std::optional<std::string> Evaluate::eval() {
@@ -141,7 +141,7 @@ std::optional<std::string> Evaluate::eval() {
 }
 
 /**
- * @brief Parse numbers in a non decimal numeric system
+ * @brief Parses numbers in a non decimal numeric system
  * @param token The value to be parsed in the chosen base
  * @return Parsing errors, if any
  */
@@ -164,7 +164,7 @@ std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
 }
 
 /**
- * @brief Parse a DC macro
+ * @brief Parses a DC macro
  * @param idx The position of the current token to be parsed
  * @return Syntax errors, if any
  */
@@ -218,7 +218,7 @@ std::optional<std::string> Evaluate::parse_macro(std::size_t &idx) {
 }
 
 /**
- * @brief Parse a DC macro command and execute it
+ * @brief Parses a DC macro command and execute it
  * 
  * This method parses a macro command, then it pops two values from the stack.
  * If the top-of-stack is greater(or less, equal, etc.), execute register;s content
@@ -289,8 +289,8 @@ std::optional<std::string> Evaluate::parse_macro_command(std::string token) {
 }
 
 /**
- * @brief Parse a DC register command.
- * @param token The command folloed by the register's name
+ * @brief Parses a DC register command.
+ * @param token The command followed by the register's name
  * @return Parsing errors, if any
  */
 std::optional<std::string> Evaluate::parse_register_command(std::string token) {
@@ -406,7 +406,7 @@ std::optional<std::string> Evaluate::parse_register_command(std::string token) {
 }
 
 /**
- * @brief Parse DC array commands
+ * @brief Parses DC array commands
  * @param token The command followed by the array name
  * @return Parsing errors, if any.
  */

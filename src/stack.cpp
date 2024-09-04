@@ -48,6 +48,15 @@ std::optional<std::string> Stack::exec(dc::Stack<std::string> &stack, dc::Parame
     return err;
 }
 
+/**
+ * @brief Prints the head of the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * @param op The type of print operation(with newline, without newline and with space)
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Parameters  &parameters, const StackOP op) {
     // Check if the stack is empty
     if(stack.empty()) {
@@ -92,6 +101,15 @@ std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Pa
     return std::nullopt;
 }
 
+/**
+ * @brief Removes top of the stack
+ * 
+ * Removes the head of the stack without printing it
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_pop_head(dc::Stack<std::string> &stack) {
     // Check if stack is empty
     if(stack.empty()) {
@@ -104,6 +122,13 @@ std::optional<std::string> Stack::fn_pop_head(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
+/**
+ * @brief Swaps the top two values of the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_swap_xy(dc::Stack<std::string> &stack) {
     // Check if the stack has enough elements
     if(stack.size() < 2) {
@@ -121,6 +146,13 @@ std::optional<std::string> Stack::fn_swap_xy(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
+/**
+ * @brief Duplicates the head of the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_dup_head(dc::Stack<std::string> &stack) {
     // Check if the stack has enough elements
     if(stack.empty()) {
@@ -133,6 +165,14 @@ std::optional<std::string> Stack::fn_dup_head(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
+/**
+ * @brief Prints the entire contents of the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_print_stack(const dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     const auto& const_ref = stack.get_ref();
 
@@ -170,6 +210,17 @@ std::optional<std::string> Stack::fn_print_stack(const dc::Stack<std::string> &s
     return std::nullopt;
 }
 
+/**
+ * @brief Computes the length of the head of the stack
+ * 
+ * Takes one value off the stack and computes the number of 
+ * digits it has(or the number of characters, if it is a string)
+ * and pushes that number
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_head_size(dc::Stack<std::string> &stack) {
     // Check if the stack has enough elements
     if(stack.empty()) {
@@ -204,12 +255,29 @@ std::optional<std::string> Stack::fn_head_size(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
+/**
+ * @brief Calculates the size of the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_stack_size(dc::Stack<std::string> &stack) {
     stack.push(std::to_string(stack.size()));
 
     return std::nullopt;
 }
 
+/**
+ * @brief Sets precision for numeric function
+ * 
+ * Takes one value from the stack and uses it to set the precision
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_set_precision(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -231,12 +299,32 @@ std::optional<std::string> Stack::fn_set_precision(dc::Stack<std::string> &stack
     return std::nullopt;
 }
 
+/**
+ * @brief Gets the precision
+ * 
+ * Pushes the current precision parameter onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_get_precision(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(std::to_string(parameters.precision));
 
     return std::nullopt;
 }
 
+/**
+ * @brief Sets output radix
+ * 
+ * Takes one value from the stack and uses it to set the output radix
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_set_oradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -263,12 +351,32 @@ std::optional<std::string> Stack::fn_set_oradix(dc::Stack<std::string> &stack, d
     return std::nullopt;
 }
 
+/**
+ * @brief Gets output radix
+ * 
+ * Pushes the current output radix parameter onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_get_oradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     stack.push(std::to_string(static_cast<int>(parameters.oradix)));
 
     return std::nullopt;
 }
 
+/**
+ * @brief Sets input radix
+ * 
+ * Takes one value from the stack and uses it to set the input radix
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_set_iradix(dc::Stack<std::string> &stack, dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -290,12 +398,31 @@ std::optional<std::string> Stack::fn_set_iradix(dc::Stack<std::string> &stack, d
     return std::nullopt;
 }
 
+/**
+ * @brief Gets input radix
+ * 
+ * Pushes the current input radix parameter onto the stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_get_iradix(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     stack.push(std::to_string(parameters.iradix));
 
     return std::nullopt;
 }
 
+/**
+ * @brief Gets last value of top of the stack
+ * 
+ * Retrieves the values that was last top-of-stack before execution of any operation.
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_get_lastx(dc::Stack<std::string> &stack) {
     // Retrieve last x from the stack and push it back
     auto last_x = stack.get_last_x();
@@ -304,6 +431,15 @@ std::optional<std::string> Stack::fn_get_lastx(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
+/**
+ * @brief Gets last value of second to top of the stack
+ * 
+ * Retrieves the values that was last second-of-stack before execution of any operation.
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_get_lasty(dc::Stack<std::string> &stack) {
     // Retrieve last y from the stack and push it back
     auto last_y = stack.get_last_y();
@@ -312,6 +448,15 @@ std::optional<std::string> Stack::fn_get_lasty(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
+/**
+ * @brief Gets last value of third to top of the stack
+ * 
+ * Retrieves the values that was last third-of-stack before execution of any operation.
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Stack::fn_get_lastz(dc::Stack<std::string> &stack) {
     // Retrieve last y from the stack and push it back
     auto last_z = stack.get_last_z();
@@ -320,6 +465,16 @@ std::optional<std::string> Stack::fn_get_lastz(dc::Stack<std::string> &stack) {
     return std::nullopt;
 }
 
+/**
+ * @brief Pretty prints a binary number
+ * 
+ * Formats a binary number by removing insignificant digits
+ * and by appending a 'b' character at the end of the number
+ * 
+ * @param s A string representing the binary number
+ * 
+ * @return A string containing the formatted binary number
+ */
 std::string Stack::bin_prettify(std::string s) {
     std::string result;
 

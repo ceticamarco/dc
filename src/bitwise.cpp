@@ -22,6 +22,17 @@ std::optional<std::string> Bitwise::exec(dc::Stack<std::string> &stack, dc::Para
     return err;
 }
 
+/**
+ * @brief Evaluates a bitwise AND
+ * 
+ * Takes two values from the stack and computes bitwise AND between the second one popped
+ * and the first one popped
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Bitwise::fn_bitwise_and(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -51,6 +62,17 @@ std::optional<std::string> Bitwise::fn_bitwise_and(dc::Stack<std::string> &stack
     return std::nullopt;
 }
 
+/**
+ * @brief Evaluates a bitwise OR
+ * 
+ * Takes two values from the stack and computes bitwise OR between the second one popped
+ * and the first one popped
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Bitwise::fn_bitwise_or(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -79,6 +101,17 @@ std::optional<std::string> Bitwise::fn_bitwise_or(dc::Stack<std::string> &stack,
 
     return std::nullopt;
 }
+
+/**
+ * @brief Evaluates a bitwise NOT
+ * 
+ * Takes one value from the stack and computes bitwise NOT(one's complement)
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Bitwise::fn_bitwise_not(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.empty()) {
@@ -101,6 +134,18 @@ std::optional<std::string> Bitwise::fn_bitwise_not(dc::Stack<std::string> &stack
 
     return std::nullopt;
 }
+
+/**
+ * @brief Evaluates a bitwise XOR
+ * 
+ * Takes two values from the stack and computes bitwise XOR between the second one popped
+ * and the first one popped
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Bitwise::fn_bitwise_xor(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -129,6 +174,18 @@ std::optional<std::string> Bitwise::fn_bitwise_xor(dc::Stack<std::string> &stack
 
     return std::nullopt;
 }
+
+/**
+ * @brief Shifts a value to the left
+ * 
+ * Takes two values from the stack and shifts to the left the second one popped
+ * by _n_ values where _n_ is the first one popped
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Bitwise::fn_bitwise_lshift(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -158,6 +215,17 @@ std::optional<std::string> Bitwise::fn_bitwise_lshift(dc::Stack<std::string> &st
     return std::nullopt;
 }
 
+/**
+ * @brief Shifts a value to the right
+ * 
+ * Takes two values from the stack and shifts to the right the second one popped
+ * by _n_ values where _n_ is the first one popped
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Bitwise::fn_bitwise_rshift(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {

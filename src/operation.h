@@ -2,9 +2,21 @@
 #include <optional>
 
 #include "adt.h"
-
+/**
+ * @brief This protocol establishes a set of methods to which every DC operation(represented by a class) must adhere.
+ * 
+ */
 class IOperation {
 public:
+    /**
+     * @brief Executes a DC operation
+     * 
+     * @param stack An instance of the dc::Stack data structure
+     * @param parameters An instance of the dc::Parameters data structure
+     * @param regs An instance of the dc::Register data structure
+     * 
+     * @return Runtime errors, if any
+     */
     virtual std::optional<std::string> exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) = 0;
     virtual ~IOperation() = default;
 };

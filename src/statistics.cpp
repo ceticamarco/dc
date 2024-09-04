@@ -22,6 +22,14 @@ std::optional<std::string> Statistics::exec(dc::Stack<std::string> &stack, dc::P
     return err;
 }
 
+/**
+ * @brief Computes a permutation
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Statistics::fn_perm(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -41,6 +49,21 @@ std::optional<std::string> Statistics::fn_perm(dc::Stack<std::string> &stack, co
         auto x = std::stoll(stack.pop(true));
         auto y = std::stoll(stack.pop(true));
 
+        // Define a factorial lambda function
+        auto factorial = [](long long int val) -> std::optional<unsigned long long int> {
+            if(val < 0) {
+                return std::nullopt;
+            }
+
+            unsigned long long int res = 1;
+
+            for(long long i = 2; i <= val; i++) {
+                res *= i;
+            }
+
+            return res;
+        };
+
         // Compute factorial of numerator and denominator
         // and check if result is a non-negative integer
         auto numerator_opt = factorial(y);
@@ -58,6 +81,14 @@ std::optional<std::string> Statistics::fn_perm(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Computes a combination
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Statistics::fn_comb(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
     // Check if stack has enough elements
     if(stack.size() < 2) {
@@ -97,6 +128,15 @@ std::optional<std::string> Statistics::fn_comb(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Sums up all elements of the 'X' register
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * @param regs An instance of the dc::Register data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Statistics::fn_sum(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check whether 'x' register exists
     if(regs.find('X') == regs.end()) {
@@ -108,13 +148,22 @@ std::optional<std::string> Statistics::fn_sum(dc::Stack<std::string> &stack, con
         return "The stack of register 'X' is empty";
     }
 
-    // Othewise retrieve summation of register's stack
+    // Otherwise retrieve summation of register's stack
     auto summation = regs['X'].stack.summation();
     stack.push(trim_digits(summation, parameters.precision));
 
     return std::nullopt;
 }
 
+/**
+ * @brief Sums up the squares of all elements of the 'X' register
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * @param regs An instance of the dc::Register data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Statistics::fn_sum_squared(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check whether 'x' register exists
     if(regs.find('X') == regs.end()) {
@@ -133,6 +182,15 @@ std::optional<std::string> Statistics::fn_sum_squared(dc::Stack<std::string> &st
     return std::nullopt;
 }
 
+/**
+ * @brief Computes the mean of the 'X" register's stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * @param regs An instance of the dc::Register data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Statistics::fn_mean(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check whether 'x' register exists
     if(regs.find('X') == regs.end()) {
@@ -153,6 +211,15 @@ std::optional<std::string> Statistics::fn_mean(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Computes the standard deviation of the 'X' register's stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * @param regs An instance of the dc::Register data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Statistics::fn_sdev(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     // Check whether 'x' register exists
     if(regs.find('X') == regs.end()) {
@@ -186,6 +253,16 @@ std::optional<std::string> Statistics::fn_sdev(dc::Stack<std::string> &stack, co
     return std::nullopt;
 }
 
+/**
+ * @brief Computes the linear regression of the 'X' register's stack
+ * and the 'Y' register's stack
+ * 
+ * @param stack An instance of the dc::Stack data structure
+ * @param parameters An instance of the dc::Parameters data structure
+ * @param regs An instance of the dc::Register data structure
+ * 
+ * @return Evaluation errors, if any
+ */
 std::optional<std::string> Statistics::fn_lreg(dc::Stack<std::string> &stack, const dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
      // Check whether 'x' register exists
     if(regs.find('X') == regs.end()) {
@@ -245,20 +322,6 @@ std::optional<std::string> Statistics::fn_lreg(dc::Stack<std::string> &stack, co
     stack.push(trim_digits(intercept, parameters.precision));
 
     return std::nullopt;
-}
-
-std::optional<unsigned long long> Statistics::factorial(const long long n) {
-    if(n < 0) {
-        return std::nullopt;
-    }
-
-    unsigned long long factorial = 1;
-
-    for(long long i = 2; i <= n; i++) {
-        factorial *= i;
-    }
-
-    return factorial;
 }
 
 std::string Statistics::trim_digits(double number, unsigned int precision) {

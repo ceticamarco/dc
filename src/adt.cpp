@@ -7,7 +7,7 @@
 
 namespace dc {
     /**
-     * @brief push a value onto the stack
+     * @brief Pushes a value onto the stack
      * @param value The value to be pushed
      */
     template<typename T>
@@ -17,7 +17,7 @@ namespace dc {
     }
 
     /**
-     * @brief Empty the stack
+     * @brief Empties the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -28,9 +28,9 @@ namespace dc {
     }
 
     /**
-     * @brief Pop the head of the stack and return it
-     * if the _remove_ flag is true, otherwise return the 
-     * head of the stack without removing it(i.e. peek it)
+     * @brief Pops the head of the stack and returns it
+     * if the _remove_ flag is true, otherwise returns the 
+     * head of the stack without removing it(i.e. peek)
      * 
      * @param remove Specify whether the operation is disruptive or not
      * @return The head of the stack
@@ -48,7 +48,7 @@ namespace dc {
     }
 
     /**
-     * @brief Make a copy of the head, the 2nd and the 3rd 
+     * @brief Copies the head, the 2nd and the 3rd 
      * elements of the stack
      */
     template<typename T>
@@ -68,8 +68,8 @@ namespace dc {
     }
 
     /**
-     * @brief Get the _last x_(i.e., the previous head) value of the stack. If stack is empty,
-     * return '0' or empty string
+     * @brief Gets the _last x_(i.e., the previous head) value of the stack. If stack is empty,
+     * returns '0' or empty string
      * @return _last x_ element of the stack
      */
     template<typename T>
@@ -79,8 +79,8 @@ namespace dc {
     }
 
     /**
-     * @brief Get the _last y_(i.e., the previous second-to-top) value of the stack. If stack is empty,
-     * return '0' or empty string
+     * @brief Gets the _last y_(i.e., the previous second-to-top) value of the stack. If stack is empty,
+     * returns '0' or empty string
      * @return _last y_ element of the stack
      */
     template<typename T>
@@ -90,8 +90,8 @@ namespace dc {
     }
 
     /**
-     * @brief Get the _last z_(i.e., the previous third-to-top) value of the stack. If stack is empty,
-     * return '0' or empty string
+     * @brief Gets the _last z_(i.e., the previous third-to-top) value of the stack. If stack is empty,
+     * returns '0' or empty string
      * @return _last z_ element of the stack
      */
     template<typename T>
@@ -101,7 +101,7 @@ namespace dc {
     }
 
     /**
-     * @brief Get the _nth_ element of the stack
+     * @brief Gets the _nth_ element of the stack
      * @param index The index of the element to get
      * @return The _nth_ value of the stack
      */
@@ -114,7 +114,7 @@ namespace dc {
     }
 
     /**
-     * @brief Overload the '[]' operator to match the 'at' function
+     * @brief Overloads the '[]' operator to match the Stack::at function
      * @param index The index of the element to get
      * @return The _nth_ value of the stack
      */
@@ -125,8 +125,8 @@ namespace dc {
     }
 
     /**
-     * @brief Get the current value of the stack
-     * @return The value of the stack
+     * @brief Gets the size of the stack
+     * @return The size of the stack
      */
     template<typename T>
     requires is_num_or_str<T>
@@ -135,7 +135,7 @@ namespace dc {
     }
 
     /**
-     * @brief Get the summation of all items on the stack
+     * @brief Gets the summation of all items on the stack
      * @return The sum of the stack
      */
     template<typename T>
@@ -154,7 +154,7 @@ namespace dc {
     }
 
     /**
-     * @brief Get the summation of squares of all items
+     * @brief Gets the sum of the squares of the stack
      * @return The summation of squares of the stack
      */
     template<typename T>
@@ -174,7 +174,7 @@ namespace dc {
 
 
     /**
-     * @brief Return true if stack is empty false otherwise
+     * @brief Returns true if stack is empty false otherwise
      * @return Boolean value
      */
     template<typename T>
@@ -184,7 +184,7 @@ namespace dc {
     }
 
     /**
-    * @brief Get a const reference to the stack
+    * @brief Gets a const reference to the stack
     * @return The const reference to the stack
     */
     template<typename T>
