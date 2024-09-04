@@ -100,6 +100,16 @@ program's features. To run them, issue the following command:
 $> ./utest.sh tests
 ```
 
+## Documentation
+General purpose documentation about the program can be found at the [online manual page](man.md) or
+at the UNIX `dc(1)` man page. If you want to understand the source code of the program, you can read the
+technical documentation by issuing the following commands:
+```sh
+$> doxygen Doxyfile
+$> open docs/html/index.html
+```
+The technical manual will appear on your browser.
+
 ## Usage
 dc can be used in three different ways:
 1. From the interactive REPL(run it without any argument);  
