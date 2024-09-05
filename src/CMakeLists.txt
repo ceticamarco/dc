@@ -9,6 +9,7 @@ set(HEADER_FILES
         operation.h
         stack.h
         adt.h
+        num_utils.h
 )
 
 set(SOURCE_FILES
@@ -19,6 +20,7 @@ set(SOURCE_FILES
         bitwise.cpp
         stack.cpp
         adt.cpp
+        num_utils.cpp
 )
 
 add_library(src STATIC ${SOURCE_FILES} ${HEADER_FILES})

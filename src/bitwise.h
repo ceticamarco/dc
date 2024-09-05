@@ -31,7 +31,6 @@ private:
     std::optional<std::string> fn_bitwise_xor(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
     std::optional<std::string> fn_bitwise_lshift(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
     std::optional<std::string> fn_bitwise_rshift(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
-    std::string trim_digits(double number, unsigned int precision);
 
     OPType op_type;
 };

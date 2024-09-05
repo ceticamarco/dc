@@ -5,7 +5,7 @@
 
 #include "adt.cpp"
 #include "stack.h"
-#include "is_num.h"
+#include "num_utils.h"
 
 std::optional<std::string> Stack::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, __attribute__((unused)) std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
@@ -64,7 +64,7 @@ std::optional<std::string> Stack::fn_print(dc::Stack<std::string> &stack, dc::Pa
     }
 
     // If the output radix is non-decimal, check if top of the stack is an integer
-    if(static_cast<int>(parameters.oradix) != 10 && !is_num<int>(stack.pop(false))) {
+    if(static_cast<int>(parameters.oradix) != 10 && !NumericUtils::is_numeric<int>(stack.pop(false))) {
         return "This output radix requires integer values";
     }
 
@@ -231,7 +231,7 @@ std::optional<std::string> Stack::fn_head_size(dc::Stack<std::string> &stack) {
     auto head = stack.pop(false);
 
     // If it's an integer, count its digits
-    if(is_num<int>(head)) {
+    if(NumericUtils::is_numeric<int>(head)) {
         auto num = std::stoi(head);
 
         stack.copy_xyz();
@@ -286,7 +286,7 @@ std::optional<std::string> Stack::fn_set_precision(dc::Stack<std::string> &stack
 
     // Check whether head is a non-negative number
     auto head = stack.pop(false);
-    if(!is_num<int>(head) || std::stoi(head) < 0) {
+    if(!NumericUtils::is_numeric<int>(head) || std::stoi(head) < 0) {
         return "Precision must be a non-negative number";
     }
 
@@ -334,7 +334,7 @@ std::optional<std::string> Stack::fn_set_oradix(dc::Stack<std::string> &stack, d
     // Check whether the head is a number
     stack.copy_xyz();
     auto head = stack.pop(true);
-    if(!is_num<int>(head)) {
+    if(!NumericUtils::is_numeric<int>(head)) {
         return "'o' requires numeric values only";
     }
 
@@ -385,7 +385,7 @@ std::optional<std::string> Stack::fn_set_iradix(dc::Stack<std::string> &stack, d
 
     // Check whether head is a number within the range 2-16
     auto head = stack.pop(false);
-    if(!is_num<double>(head) || std::stoi(head) < 2 || std::stoi(head) > 16) {
+    if(!NumericUtils::is_numeric<double>(head) || std::stoi(head) < 2 || std::stoi(head) > 16) {
         return "Input base must be a number within the range 2-16(inclusive)";
     }
 

@@ -3,7 +3,7 @@
 
 #include "adt.cpp"
 #include "statistics.h"
-#include "is_num.h"
+#include "num_utils.h"
 
 std::optional<std::string> Statistics::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
@@ -40,8 +40,8 @@ std::optional<std::string> Statistics::fn_perm(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto head = stack[len];
     auto second = stack[len-1];
-    auto is_head_num = is_num<long long>(head);
-    auto is_second_num = is_num<long long>(second);
+    auto is_head_num = NumericUtils::is_numeric<long long>(head);
+    auto is_second_num = NumericUtils::is_numeric<long long>(second);
 
     // Check whether both entries are integers
     if(is_head_num && is_second_num) {
@@ -73,7 +73,7 @@ std::optional<std::string> Statistics::fn_perm(dc::Stack<std::string> &stack, co
         }
 
         unsigned long long permutation = numerator_opt.value() / denominator_opt.value();
-        stack.push(trim_digits(static_cast<double>(permutation), parameters.precision));
+        stack.push(NumericUtils::format_number(static_cast<double>(permutation), parameters.precision));
     } else {
         return "'gP' requires integer values";
     }
@@ -99,8 +99,8 @@ std::optional<std::string> Statistics::fn_comb(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto head = stack[len];
     auto second = stack[len-1];
-    auto is_head_num = is_num<long long>(head);
-    auto is_second_num = is_num<long long>(second);
+    auto is_head_num = NumericUtils::is_numeric<long long>(head);
+    auto is_second_num = NumericUtils::is_numeric<long long>(second);
 
     // Check whether both entries are integers
     if(is_head_num && is_second_num) {
@@ -120,7 +120,7 @@ std::optional<std::string> Statistics::fn_comb(dc::Stack<std::string> &stack, co
             combination /= i;
         }
 
-        stack.push(trim_digits(static_cast<double>(combination), parameters.precision));
+        stack.push(NumericUtils::format_number(static_cast<double>(combination), parameters.precision));
     } else {
         return "'gC' requires integer values";
     }
@@ -150,7 +150,7 @@ std::optional<std::string> Statistics::fn_sum(dc::Stack<std::string> &stack, con
 
     // Otherwise retrieve summation of register's stack
     auto summation = regs['X'].stack.summation();
-    stack.push(trim_digits(summation, parameters.precision));
+    stack.push(NumericUtils::format_number(summation, parameters.precision));
 
     return std::nullopt;
 }
@@ -175,9 +175,9 @@ std::optional<std::string> Statistics::fn_sum_squared(dc::Stack<std::string> &st
         return "The stack of register 'X' is empty";
     }
 
-    // Othewise retrieve summation of squares of register's stack
+    // Otherwise retrieve summation of squares of register's stack
     auto summation_squared = regs['X'].stack.summation_squared();
-    stack.push(trim_digits(summation_squared, parameters.precision));
+    stack.push(NumericUtils::format_number(summation_squared, parameters.precision));
 
     return std::nullopt;
 }
@@ -206,7 +206,7 @@ std::optional<std::string> Statistics::fn_mean(dc::Stack<std::string> &stack, co
     auto summation = regs['X'].stack.summation();
     auto size = regs['X'].stack.size();
     auto mean = summation / static_cast<double>(size);
-    stack.push(trim_digits(mean, parameters.precision));
+    stack.push(NumericUtils::format_number(mean, parameters.precision));
 
     return std::nullopt;
 }
@@ -249,7 +249,7 @@ std::optional<std::string> Statistics::fn_sdev(dc::Stack<std::string> &stack, co
     // Finally, compute the square root of the variance(standard deviation)
     auto s_dev = sqrt(variance);
 
-    stack.push(trim_digits(s_dev, parameters.precision));
+    stack.push(NumericUtils::format_number(s_dev, parameters.precision));
     return std::nullopt;
 }
 
@@ -318,22 +318,8 @@ std::optional<std::string> Statistics::fn_lreg(dc::Stack<std::string> &stack, co
     auto intercept = (y_sum - (slope * x_sum)) / static_cast<double>(count);
 
     // Finally push the slope and the intercept(in this order) into the main stack
-    stack.push(trim_digits(slope, parameters.precision));
-    stack.push(trim_digits(intercept, parameters.precision));
+    stack.push(NumericUtils::format_number(slope, parameters.precision));
+    stack.push(NumericUtils::format_number(intercept, parameters.precision));
 
     return std::nullopt;
-}
-
-std::string Statistics::trim_digits(double number, unsigned int precision) {
-    std::ostringstream oss;
-
-    // Preserve non-zero decimal numbers even when precision is zero
-    if(precision == 0 && std::fmod(number, 1.0) != 0.0) {
-        precision = 2;
-    }
-
-    oss << std::fixed << std::setprecision(static_cast<int>(precision)) << number;
-    std::string s = oss.str();
-
-    return s;
 }

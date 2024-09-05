@@ -7,7 +7,7 @@
 #include "adt.cpp"
 #include "eval.h"
 #include "macro.h"
-#include "is_num.h"
+#include "num_utils.h"
 
 std::optional<std::string> Macro::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
@@ -44,7 +44,7 @@ std::optional<std::string> Macro::fn_execute(dc::Stack<std::string> &stack, dc::
     // If the head of the stack is a string
     // pop it and execute it as a macro
     auto head = stack.pop(false);
-    if(!is_num<double>(head)) {
+    if(!NumericUtils::is_numeric<double>(head)) {
         stack.copy_xyz();
         stack.pop(true);
         std::vector<std::string> tokens = split(head);
@@ -90,7 +90,7 @@ std::optional<std::string> Macro::fn_evaluate_macro(dc::Stack<std::string> &stac
     auto dc_macro = regs[this->dc_register].stack.pop(false);
 
     // Check if macro exists and if top two elements of main stack are numbers
-    if(!dc_macro.empty() && is_num<double>(head_str) && is_num<double>(second_str)) {
+    if(!dc_macro.empty() && NumericUtils::is_numeric<double>(head_str) && NumericUtils::is_numeric<double>(second_str)) {
         auto head = std::stod(head_str);
         auto second = std::stod(second_str);
 
@@ -225,7 +225,7 @@ std::optional<std::string> Macro::fn_evaluate_file(dc::Stack<std::string> &stack
 
     // If the head of the stack is a string,
     auto file_name = stack.pop(false);
-    if(!is_num<double>(file_name)) {
+    if(!NumericUtils::is_numeric<double>(file_name)) {
         // Pop it from the stack
         stack.copy_xyz();
         stack.pop(true);

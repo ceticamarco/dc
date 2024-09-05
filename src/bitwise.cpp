@@ -1,10 +1,9 @@
 #include <bitset>
 #include <iomanip>
-#include <cmath>
 
 #include "adt.cpp"
 #include "bitwise.h"
-#include "is_num.h"
+#include "num_utils.h"
 
 std::optional<std::string> Bitwise::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, __attribute__((unused))  std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
@@ -43,8 +42,8 @@ std::optional<std::string> Bitwise::fn_bitwise_and(dc::Stack<std::string> &stack
     auto len = stack.size() - 1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -54,7 +53,7 @@ std::optional<std::string> Bitwise::fn_bitwise_and(dc::Stack<std::string> &stack
 
         // Compute bitwise AND and push back the result
         std::bitset<64> result = (lhs & rhs);
-        stack.push(trim_digits(result.to_ullong(), parameters.precision));
+        stack.push(NumericUtils::format_number(result.to_ullong(), parameters.precision));
     } else {
         return "'{' requires numeric values";
     }
@@ -83,8 +82,8 @@ std::optional<std::string> Bitwise::fn_bitwise_or(dc::Stack<std::string> &stack,
     auto len = stack.size() - 1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -94,7 +93,7 @@ std::optional<std::string> Bitwise::fn_bitwise_or(dc::Stack<std::string> &stack,
 
         // Compute bitwise AND and push back the result
         std::bitset<64> result = (lhs | rhs);
-        stack.push(trim_digits(result.to_ullong(), parameters.precision));
+        stack.push(NumericUtils::format_number(result.to_ullong(), parameters.precision));
     } else {
         return "'}' requires numeric values";
     }
@@ -120,14 +119,14 @@ std::optional<std::string> Bitwise::fn_bitwise_not(dc::Stack<std::string> &stack
 
     // Extract one entry from the stack
     auto x = stack.pop(false);
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
 
     // Check whether popped value is a number
     if(is_x_num) {
         stack.copy_xyz();
         // Compute bitwise NOT 
         int result = ~std::stoi(stack.pop(true));
-        stack.push(trim_digits(result, parameters.precision));
+        stack.push(NumericUtils::format_number(result, parameters.precision));
     } else {
         return "'l' requires numeric values";
     }
@@ -156,8 +155,8 @@ std::optional<std::string> Bitwise::fn_bitwise_xor(dc::Stack<std::string> &stack
     auto len = stack.size() - 1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -167,7 +166,7 @@ std::optional<std::string> Bitwise::fn_bitwise_xor(dc::Stack<std::string> &stack
 
         // Compute bitwise AND and push back the result
         std::bitset<64> result = (lhs ^ rhs);
-        stack.push(trim_digits(result.to_ullong(), parameters.precision));
+        stack.push(NumericUtils::format_number(result.to_ullong(), parameters.precision));
     } else {
         return "'L' requires numeric values";
     }
@@ -196,8 +195,8 @@ std::optional<std::string> Bitwise::fn_bitwise_lshift(dc::Stack<std::string> &st
     auto len = stack.size() - 1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -207,7 +206,7 @@ std::optional<std::string> Bitwise::fn_bitwise_lshift(dc::Stack<std::string> &st
 
         // Compute bitwise left shift and push back the result
         std::bitset<64> result = (value << pos.to_ulong());
-        stack.push(trim_digits(result.to_ullong(), parameters.precision));
+        stack.push(NumericUtils::format_number(result.to_ullong(), parameters.precision));
     } else {
         return "'m' requires numeric values";
     }
@@ -236,8 +235,8 @@ std::optional<std::string> Bitwise::fn_bitwise_rshift(dc::Stack<std::string> &st
     auto len = stack.size() - 1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -247,24 +246,10 @@ std::optional<std::string> Bitwise::fn_bitwise_rshift(dc::Stack<std::string> &st
 
         // Compute bitwise right shift and push back the result
         std::bitset<64> result = (value >> pos.to_ulong());
-        stack.push(trim_digits(result.to_ullong(), parameters.precision));
+        stack.push(NumericUtils::format_number(result.to_ullong(), parameters.precision));
     } else {
         return "'M' requires numeric values";
     }
 
     return std::nullopt;
-}
-
-std::string Bitwise::trim_digits(double number, unsigned int precision) {
-    std::ostringstream oss;
-
-    // Preserve non-zero decimal numbers even when precision is zero
-    if(precision == 0 && std::fmod(number, 1.0) != 0.0) {
-        precision = 2;
-    }
-
-    oss << std::fixed << std::setprecision(static_cast<int>(precision)) << number;
-    std::string s = oss.str();
-
-    return s;
 }

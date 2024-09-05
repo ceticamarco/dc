@@ -6,7 +6,7 @@
 
 #include "adt.cpp"
 #include "mathematics.h"
-#include "is_num.h"
+#include "num_utils.h"
 
 std::optional<std::string> Mathematics::exec(dc::Stack<std::string> &stack, dc::Parameters &parameters, __attribute__((unused))  std::unordered_map<char, dc::Register> &regs) {
     std::optional<std::string> err = std::nullopt;
@@ -62,8 +62,8 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
     auto is_x_cmplx = is_complex(x);
     auto is_y_cmplx = is_complex(y);
 
@@ -74,7 +74,7 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
         auto lhs = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits((lhs + rhs), parameters.precision));
+        stack.push(NumericUtils::format_number((lhs + rhs), parameters.precision));
     } else if(is_x_cmplx || is_y_cmplx) {
         stack.copy_xyz();
         // Convert complex dc objects(ie strings) to std::complex
@@ -86,8 +86,8 @@ std::optional<std::string> Mathematics::fn_add(dc::Stack<std::string> &stack, co
         std::complex<double> sum = (rhs + lhs);
 
         // trim their digits
-        auto real_trimmed = trim_digits(sum.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(sum.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(sum.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(sum.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -120,8 +120,8 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
     auto is_x_cmplx = is_complex(x);
     auto is_y_cmplx = is_complex(y);
 
@@ -142,7 +142,7 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
         }
 
         // Push back the result as a string
-        stack.push(trim_digits(result, parameters.precision));
+        stack.push(NumericUtils::format_number(result, parameters.precision));
     } else if(is_x_cmplx || is_y_cmplx) {
         stack.copy_xyz();
         // Convert complex dc objects(ie strings) to std::complex
@@ -154,8 +154,8 @@ std::optional<std::string> Mathematics::fn_sub(dc::Stack<std::string> &stack, co
         std::complex<double> diff = (lhs - rhs);
 
         // trim their digits
-        auto real_trimmed = trim_digits(diff.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(diff.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(diff.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(diff.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -188,8 +188,8 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
     auto is_x_cmplx = is_complex(x);
     auto is_y_cmplx = is_complex(y);
 
@@ -200,7 +200,7 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
         auto lhs = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits((lhs * rhs), parameters.precision));
+        stack.push(NumericUtils::format_number((lhs * rhs), parameters.precision));
     } else if(is_x_cmplx || is_y_cmplx) {
         stack.copy_xyz();
         // Convert complex dc objects(ie strings) to std::complex
@@ -212,8 +212,8 @@ std::optional<std::string> Mathematics::fn_mul(dc::Stack<std::string> &stack, co
         std::complex<double> mul = (lhs * rhs);
 
         // trim their digits
-        auto real_trimmed = trim_digits(mul.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(mul.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(mul.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(mul.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -246,8 +246,8 @@ std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
     auto is_x_cmplx = is_complex(x);
     auto is_y_cmplx = is_complex(y);
 
@@ -263,7 +263,7 @@ std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, co
         }
 
         // Push back the result as a string
-        stack.push(trim_digits((dividend / divisor), parameters.precision));
+        stack.push(NumericUtils::format_number((dividend / divisor), parameters.precision));
     } else if(is_x_cmplx || is_y_cmplx) {
         stack.copy_xyz();
         // Convert complex dc objects(ie strings) to std::complex
@@ -280,8 +280,8 @@ std::optional<std::string> Mathematics::fn_div(dc::Stack<std::string> &stack, co
         std::complex<double> div = (dividend / divisor);
 
         // trim their digits
-        auto real_trimmed = trim_digits(div.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(div.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(div.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(div.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -314,8 +314,8 @@ std::optional<std::string> Mathematics::fn_mod(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -329,7 +329,7 @@ std::optional<std::string> Mathematics::fn_mod(dc::Stack<std::string> &stack, co
         }
 
         // Push back the result as a string
-        stack.push(trim_digits((static_cast<int>(lhs) % static_cast<int>(rhs)), parameters.precision));
+        stack.push(NumericUtils::format_number((static_cast<int>(lhs) % static_cast<int>(rhs)), parameters.precision));
     } else {
         return "'%' requires numeric values";
     }
@@ -358,8 +358,8 @@ std::optional<std::string> Mathematics::fn_div_mod(dc::Stack<std::string> &stack
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
@@ -372,8 +372,8 @@ std::optional<std::string> Mathematics::fn_div_mod(dc::Stack<std::string> &stack
             auto quotient = std::trunc(dividend / divisor);
             auto remainder = ((int)dividend % (int)divisor);
 
-            stack.push(trim_digits(quotient, parameters.precision));
-            stack.push(trim_digits(remainder, parameters.precision));
+            stack.push(NumericUtils::format_number(quotient, parameters.precision));
+            stack.push(NumericUtils::format_number(remainder, parameters.precision));
         }
 
     } else {
@@ -408,9 +408,9 @@ std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack
     auto n = stack[len];
     auto e = stack[len-1];
     auto b = stack[len-2];
-    auto is_n_num = is_num<long long>(n);
-    auto is_e_num = is_num<long long>(e);
-    auto is_b_num = is_num<long long>(b);
+    auto is_n_num = NumericUtils::is_numeric<long long>(n);
+    auto is_e_num = NumericUtils::is_numeric<long long>(e);
+    auto is_b_num = NumericUtils::is_numeric<long long>(b);
 
     // This functions computes
 	// 		c ≡ b^e (mod n)
@@ -436,7 +436,7 @@ std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack
             c = (c * base) % modulus;
         }
         
-        stack.push(trim_digits(c, parameters.precision));
+        stack.push(NumericUtils::format_number(c, parameters.precision));
     } else {
         return "'|' requires numeric values";
     }
@@ -447,7 +447,7 @@ std::optional<std::string> Mathematics::fn_mod_exp(dc::Stack<std::string> &stack
 /**
  * @brief Evaluates the exponentiation
  * 
- * Takes two values from the stack and computes their exponentiates, using the first value popped as the
+ * Takes two values from the stack and computes their exponentiate, using the first value popped as the
  * exponent and the second popped as the base
  * 
  * @param stack An instance of the dc::Stack data structure
@@ -465,8 +465,8 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
     auto is_x_cmplx = is_complex(x);
     auto is_y_cmplx = is_complex(y);
 
@@ -490,15 +490,15 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
         // Check if result is a complex number
         if(std::imag(power) != 0) {
             // trim their digits
-            auto real_trimmed = trim_digits(power.real(), parameters.precision);
-            auto imag_trimmed = trim_digits(power.imag(), parameters.precision);
+            auto real_trimmed = NumericUtils::format_number(power.real(), parameters.precision);
+            auto imag_trimmed = NumericUtils::format_number(power.imag(), parameters.precision);
             auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
             // Push the result back onto the stack
             stack.push(complex_str);
         } else {
             // Push the result back onto the stack
-            stack.push(trim_digits(std::real(power), parameters.precision));
+            stack.push(NumericUtils::format_number(std::real(power), parameters.precision));
         }
     } else if(is_x_cmplx || is_y_cmplx) {
         stack.copy_xyz();
@@ -511,8 +511,8 @@ std::optional<std::string> Mathematics::fn_exp(dc::Stack<std::string> &stack, co
         std::complex<double> power = std::pow(base, exp);
 
         // trim their digits
-        auto real_trimmed = trim_digits(power.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(power.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(power.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(power.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -543,7 +543,7 @@ std::optional<std::string> Mathematics::fn_sqrt(dc::Stack<std::string> &stack, c
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
     auto is_y_cmplx = is_complex(x);
 
     // Check whether the entry is a number
@@ -559,14 +559,14 @@ std::optional<std::string> Mathematics::fn_sqrt(dc::Stack<std::string> &stack, c
             std::complex<double> sq = std::sqrt(c_val);
 
             // trim their digits
-            auto real_trimmed = trim_digits(sq.real(), parameters.precision);
-            auto imag_trimmed = trim_digits(sq.imag(), parameters.precision);
+            auto real_trimmed = NumericUtils::format_number(sq.real(), parameters.precision);
+            auto imag_trimmed = NumericUtils::format_number(sq.imag(), parameters.precision);
             auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
             // Push the result back onto the stack
             stack.push(complex_str);
         } else {
-            stack.push(trim_digits(sqrt(std::stod(val)), parameters.precision));
+            stack.push(NumericUtils::format_number(sqrt(std::stod(val)), parameters.precision));
         }
         
     } else {
@@ -595,7 +595,7 @@ std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, co
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
     auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
@@ -604,7 +604,7 @@ std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, co
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits(sin(val), parameters.precision));
+        stack.push(NumericUtils::format_number(sin(val), parameters.precision));
     } else if(is_x_cmplx) {
         stack.copy_xyz();
         std::complex<double> c_val;
@@ -614,8 +614,8 @@ std::optional<std::string> Mathematics::fn_sin(dc::Stack<std::string> &stack, co
         std::complex<double> s = sin(c_val);
         
         // trim their digits
-        auto real_trimmed = trim_digits(s.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(s.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(s.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -646,7 +646,7 @@ std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, co
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
     auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
@@ -655,7 +655,7 @@ std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, co
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits(cos(val), parameters.precision));
+        stack.push(NumericUtils::format_number(cos(val), parameters.precision));
     } else if(is_x_cmplx) {
         stack.copy_xyz();
         std::complex<double> c_val;
@@ -665,8 +665,8 @@ std::optional<std::string> Mathematics::fn_cos(dc::Stack<std::string> &stack, co
         std::complex<double> s = cos(c_val);
         
         // trim their digits
-        auto real_trimmed = trim_digits(s.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(s.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(s.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -697,7 +697,7 @@ std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, co
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
     auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
@@ -706,7 +706,7 @@ std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, co
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits(tan(val), parameters.precision));
+        stack.push(NumericUtils::format_number(tan(val), parameters.precision));
     } else if(is_x_cmplx) {
         stack.copy_xyz();
         std::complex<double> c_val;
@@ -716,8 +716,8 @@ std::optional<std::string> Mathematics::fn_tan(dc::Stack<std::string> &stack, co
         std::complex<double> s = tan(c_val);
         
         // trim their digits
-        auto real_trimmed = trim_digits(s.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(s.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(s.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -748,7 +748,7 @@ std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, c
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
     auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
@@ -757,7 +757,7 @@ std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, c
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits(asin(val), parameters.precision));
+        stack.push(NumericUtils::format_number(asin(val), parameters.precision));
     } else if(is_x_cmplx) {
         stack.copy_xyz();
         std::complex<double> c_val;
@@ -767,8 +767,8 @@ std::optional<std::string> Mathematics::fn_asin(dc::Stack<std::string> &stack, c
         std::complex<double> s = asin(c_val);
         
         // trim their digits
-        auto real_trimmed = trim_digits(s.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(s.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(s.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -799,7 +799,7 @@ std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, c
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
     auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
@@ -808,7 +808,7 @@ std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, c
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits(acos(val), parameters.precision));
+        stack.push(NumericUtils::format_number(acos(val), parameters.precision));
     } else if(is_x_cmplx) {
         stack.copy_xyz();
         std::complex<double> c_val;
@@ -818,8 +818,8 @@ std::optional<std::string> Mathematics::fn_acos(dc::Stack<std::string> &stack, c
         std::complex<double> s = acos(c_val);
         
         // trim their digits
-        auto real_trimmed = trim_digits(s.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(s.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(s.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -850,7 +850,7 @@ std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, c
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
     auto is_x_cmplx = is_complex(x);
 
     // Check whether the entry is a number
@@ -859,7 +859,7 @@ std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, c
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits(atan(val), parameters.precision));
+        stack.push(NumericUtils::format_number(atan(val), parameters.precision));
     } else if(is_x_cmplx) {
         stack.copy_xyz();
         std::complex<double> c_val;
@@ -869,8 +869,8 @@ std::optional<std::string> Mathematics::fn_atan(dc::Stack<std::string> &stack, c
         std::complex<double> s = atan(c_val);
         
         // trim their digits
-        auto real_trimmed = trim_digits(s.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(s.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(s.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(s.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack
@@ -901,7 +901,7 @@ std::optional<std::string> Mathematics::fn_fact(dc::Stack<std::string> &stack, c
     // Extract one entry from the stack
     auto len = stack.size()-1;
     auto x = stack[len];
-    auto is_x_num = is_num<double>(x);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
 
     // Check whether the entry is a number
     if(is_x_num) {
@@ -918,7 +918,7 @@ std::optional<std::string> Mathematics::fn_fact(dc::Stack<std::string> &stack, c
         }
 
         // Push back the result as a string
-        stack.push(trim_digits(static_cast<double>(factorial), parameters.precision));
+        stack.push(NumericUtils::format_number(static_cast<double>(factorial), parameters.precision));
     } else {
         return "'!' requires numeric values";
     }
@@ -936,7 +936,7 @@ std::optional<std::string> Mathematics::fn_fact(dc::Stack<std::string> &stack, c
  * 
  */
 std::optional<std::string> Mathematics::fn_pi(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
-    stack.push(trim_digits(std::numbers::pi, parameters.precision));
+    stack.push(NumericUtils::format_number(std::numbers::pi, parameters.precision));
 
     return std::nullopt;
 }
@@ -951,7 +951,7 @@ std::optional<std::string> Mathematics::fn_pi(dc::Stack<std::string> &stack, con
  * 
  */
 std::optional<std::string> Mathematics::fn_e(dc::Stack<std::string> &stack, const dc::Parameters &parameters) {
-    stack.push(trim_digits(std::numbers::e, parameters.precision));
+    stack.push(NumericUtils::format_number(std::numbers::e, parameters.precision));
 
     return std::nullopt;
 }
@@ -976,8 +976,8 @@ std::optional<std::string> Mathematics::fn_random(dc::Stack<std::string> &stack,
     auto len = stack.size() - 1;
     auto b = stack[len];
     auto a = stack[len-1];
-    auto is_a_num = is_num<double>(a);
-    auto is_b_num = is_num<double>(b);
+    auto is_a_num = NumericUtils::is_numeric<double>(a);
+    auto is_b_num = NumericUtils::is_numeric<double>(b);
 
     // Check whether both entries are numbers
     if(is_a_num && is_b_num) {
@@ -992,7 +992,7 @@ std::optional<std::string> Mathematics::fn_random(dc::Stack<std::string> &stack,
         auto r_number = u_dist(rng);
 
         // Push the random value onto the stack
-        stack.push(trim_digits(r_number, parameters.precision));
+        stack.push(NumericUtils::format_number(r_number, parameters.precision));
     } else {
         return "'@' requires numeric values";
     }
@@ -1015,7 +1015,7 @@ std::optional<std::string> Mathematics::fn_integer(dc::Stack<std::string> &stack
     }
 
     auto head = stack.pop(false);
-    auto is_head_num = is_num<double>(head);
+    auto is_head_num = NumericUtils::is_numeric<double>(head);
     
     // Check whether head of the stack is a number
     if(is_head_num) {
@@ -1023,7 +1023,7 @@ std::optional<std::string> Mathematics::fn_integer(dc::Stack<std::string> &stack
         // Convert to integral type to truncate
         auto value = std::stol(stack.pop(true));
         // Push the truncated number back to the stack
-        stack.push(trim_digits(static_cast<double>(value), parameters.precision));
+        stack.push(NumericUtils::format_number(static_cast<double>(value), parameters.precision));
     } else {
         return "'$' requires numeric values";
     }
@@ -1051,8 +1051,8 @@ std::optional<std::string> Mathematics::fn_to_complex(dc::Stack<std::string> &st
     auto len = stack.size()-1;
     auto x = stack.at(len);
     auto y = stack.at(len-1);
-    auto is_x_num = is_num<double>(x);
-    auto is_y_num = is_num<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<double>(x);
+    auto is_y_num = NumericUtils::is_numeric<double>(y);
 
     // Check whether both values are numbers
     if(is_x_num && is_y_num) {
@@ -1061,8 +1061,8 @@ std::optional<std::string> Mathematics::fn_to_complex(dc::Stack<std::string> &st
         auto real = std::stod(stack.pop(true));
 
         // trim their digits
-        auto real_trimmed = trim_digits(real, parameters.precision);
-        auto imag_trimmed = trim_digits(imag, parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(real, parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(imag, parameters.precision);
 
         // Complex numbers are represented on the stack as "(Re,Im)"
         // They are then converted to std::complex before computations
@@ -1073,21 +1073,6 @@ std::optional<std::string> Mathematics::fn_to_complex(dc::Stack<std::string> &st
     }
 
     return std::nullopt;
-}
-
-
-std::string Mathematics::trim_digits(double number, unsigned int precision) {
-    std::ostringstream oss;
-
-    // Preserve non-zero decimal numbers even when precision is zero
-    if(precision == 0 && std::fmod(number, 1.0) != 0.0) {
-        precision = 2;
-    }
-
-    oss << std::fixed << std::setprecision(static_cast<int>(precision)) << number;
-    std::string s = oss.str();
-
-    return s;
 }
 
 /**
@@ -1119,7 +1104,7 @@ std::optional<std::string> Mathematics::fn_get_real(dc::Stack<std::string> &stac
         auto real = c_val.real();
     
         // Push the result back onto the stack
-        stack.push(trim_digits(real, parameters.precision));
+        stack.push(NumericUtils::format_number(real, parameters.precision));
     } else {
         return "'re' requires complex values";
     }
@@ -1156,7 +1141,7 @@ std::optional<std::string> Mathematics::fn_get_imaginary(dc::Stack<std::string> 
         auto imag = c_val.imag();
     
         // Push the result back onto the stack
-        stack.push(trim_digits(imag, parameters.precision));
+        stack.push(NumericUtils::format_number(imag, parameters.precision));
     } else {
         return "'im' requires complex values";
     }
@@ -1182,7 +1167,7 @@ std::optional<std::string> Mathematics::fn_log10(dc::Stack<std::string> &stack, 
     }
 
     auto head = stack.pop(false);
-    auto is_head_num = is_num<double>(head);
+    auto is_head_num = NumericUtils::is_numeric<double>(head);
     auto is_head_complex = is_complex(head);
 
     if(is_head_num) {
@@ -1190,7 +1175,7 @@ std::optional<std::string> Mathematics::fn_log10(dc::Stack<std::string> &stack, 
         auto val = std::stod(stack.pop(true));
 
         // Push back the result as a string
-        stack.push(trim_digits(log10(val), parameters.precision));
+        stack.push(NumericUtils::format_number(log10(val), parameters.precision));
     } else if(is_head_complex) {
         stack.copy_xyz();
         std::complex<double> c_val;
@@ -1200,8 +1185,8 @@ std::optional<std::string> Mathematics::fn_log10(dc::Stack<std::string> &stack, 
         std::complex<double> lg = log(c_val);
 
         // trim their digits
-        auto real_trimmed = trim_digits(lg.real(), parameters.precision);
-        auto imag_trimmed = trim_digits(lg.imag(), parameters.precision);
+        auto real_trimmed = NumericUtils::format_number(lg.real(), parameters.precision);
+        auto imag_trimmed = NumericUtils::format_number(lg.imag(), parameters.precision);
         auto complex_str = ('(' + real_trimmed + ',' + imag_trimmed + ')');
 
         // Push the result back onto the stack

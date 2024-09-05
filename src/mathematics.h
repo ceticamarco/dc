@@ -49,7 +49,6 @@ private:
     static std::optional<std::string> fn_get_real(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
     static std::optional<std::string> fn_get_imaginary(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
     static std::optional<std::string> fn_log10(dc::Stack<std::string> &stack, const dc::Parameters &parameters);
-    static std::string trim_digits(double number, unsigned int precision);
     static bool is_complex(const std::string &str);
 
     OPType op_type;

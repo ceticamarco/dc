@@ -7,7 +7,7 @@
 #include "bitwise.h"
 #include "stack.h"
 #include "macro.h"
-#include "is_num.h"
+#include "num_utils.h"
 
 #define MACRO_COND(VAL) ((VAL.length() == 1 && VAL == "["))
 #define MACRO_CMD_COND(VAL) ((VAL.length() == 2 || VAL.length() == 3) && \
@@ -126,7 +126,7 @@ std::optional<std::string> Evaluate::eval() {
             err = parse_array_command(token);
         } else if(this->parameters.iradix != 10) {
             err = parse_base_n(token);
-        } else if(is_num<double>(token)) {
+        } else if(NumericUtils::is_numeric<double>(token)) {
             this->stack.push(token);
         } else {
             return "Unrecognized option";
@@ -147,7 +147,7 @@ std::optional<std::string> Evaluate::eval() {
  */
 std::optional<std::string> Evaluate::parse_base_n(const std::string& token) {
     // Discard values that are neither integers neither within "ABCDEF"
-    if(!is_num<long>(token) && !X_CONTAINS_Y("ABCDEF", token)) {
+    if(!NumericUtils::is_numeric<long>(token) && !X_CONTAINS_Y("ABCDEF", token)) {
         return "This input base supports integers only";
     }
 
@@ -430,7 +430,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         auto arr_val = this->stack.pop(true);
 
         // Check whether the index is an integer
-        if(!is_num<int>(idx_str)) {
+        if(!NumericUtils::is_numeric<int>(idx_str)) {
             return "Array index must be an integer";
         }
 
@@ -465,7 +465,7 @@ std::optional<std::string> Evaluate::parse_array_command(std::string token) {
         auto idx_str = this->stack.pop(true);
 
         // Check if index is an integer
-        if(!is_num<int>(idx_str)) {
+        if(!NumericUtils::is_numeric<int>(idx_str)) {
             return "Array index must be an integer";
         }
 
