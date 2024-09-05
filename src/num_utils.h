@@ -27,7 +27,9 @@ public:
 /**
  * @brief Determines whether a given string is a number or not
  * 
- * @param T The 
+ * Given a string containing a numeric value, checks if string is a number
+ * of type T, where T is the generic type
+ * 
  * @param str A string containing either a numeric or a non-numeric value
  * 
  * @return true if the string contains a numeric value, false otherwise
