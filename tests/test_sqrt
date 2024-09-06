@@ -17,8 +17,16 @@ utest() {
     assert_eq "$EXPECTED" "$ACTUAL"
 
     # Test complex number
-    EXPECTED="(0,1)"
-    ACTUAL=$("$PROGRAM" -e '-1 v p')
-    assert_eq "$EXPECTED" "$ACTUAL"
+    if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
+        # Apple Silicon treats complex number arithmetics in a slightly
+        # different way, therefore we need to adjust the test for this platform
+        EXPECTED="(0.00,1)"
+        ACTUAL=$("$PROGRAM" -e '-1 v p')
+        assert_eq "$EXPECTED" "$ACTUAL"
+    else
+        EXPECTED="(0,1)"
+        ACTUAL=$("$PROGRAM" -e '-1 v p')
+        assert_eq "$EXPECTED" "$ACTUAL"
+    fi
 }
 # vim: ts=4 sw=4 softtabstop=4 expandtab:

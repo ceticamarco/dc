@@ -30,7 +30,8 @@ void helper() {
 void version() {
     std::cout << "dc (v" << DC_VER << ", " << DC_HASH << ", " << DC_BUILD ")" << std::endl;
     std::cout << "Build date: " << DC_BUILD_DATE << std::endl;
-    std::cout << "Compile flags: " << DC_FLAGS << std::endl;
+    std::cout << "Compiled with: " << DC_COMPILER << " v" << DC_COMPILER_V << std::endl;
+    std::cout << "Compiler flags: " << DC_FLAGS << std::endl;
     std::cout << "Copyright (c) 2024 Marco Cetica" << std::endl;
     std::cout << "License GPLv3+: GNU GPL version 3 or later\n" << std::endl;
     std::cout << "The original version of the dc command was written by Robert Morris\n"

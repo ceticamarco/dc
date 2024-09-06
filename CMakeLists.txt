@@ -40,6 +40,10 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(DC_FLAGS "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
 
+# Get compiler ID and version
+set(DC_COMPILER "${CMAKE_CXX_COMPILER_ID}")
+set(DC_COMPILER_V "${CMAKE_CXX_COMPILER_VERSION}")
+
 # Main file
 add_executable(dc main.cpp)
 
@@ -56,3 +60,5 @@ add_compile_definitions(DC_HASH="${DC_GIT_HASH}")
 add_compile_definitions(DC_BUILD="${CMAKE_BUILD_TYPE}")
 add_compile_definitions(DC_FLAGS="${DC_FLAGS}")
 add_compile_definitions(DC_BUILD_DATE="${BUILD_DATE}")
+add_compile_definitions(DC_COMPILER="${DC_COMPILER}")
+add_compile_definitions(DC_COMPILER_V="${DC_COMPILER_V}")
