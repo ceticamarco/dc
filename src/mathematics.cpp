@@ -314,22 +314,22 @@ std::optional<std::string> Mathematics::fn_mod(dc::Stack<std::string> &stack, co
     auto len = stack.size()-1;
     auto x = stack[len];
     auto y = stack[len-1];
-    auto is_x_num = NumericUtils::is_numeric<double>(x);
-    auto is_y_num = NumericUtils::is_numeric<double>(y);
+    auto is_x_num = NumericUtils::is_numeric<long long>(x);
+    auto is_y_num = NumericUtils::is_numeric<long long>(y);
 
     // Check whether both entries are numbers
     if(is_x_num && is_y_num) {
         stack.copy_xyz();
-        auto rhs = std::stod(stack.pop(true));
-        auto lhs = std::stod(stack.pop(true));
+        auto rhs = std::stoll(stack.pop(true));
+        auto lhs = std::stoll(stack.pop(true));
 
         // Check whether divisor is equal to zero
-        if(rhs == 0.0) {
+        if(rhs == 0) {
             return "Cannot divide by zero";
         }
 
         // Push back the result as a string
-        stack.push(NumericUtils::format_number((static_cast<int>(lhs) % static_cast<int>(rhs)), parameters.precision));
+        stack.push(NumericUtils::format_number((lhs % rhs), parameters.precision));
     } else {
         return "'%' requires numeric values";
     }
